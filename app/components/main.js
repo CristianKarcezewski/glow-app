@@ -3,11 +3,26 @@ import { StyleSheet,View } from 'react-native';
 import Toolbar from './toolbar/toolbar';
 
 class Main extends Component {
+
+  constructor(){
+    super();
+    this.state = {
+      toolbarTitle: "Glow"
+    }
+  }
+
+  handleChangeToolbarTitle(title){
+    const st = {toolbarTitle: title}
+    this.setState(st)
+  }
+
   render(){
     return (
       <View style={mainStyle.container}>
-        <Toolbar></Toolbar>
-        <View style={contentStyle.container}></View>
+        <Toolbar title={this.state.toolbarTitle} changeTitle={this.handleChangeToolbarTitle.bind(this)}></Toolbar>
+        <View style={contentStyle.container} >
+          
+        </View>
       </View>
     );
   }
