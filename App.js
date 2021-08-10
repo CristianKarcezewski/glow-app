@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet,SafeAreaView,StatusBar } from 'react-native';
-import Main from './app/components/main'
+import Main from './app/components';
 
 class App extends Component {
   render(){
