@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View,Button } from 'react-native';
+import { StyleSheet,Button } from 'react-native';
 
 class Login extends Component{
 
