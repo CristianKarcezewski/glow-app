@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
+import { Button, StyleSheet, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Search from './search';
@@ -12,19 +12,41 @@ class Main extends Component {
     this.stack = createNativeStackNavigator();
   }
 
-  _handleNavigation(screen){
-    console.log(screen);
-    console.log(this.stack.Screen(screen));
-  }
-
   render(){
     return (
       <NavigationContainer>
-        <this.stack.Navigator initialRouteName="Glow">
-          <this.stack.Screen name="Glow" >
-            {props => <Search {...props} handleNavigation={this._handleNavigation.bind(this)} />}
-          </this.stack.Screen>
-          <this.stack.Screen name="Login" component={Login} />
+        <this.stack.Navigator initialRouteName="search">
+
+          {/* <this.stack.Screen
+            name="search"
+            component={Search}
+            options={{
+              headerTitle: props => <Text {...props}>Glow</Text>,
+              headerRight: () => (
+                <Button
+                  onPress={() => alert('This is a button!')}
+                  title="Login"
+                />
+              ),
+            }}
+          /> */}
+
+          <this.stack.Screen
+            name="search"
+            component={Search}
+            options={({ navigation, route }) => ({
+              headerTitle: props => <Text {...props}>Glow</Text>,
+            })}
+          />
+
+          <this.stack.Screen 
+            name="login"
+            component={Login}
+            options={{
+              title: "Login",
+            }}
+          />
+
         </this.stack.Navigator>
       </NavigationContainer>
     );
@@ -38,6 +60,9 @@ const style = StyleSheet.create({
   },
   content: {
     flex: 11,
+  },
+  headerButton: {
+    color: 'black'
   },
 });
 
