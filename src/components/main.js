@@ -1,28 +1,32 @@
 import React, { Component } from 'react';
-import { StyleSheet,View } from 'react-native';
-import Toolbar from './toolbar';
+import { StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Search from './search';
+import Login from './login';
 
 class Main extends Component {
 
   constructor(){
     super();
-    this.state = {
-      toolbarTitle: "Glow"
-    }
+    this.stack = createNativeStackNavigator();
   }
 
-  handleChangeToolbarTitle(title){
-    this.setState({toolbarTitle: title});
+  _handleNavigation(screen){
+    console.log(screen);
+    console.log(this.stack.Screen(screen));
   }
 
   render(){
     return (
-      <View style={style.main}>
-        <Toolbar title={this.state.toolbarTitle} changeTitle={this.handleChangeToolbarTitle.bind(this)}></Toolbar>
-        <View style={style.content} >
-          
-        </View>
-      </View>
+      <NavigationContainer>
+        <this.stack.Navigator initialRouteName="Glow">
+          <this.stack.Screen name="Glow" >
+            {props => <Search {...props} handleNavigation={this._handleNavigation.bind(this)} />}
+          </this.stack.Screen>
+          <this.stack.Screen name="Login" component={Login} />
+        </this.stack.Navigator>
+      </NavigationContainer>
     );
   }
 }

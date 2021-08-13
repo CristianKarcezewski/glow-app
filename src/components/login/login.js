@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import { StyleSheet,Button } from 'react-native';
+import { StyleSheet,Button, View } from 'react-native';
 
 class Login extends Component{
 
-  _handleSubmit(){
-    console.log('login!')
-  }
-
   render(){
-    <form style={loginStyle.container} onSubmit={this._handleSubmit.bind(this)}>
-      <input type="email" placeholder="Email"/>
-      <input type="password" placeholder="Password"/>
-      <Button type="submit">Login</Button>
-    </form>
+    return(
+      // <form style={loginStyle.container}>
+      //   <input type="email" placeholder="Email"/>
+      //   <input type="password" placeholder="Password"/>
+      //   <Button title="Login" />
+      // </form>
+      <View>
+        <Button title="Login" />
+      </View>
+    )
   }
 }
 

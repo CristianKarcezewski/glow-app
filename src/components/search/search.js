@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Button } from 'react-native';
 
 class Search extends Component{
 
@@ -7,6 +7,7 @@ class Search extends Component{
     return(
       <View>
         <Text>Search component</Text>
+        <Button title="Go to Login" onPress={this.props.handleNavigation('Login')} />
       </View>
     );
   }
