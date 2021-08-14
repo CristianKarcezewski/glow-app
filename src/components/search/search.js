@@ -20,7 +20,7 @@ function Search({ navigation }){
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <Button onPress={() => navigation.navigate('login')} title="Login" />
+        <Button title="Login" onPress={() => navigation.navigate('login')} />
       ),
     });
   }, [navigation]);
