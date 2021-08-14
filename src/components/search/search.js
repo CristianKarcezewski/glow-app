@@ -51,9 +51,7 @@ class CardResult extends Component{
   render(){
     return(
       <View style={style.cardResultContainer}>
-        <View style={{flex: 1}}>
-          <FontAwesomeIcon icon={ faUser } style={{flex: 1}}/>
-        </View>
+        <View style={{flex: 1}}><FontAwesomeIcon icon={ faUser } style={{flex: 1}}/></View>
         <View style={{flex: 3}}>
 
           <View>
