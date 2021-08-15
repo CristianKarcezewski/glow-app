@@ -1,33 +1,55 @@
-import { faAlignRight } from '@fortawesome/free-solid-svg-icons';
-import React, { Component } from 'react';
+import React, { Component} from 'react';
 import { StyleSheet,Text, View, TextInput, TouchableHighlight, Image } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 
-class UserRegister extends Component{
+class UserRegister extends Component{  
 
-    render(){
-        return(
-            <View style={{flex: 1, backgroundColor: '#fff'}}>
-                <View style={style.imageContainer}>                    
-                     <Image style={style.imageLogo} source={require('../../assets/glow-logo.jpeg')}/>
-                </View>                
-                <View style={style.container}>                   
-                    <TextInput style={style.formField} maxLength={50} type="nome" placeholder="Nome"/>
-                    <TextInput style={style.formField} maxLength={50} type="email" placeholder="E-mail"/>
-                    <TextInput style={style.formField} type="telefone" placeholder="Tefefone"/>
-                    <TextInput style={style.formField} type="estado" placeholder="  Estado"/>
-                    <TextInput style={style.formField} type="cidade" placeholder="  Cidade"/>
-                    <TextInput style={style.formField} type="senha" placeholder="  Senha"/>
-                    <TextInput style={style.formField} type="confirmaSenha" placeholder="  Confirma Senha"/>
-                    <TouchableHighlight style={style.loginButton}>
-                    <Text style={{fontSize: 25}}>Cadastrar</Text>
-                 </TouchableHighlight>
-                </View>
-                
-            </View> 
-        )
+
+  constructor(){
+    super();
+    this.state = {
+      states: ['Santa Catarina', 'Rio Grande do Sul'],
+      selectedState: 'Rio Grande do Sul',
     }
+  }
+
+  render(){
     
+    return(
+      <View style={{flex: 1, backgroundColor: '#fff'}}>
+        <View style={style.imageContainer}>                    
+          <Image style={style.imageLogo} source={require('../../assets/glow-logo.jpeg')}/>
+        </View>                
+        <View style={style.container}>                   
+          <TextInput style={style.formField} maxLength={50} type="nome" placeholder="Nome"/>
+          <TextInput style={style.formField} maxLength={50} type="email" placeholder="E-mail"/>
+          <TextInput style={style.formField} type="telefone" placeholder="Tefefone"/>
+          
+          {/* <Picker 
+            selectedValue={this.state.selectedState} 
+            onValueChange={(itemValue) => this.setState({...this.state, selectedState:itemValue})}
+          >
+            {
+              this.state.states.map((st,index) => {
+                return <Picker.Item label={st} value={st} key={index}/>
+              })
+            }
+          </Picker  > */}
+                                          
+          <TextInput style={style.formField} type="estado" placeholder="  Estado"/>
+          <TextInput style={style.formField} type="cidade" placeholder="  Cidade"/>
+          <TextInput style={style.formField} type="senha" placeholder="  Senha"/>
+          <TextInput style={style.formField} type="confirmaSenha" placeholder="  Confirma Senha"/>
+          <TouchableHighlight style={style.loginButton}>
+            <Text style={{fontSize: 25}}>Cadastrar</Text>
+          </TouchableHighlight>
+        </View>
+      
+      </View> 
+    );
+  }    
 }
+
 const style = StyleSheet.create({
     imageContainer: {
       flex: 2,

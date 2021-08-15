@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Search from './search';
 import Login from './login';
 import UserRegister from './user-register';
+import UserDescription from './provider-detail';
 
 class Main extends Component {
 
@@ -53,6 +54,14 @@ class Main extends Component {
             component={UserRegister}
             options={{
               title: "Cadastro de usuário",
+            }}
+          />
+
+          <this.stack.Screen 
+            name="user-description"
+            component={UserDescription}
+            options={{
+              title: "Descrição do Profissional",
             }}
           />
 
