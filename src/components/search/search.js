@@ -4,6 +4,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 import Provider from '../../models/provider'
 
+// class Search extends Component{
+
+//   render(){
+
+//     return(
+//       <View>
+//         <Text>Search component</Text>
+//         <Button title="Go to Login" onPress={() => this.props.navigation.navigate('login')} />
+//       </View>
+//     );
+//   }
+
+// }
+
 function Search({navigation,loginEmitter}){
 
   const [userLoggedIn, setUser] = useState(false);
@@ -14,7 +28,6 @@ function Search({navigation,loginEmitter}){
   };
   loginEmitter.subscribe('appToolbarButton',loggedIn);
 
-  // Append right button on toolbar
   React.useLayoutEffect(() => {
     if (userLoggedIn){
       navigation.setOptions({
@@ -32,7 +45,10 @@ function Search({navigation,loginEmitter}){
   }, [navigation]);
 
   return (
-    <SearchResult/>
+    <View>
+      <Text>Search component</Text>
+      <Button title="Go to Login" onPress={() => this.props.navigation.navigate('login')} />
+    </View>
   )
 }
 

@@ -7,6 +7,7 @@ import Search from './search';
 import Login from './login';
 import UserRegister from './user-register';
 import LoginEmitter from '../models/login-emitter';
+import ProviderDetail from './provider-detail';
 
 class DrawerNavigator extends Component{
 
@@ -63,14 +64,6 @@ class StackNavigator extends Component{
         >
           {props => <Search {...props} loginEmitter={this.props.loginEmitter} userLoggedIn={this.state.userLoggedIn}/>}
         </this.stack.Screen>
-
-        {/* <this.stack.Screen
-          name="glow"
-          component={Search}
-          options={() => ({
-            headerTitle: () => <Image source={require('../assets/glow-logo.jpeg')}/>,
-          })}
-        /> */}
   
         <this.stack.Screen 
           name="login"
@@ -86,6 +79,14 @@ class StackNavigator extends Component{
           component={UserRegister}
           options={{
             title: "Cadastro de usuário",
+          }}
+        />
+
+        <this.stack.Screen 
+          name="provider-detail"
+          component={ProviderDetail}
+          options={{
+            title: "Descrição do Profissional",
           }}
         />
 
