@@ -22,7 +22,7 @@ class Login extends Component{
       <View style={{flex: 1, backgroundColor: '#fff'}}>
 
         <View style={style.imageContainer}>
-          <Image style={style.imageLogo} source={require('../../assets/glow-logo.jpeg')}/>
+          <Image style={style.imageLogo} source={require('../../assets/glow-logo.png')}/>
         </View>
 
         <View style={style.container}>
@@ -67,6 +67,8 @@ const style = StyleSheet.create({
   imageLogo: {
     width: '50%',
     marginTop: 70,
+    width: 160,
+    height: 50,
   },
   container: {
     flex: 3,

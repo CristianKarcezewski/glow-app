@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -59,7 +59,7 @@ class StackNavigator extends Component{
         <this.stack.Screen
           name="glow"
           options={() => ({
-            headerTitle: () => <Image source={require('../assets/glow-logo.jpeg')}/>,
+            headerTitle: () => <Image source={require('../assets/glow-logo.png')} style={style.image} />,
           })}
         >
           {props => <Search {...props} loginEmitter={this.props.loginEmitter} userLoggedIn={this.state.userLoggedIn}/>}
@@ -111,5 +111,12 @@ class Main extends Component {
     );
   }
 }
+
+const style = StyleSheet.create({
+  image: {
+    width: 140,
+    height: 40,
+  },
+});
 
 export default Main;
