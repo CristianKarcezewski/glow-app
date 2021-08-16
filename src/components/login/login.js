@@ -12,6 +12,11 @@ class Login extends Component{
     }
   }
 
+  _login(){
+    this.props.loginEmitter.login('Bearer dsgpsogspog');
+    this.props.navigation.popToTop();
+  }
+
   render(){
     return(
       <View style={{flex: 1, backgroundColor: '#fff'}}>
@@ -28,7 +33,6 @@ class Login extends Component{
             pattern={'/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/'}
             onValidation={isValid => {
               this.setState({...this.state, validEmail: isValid});
-              console.log(isValid, this.state.validEmail);
             }}
           />
 
@@ -38,7 +42,7 @@ class Login extends Component{
             style={style.passwordField}
           />
 
-          <TouchableHighlight style={style.loginButton} onPress={() => this.props.loginEmitter.saveToken('token')}>
+          <TouchableHighlight style={style.loginButton} onPress={() => this._login()}>
             <Text style={{fontSize: 25}}>Login</Text>
           </TouchableHighlight>
 

@@ -1,10 +1,18 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { StyleSheet,Text, View, Button } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 import Provider from '../../models/provider'
 
-function Search({navigation,userLoggedIn}){
+function Search({navigation,loginEmitter}){
+
+  const [userLoggedIn, setUser] = useState(false);
+
+  async function loggedIn(value){
+    await setUser(value);
+    console.log('search',userLoggedIn);
+  };
+  loginEmitter.subscribe('appToolbarButton',loggedIn);
 
   // Append right button on toolbar
   React.useLayoutEffect(() => {
