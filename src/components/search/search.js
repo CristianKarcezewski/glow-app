@@ -1,18 +1,26 @@
 import React, { Component } from 'react';
 import { StyleSheet,Text, View, Button } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 import Provider from '../../models/provider'
 
-function Search({ navigation }){
+function Search({navigation,userLoggedIn}){
 
   // Append right button on toolbar
   React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <Button title="Login" onPress={() => navigation.navigate('login')} />
-      ),
-    });
+    if (userLoggedIn){
+      navigation.setOptions({
+        headerRight: () => (
+          <FontAwesomeIcon icon={faBars} onPress={() => navigation.toggleDrawer()} />
+        ),
+      });
+    }else{
+      navigation.setOptions({
+        headerRight: () => (
+          <Button title="Login" onPress={() => navigation.navigate('login')} />
+        ),
+      });
+    }
   }, [navigation]);
 
   return (
@@ -21,20 +29,6 @@ function Search({ navigation }){
 }
 
 class SearchResult extends Component{
-
-  constructor(){
-    super();
-    this.state = {
-      providers: []
-    }
-  }
-
-  componentDidMount(
-    p = [
-      Provider(null, 'Encanador', 'João', 'Um dos mais bem avaliados da região'),
-      Provider(null, 'Diarista', 'Maria', 'Entre as mais confiaveis que você precisa'),
-    ]
-  );
 
   render(){
 

@@ -1,7 +1,16 @@
 import React, { Component } from 'react';
 import { StyleSheet,Text, View, TextInput, TouchableHighlight, Image } from 'react-native';
+import Input from '../Input';
 
 class Login extends Component{
+
+  constructor(props){
+    super(props);
+    this.state = {
+      validEmail: true,
+      validPassword: true,
+    }
+  }
 
   render(){
     return(
@@ -12,14 +21,31 @@ class Login extends Component{
         </View>
 
         <View style={style.container}>
-          <TextInput style={style.emailField} maxLength={50} type="email" placeholder="  Email"/>
-          <TextInput style={style.emailField} type="password" placeholder="  Password"/>
-          <TouchableHighlight style={style.loginButton}>
+          <Input
+            style={(this.state.validEmail ? style.validEmailField : style.invalidEmailField)}
+            maxLength={50}
+            placeholder="Email"
+            pattern={'/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/'}
+            onValidation={isValid => {
+              this.setState({...this.state, validEmail: isValid});
+              console.log(isValid, this.state.validEmail);
+            }}
+          />
+
+          <Input
+            placeholder="Password"
+            secureTextEntry={true}
+            style={style.passwordField}
+          />
+
+          <TouchableHighlight style={style.loginButton} onPress={() => this.props.loginEmitter.saveToken('token')}>
             <Text style={{fontSize: 25}}>Login</Text>
           </TouchableHighlight>
+
           <TouchableHighlight style={style.registerButton} onPress={() => this.props.navigation.navigate('user-register')}>
             <Text style={{fontSize: 25}}>Registre-se</Text>
           </TouchableHighlight>
+
           <Text style={style.forgotPassword}>Esqueci minha senha</Text>
         </View>
 
@@ -44,7 +70,7 @@ const style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  emailField: {
+  validEmailField: {
     width: '80%',
     paddingLeft: 20,
     paddingRight: 20,
@@ -52,6 +78,17 @@ const style = StyleSheet.create({
     fontSize: 20,
     backgroundColor: '#fff',
     borderColor: 'black',
+    borderWidth: 2,
+    borderRadius: 20,
+  },
+  invalidEmailField: {
+    width: '80%',
+    paddingLeft: 20,
+    paddingRight: 20,
+    margin: 10,
+    fontSize: 20,
+    backgroundColor: '#fff',
+    borderColor: 'red',
     borderWidth: 2,
     borderRadius: 20,
   },
