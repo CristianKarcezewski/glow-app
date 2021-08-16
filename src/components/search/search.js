@@ -1,22 +1,8 @@
 import React, { Component, useState } from 'react';
-import { StyleSheet,Text, View, Button } from 'react-native';
+import { StyleSheet,Text, View, Button, FlatList } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 import Provider from '../../models/provider'
-
-// class Search extends Component{
-
-//   render(){
-
-//     return(
-//       <View>
-//         <Text>Search component</Text>
-//         <Button title="Go to Login" onPress={() => this.props.navigation.navigate('login')} />
-//       </View>
-//     );
-//   }
-
-// }
 
 function Search({navigation,loginEmitter}){
 
@@ -24,7 +10,6 @@ function Search({navigation,loginEmitter}){
 
   async function loggedIn(value){
     await setUser(value);
-    console.log('search',userLoggedIn);
   };
   loginEmitter.subscribe('appToolbarButton',loggedIn);
 
@@ -45,44 +30,56 @@ function Search({navigation,loginEmitter}){
   }, [navigation]);
 
   return (
-    <View>
-      <Text>Search component</Text>
-      <Button title="Go to Login" onPress={() => this.props.navigation.navigate('login')} />
-    </View>
+    <SearchResult/>
   )
 }
 
 class SearchResult extends Component{
 
+  constructor(){
+    super();
+    this.state = {
+      providers: [
+        new Provider(1, null, 'Encanador', 'João', 'Um dos mais bem avaliados da região'),
+        new Provider(2, null, 'Diarista', 'Maria', 'Entre as mais confiaveis que você precisa'),
+        new Provider(3, null, 'Encanador', 'João', 'Um dos mais bem avaliados da região'),
+        new Provider(4, null, 'Diarista', 'Maria', 'Entre as mais confiaveis que você precisa'),
+        new Provider(5, null, 'Encanador', 'João', 'Um dos mais bem avaliados da região'),
+        new Provider(6, null, 'Diarista', 'Maria', 'Entre as mais confiaveis que você precisa'),
+        new Provider(7, null, 'Encanador', 'João', 'Um dos mais bem avaliados da região'),
+        new Provider(8, null, 'Diarista', 'Maria', 'Entre as mais confiaveis que você precisa'),
+      ]
+    }
+  }
+
   render(){
 
     return(
-      <View>
-        
-      </View>
+      <FlatList
+        keyExtractor={(item) => item.id}
+        data={this.state.providers}
+        renderItem={({item}) => <CardResult provider={item}/>}
+      />
     );
   }
 
 }
 
 class CardResult extends Component{
+  
   render(){
     return(
       <View style={style.cardResultContainer}>
         <View style={{flex: 1}}><FontAwesomeIcon icon={ faUser } style={{flex: 1}}/></View>
-        <View style={{flex: 3}}>
+        <View style={{flex: 4}}>
 
           <View>
-            <Text>Nome do prestador...</Text>
+            <Text>{this.props.provider.name}</Text>
+            <Text>{this.props.provider.profession}</Text>
+            <Text>{this.props.provider.description}</Text>
           </View>
 
-          <View>
-            <View>
-              <Text>Descrição...</Text>
-            </View>
-          </View>
-
-        </View>
+        </View> 
       </View>
     )
   }
@@ -90,8 +87,13 @@ class CardResult extends Component{
 
 const style = StyleSheet.create({
   cardResultContainer: {
-    flex: 1,
     flexDirection: 'row',
+    marginVertical: 5,
+    marginHorizontal: 10,
+    padding: 10,
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 20,
   },
 });
 

@@ -1,8 +1,9 @@
 export default class Provider{
-    constructor(imageUrl, profession, name, description){
-        this.imageUrl = imageUrl;
-        this.profession = profession;
-        this.name = name;
-        this.description = description;
-    }
+  constructor(id, imageUrl, profession, name, description){
+    this.id = id;
+    this.imageUrl = imageUrl;
+    this.profession = profession;
+    this.name = name;
+    this.description = description;
+  }
 }
