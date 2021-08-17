@@ -40,8 +40,8 @@ class UserRegister extends Component{
           <TextInput style={style.formField} type="cidade" placeholder="  Cidade"/>
           <TextInput style={style.formField} type="senha" placeholder="  Senha"/>
           <TextInput style={style.formField} type="confirmaSenha" placeholder="  Confirma Senha"/>
-          <TouchableHighlight style={style.loginButton}>
-            <Text style={{fontSize: 25}}>Cadastrar</Text>
+          <TouchableHighlight style={style.registerButton}>
+            <Text style={{fontSize: 25, fontWeight: 'bold', color: '#fff'}}>Cadastrar</Text>
           </TouchableHighlight>
         </View>
       
@@ -76,17 +76,6 @@ const style = StyleSheet.create({
       borderColor: 'black',
       borderWidth: 2,
       borderRadius: 20,
-    },  
-   
-    loginButton: {
-      borderRadius: 30,
-      width: '50%',
-      margin: 10,
-      borderColor: 'black',
-      borderWidth: 2,
-      backgroundColor: 'dodgerblue',
-      alignItems: 'center',
-      elevation: 10,
     },
     registerButton: {
       borderRadius: 30,
@@ -94,24 +83,9 @@ const style = StyleSheet.create({
       margin: 10,
       borderColor: 'black',
       borderWidth: 2,
-      backgroundColor: 'dodgerblue',
+      backgroundColor: '#db382f',
       alignItems: 'center',
       elevation: 10,
     },
-    forgotPassword: {
-      color: 'blue',
-      fontSize: 20,
-      margin: 10,
-    },
-    registerForm: {
-        borderRadius: 30,
-        width: '50%',
-        margin: 10,
-        borderColor: 'black',
-        borderWidth: 2,
-        backgroundColor: 'dodgerblue',
-        alignItems: 'center',
-        elevation: 10,
-      },
 }); 
 export default UserRegister;

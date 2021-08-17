@@ -8,6 +8,7 @@ import Login from './login';
 import UserRegister from './user-register';
 import LoginEmitter from '../models/login-emitter';
 import ProviderDetail from './provider-detail';
+import GlowTheme from '../shared/theme';
 
 class DrawerNavigator extends Component{
 
@@ -45,7 +46,6 @@ class StackNavigator extends Component{
 
   async _handleLogin(value){
     await this.setState({userLoggedIn: value});
-    console.log('stack', value, this.state);
   }
 
   componentDidMount(){
@@ -105,7 +105,7 @@ class Main extends Component {
 
   render(){
     return (
-      <NavigationContainer>
+      <NavigationContainer theme={GlowTheme}>
         <DrawerNavigator loginEmitter={this.loginEmitter}/>
       </NavigationContainer>
     );
@@ -114,7 +114,7 @@ class Main extends Component {
 
 const style = StyleSheet.create({
   image: {
-    width: 140,
+    width: 150,
     height: 40,
   },
 });

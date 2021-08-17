@@ -43,11 +43,11 @@ class Login extends Component{
           />
 
           <TouchableHighlight style={style.loginButton} onPress={() => this._login()}>
-            <Text style={{fontSize: 25}}>Login</Text>
+            <Text style={{fontSize: 25, fontWeight: 'bold', color: '#fff'}}>Login</Text>
           </TouchableHighlight>
 
           <TouchableHighlight style={style.registerButton} onPress={() => this.props.navigation.navigate('user-register')}>
-            <Text style={{fontSize: 25}}>Registre-se</Text>
+            <Text style={{fontSize: 25, fontWeight: 'bold', color: '#fff'}}>Registre-se</Text>
           </TouchableHighlight>
 
           <Text style={style.forgotPassword}>Esqueci minha senha</Text>
@@ -65,9 +65,8 @@ const style = StyleSheet.create({
     justifyContent: 'center',
   },
   imageLogo: {
-    width: '50%',
     marginTop: 70,
-    width: 160,
+    width: 180,
     height: 50,
   },
   container: {
@@ -115,7 +114,7 @@ const style = StyleSheet.create({
     margin: 10,
     borderColor: 'black',
     borderWidth: 2,
-    backgroundColor: 'dodgerblue',
+    backgroundColor: '#db382f',
     alignItems: 'center',
     elevation: 10,
   },
@@ -125,7 +124,7 @@ const style = StyleSheet.create({
     margin: 10,
     borderColor: 'black',
     borderWidth: 2,
-    backgroundColor: 'dodgerblue',
+    backgroundColor: '#db382f',
     alignItems: 'center',
     elevation: 10,
   },
@@ -133,6 +132,7 @@ const style = StyleSheet.create({
     color: 'blue',
     fontSize: 20,
     margin: 10,
+    textDecorationLine: 'underline'
   }
 });
 export default Login;
