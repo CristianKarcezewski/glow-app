@@ -8,16 +8,20 @@ export default class LoginEmitter{
   }
 
   subscribe(key,handler){
-    let add = true
-    this.subsribes.forEach(x => {
-      if (x.key === key){add = false}
+    let i = null;
+    this.subsribes.forEach((x, index) => {
+      if (x.key === key){i = index};
     })
-    if (add){this.subsribes.push({'key': key,handler})};
+    if(i){
+      this.subsribes[i] = {'key': key,handler};
+    }else{
+      this.subsribes.push({'key': key,handler});
+    };
   }
 
   emit(){
     this.subsribes.map(sub => {
-      sub.handler(this.userLoggedIn);
+      sub.handler(this.userLoggedIn, sub);
     });
   }
 

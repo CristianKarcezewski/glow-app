@@ -4,12 +4,11 @@ import {Picker} from '@react-native-picker/picker';
 
 class UserRegister extends Component{  
 
-
   constructor(){
     super();
     this.state = {
       states: ['Santa Catarina', 'Rio Grande do Sul'],
-      selectedState: 'Rio Grande do Sul',
+      selectedState: 1,
     }
   }
 
@@ -25,16 +24,16 @@ class UserRegister extends Component{
           <TextInput style={style.formField} maxLength={50} type="email" placeholder="E-mail"/>
           <TextInput style={style.formField} type="telefone" placeholder="Tefefone"/>
           
-          {/* <Picker 
-            selectedValue={this.state.selectedState} 
-            onValueChange={(itemValue) => this.setState({...this.state, selectedState:itemValue})}
+          <Picker 
+            selectedValue={this.state.selectedState[this.state.selectedState]} 
+            onValueChange={(itemValue, itemIndex) => this.setState({...this.state, selectedState:itemIndex})}
           >
             {
               this.state.states.map((st,index) => {
                 return <Picker.Item label={st} value={st} key={index}/>
               })
             }
-          </Picker  > */}
+          </Picker  >
                                           
           <TextInput style={style.formField} type="estado" placeholder="  Estado"/>
           <TextInput style={style.formField} type="cidade" placeholder="  Cidade"/>
