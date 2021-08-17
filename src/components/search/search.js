@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
-import { StyleSheet,Text, View, TouchableHighlight, FlatList, TouchableOpacity  } from 'react-native';
+import { StyleSheet,Text, View, TouchableHighlight, FlatList, TouchableOpacity, TextInput  } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faUser, faBars,faStar } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faBars, faStar, faSearch, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
 import Provider from '../../models/provider'
 
 function Search({navigation,loginEmitter}){
@@ -57,15 +57,28 @@ class SearchResult extends Component{
   render(){
 
     return(
-      <FlatList style={{marginTop: 10}}
-        keyExtractor={(item) => item.id}
-        data={this.state.providers}
-        renderItem={({item}) => (
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('provider-details')}>
-            <CardResult provider={item} />
+      <View style={{flex: 1, marginTop: 10}}>
+        <View style={{flex: 1, flexDirection: 'row', marginHorizontal: 10, alignItems: 'center'}}>
+          <TextInput placeholder={'Pesquisar'} style ={{fontSize: 24, flex: 5, marginLeft: 20, borderBottomColor: 'black', borderBottomWidth: 1}}></TextInput>
+          <TouchableOpacity style={{flex:1, alignItems: 'center'}}>
+            <FontAwesomeIcon icon={ faSearch } size={25} color={'#db382f'}/>
           </TouchableOpacity>
-        )}
-      />
+          <TouchableOpacity style={{flex:1, alignItems: 'center'}} onPress={() => this.props.navigation.navigate('filter')}>
+            <FontAwesomeIcon icon={ faSearchPlus } size={25} color={'#db382f'}/>
+          </TouchableOpacity>
+        </View>
+        <View style={{flex: 14}}>
+          <FlatList
+            keyExtractor={(item) => item.id}
+            data={this.state.providers}
+            renderItem={({item}) => (
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('provider-details')}>
+                <CardResult provider={item} />
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+      </View>
     );
   }
 

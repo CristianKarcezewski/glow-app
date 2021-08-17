@@ -9,6 +9,7 @@ import UserRegister from './user-register';
 import LoginEmitter from '../models/login-emitter';
 import ProviderDetails from './provider-details';
 import GlowTheme from '../shared/theme';
+import Filter from './filter';
 
 class DrawerNavigator extends Component{
 
@@ -87,6 +88,14 @@ class StackNavigator extends Component{
           component={ProviderDetails}
           options={{
             title: "Detalhes do Profissional",
+          }}
+        />
+
+        <this.stack.Screen 
+          name="filter"
+          component={Filter}
+          options={{
+            title: "Filtrar Profissionais",
           }}
         />
 
