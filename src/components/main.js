@@ -7,7 +7,7 @@ import Search from './search';
 import Login from './login';
 import UserRegister from './user-register';
 import LoginEmitter from '../models/login-emitter';
-import ProviderDetail from './provider-detail';
+import ProviderDetails from './provider-details';
 import GlowTheme from '../shared/theme';
 
 class DrawerNavigator extends Component{
@@ -83,10 +83,10 @@ class StackNavigator extends Component{
         />
 
         <this.stack.Screen 
-          name="provider-detail"
-          component={ProviderDetail}
+          name="provider-details"
+          component={ProviderDetails}
           options={{
-            title: "Descrição do Profissional",
+            title: "Detalhes do Profissional",
           }}
         />
 

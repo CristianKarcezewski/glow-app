@@ -1,9 +1,10 @@
 import { text } from '@fortawesome/fontawesome-svg-core';
 import React, { Component } from 'react';
 import { StyleSheet,Text, View, TextInput, TouchableHighlight, Image } from 'react-native';
+import ProviderDetails from '.';
 
 
-class LoginUserRegister extends Component{
+class ProviderDetails extends Component{
 
   render(){
     return(
@@ -33,10 +34,10 @@ class LoginUserRegister extends Component{
             Ir Para:
         </Text> 
         <View style={styles.Container_Inf_Inf}>         
-            <TouchableHighlight style={styles.containerButton} onPress={() => this.props.navigation.navigate('provider-detail')}>
+            <TouchableHighlight style={styles.containerButton} onPress={() => console.log('Click Chat')}>
                 <Text style={{fontSize: 20}}>Chat</Text>
             </TouchableHighlight>
-            <TouchableHighlight style={styles.containerButton} onPress={() => this.props.navigation.navigate('provider-detail')}>
+            <TouchableHighlight style={styles.containerButton} onPress={() => console.log('Click endereço')}>
                 <Text style={{fontSize: 20}}>Endereço</Text>
             </TouchableHighlight>          
         </View>
@@ -138,4 +139,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default LoginUserRegister;
+export default ProviderDetails;

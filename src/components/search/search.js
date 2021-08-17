@@ -61,7 +61,7 @@ class SearchResult extends Component{
         keyExtractor={(item) => item.id}
         data={this.state.providers}
         renderItem={({item}) => (
-          <TouchableOpacity onPress={() => console.log('Search result card pressed!')}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('provider-details')}>
             <CardResult provider={item} />
           </TouchableOpacity>
         )}
