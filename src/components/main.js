@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Search from './search';
 import Login from './login';
 import UserRegister from './user-register';
-import UserDescription from './provider-detail';
+import ProviderDetail from './provider-detail';
 
 class Main extends Component {
 
@@ -58,10 +58,10 @@ class Main extends Component {
           />
 
           <this.stack.Screen 
-            name="user-description"
-            component={UserDescription}
+            name="provider-detail"
+            component={ProviderDetail}
             options={{
-              title: "Descrição do Profissional",
+              title: "Detalhes do Profissional",
             }}
           />
 

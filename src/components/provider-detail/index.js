@@ -1,2 +1,2 @@
-import ProviderDetail from './user-description';
+import ProviderDetail from './provider-detail';
 export default ProviderDetail;

@@ -14,10 +14,10 @@ class Login extends Component{
         <View style={style.container}>
           <TextInput style={style.emailField} maxLength={50} type="email" placeholder="  Email"/>
           <TextInput style={style.emailField} type="password" placeholder="  Password"/>
-          <TouchableHighlight style={style.loginButton}>
-            <Text style={{fontSize: 25}}>Login</Text>
+          <TouchableHighlight style={style.loginButton} onPress={() => this.props.navigation.navigate('provider-detail')}>
+            <Text style={{fontSize: 25}}>Login</Text> 
           </TouchableHighlight>
-          <TouchableHighlight style={style.registerButton} onPress={() => this.props.navigation.navigate('user-register')}>
+          <TouchableHighlight style={style.registerButton} onPress={() => this.props.navigation.navigate('provider-detail')}>
             <Text style={{fontSize: 25}}>Registre-se</Text>
           </TouchableHighlight>
           <Text style={style.forgotPassword}>Esqueci minha senha</Text>
