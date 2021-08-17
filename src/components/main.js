@@ -9,6 +9,7 @@ import UserRegister from './user-register';
 import LoginEmitter from '../models/login-emitter';
 import ProviderDetails from './provider-details';
 import GlowTheme from '../shared/theme';
+import ProviderRegister from './provaider-register';
 
 class DrawerNavigator extends Component{
 
@@ -89,7 +90,13 @@ class StackNavigator extends Component{
             title: "Detalhes do Profissional",
           }}
         />
-
+         <this.stack.Screen 
+          name="provider-register"
+          component={ProviderRegister}
+          options={{
+            title: "Cadastro do Profissional",
+          }}
+        />
       </this.stack.Navigator>
     );
 
