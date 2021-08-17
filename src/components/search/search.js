@@ -32,7 +32,7 @@ function Search({navigation,loginEmitter}){
   }, [navigation]);
 
   return (
-    <SearchResult/>
+    <SearchResult navigation={navigation}/>
   )
 }
 

@@ -1,7 +1,5 @@
-import { text } from '@fortawesome/fontawesome-svg-core';
 import React, { Component } from 'react';
-import { StyleSheet,Text, View, TextInput, TouchableHighlight, Image } from 'react-native';
-import ProviderDetails from '.';
+import { StyleSheet,Text, View, TouchableHighlight, Image } from 'react-native';
 
 
 class ProviderDetails extends Component{
