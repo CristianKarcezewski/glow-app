@@ -9,11 +9,9 @@ import UserRegister from './user-register';
 import LoginEmitter from '../models/login-emitter';
 import ProviderDetails from './provider-details';
 import GlowTheme from '../shared/theme';
-<<<<<<< HEAD
 import Filter from './filter';
-=======
 import ProviderRegister from './provaider-register';
->>>>>>> ddaffa6e4205a4169680c98982d5e03b53dda2e7
+import InformAddress from './informAddress';
 
 class DrawerNavigator extends Component{
 
@@ -94,7 +92,6 @@ class StackNavigator extends Component{
             title: "Detalhes do Profissional",
           }}
         />
-<<<<<<< HEAD
 
         <this.stack.Screen 
           name="filter"
@@ -104,15 +101,21 @@ class StackNavigator extends Component{
           }}
         />
 
-=======
-         <this.stack.Screen 
+        <this.stack.Screen 
           name="provider-register"
           component={ProviderRegister}
           options={{
             title: "Cadastro do Profissional",
           }}
         />
->>>>>>> ddaffa6e4205a4169680c98982d5e03b53dda2e7
+
+        <this.stack.Screen 
+          name="inform-address"
+          component={InformAddress}
+          options={{
+            title: "Informar Endereço",
+          }}
+        />
       </this.stack.Navigator>
     );
 

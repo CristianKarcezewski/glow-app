@@ -1,5 +1,5 @@
 import React, { Component} from 'react';
-import { StyleSheet,Text, View, TextInput, TouchableHighlight, Image } from 'react-native';
+import { StyleSheet,Text, View, TextInput, TouchableHighlight, Image} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
 class UserRegister extends Component{  
