@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component,useSta } from 'react';
 import { StyleSheet,Text,TextInput, View, TouchableHighlight, Image} from 'react-native';
 
 
@@ -6,31 +6,35 @@ class InformAddress extends Component {
 
 render(){
     return (
-        <View>            
+        <View style={styles.cardPrimaryConteiner}>            
             <View style={styles.imageContainer}>                    
                 <Image style={styles.imageLogo} source={require('../../assets/maps.jpg')}/>
             </View> 
-             <View style={{backgroundColor:'#fff'},styles.cardDescritionConteiner} >
+             <View style={{backgroundColor:'#fff'},styles.cardDescriptionConteiner} >
                 <View style={styles.cardResultTextDetailsTitle}>
-                    <Text style={{fontSize:18}}>Descrição:</Text><TextInput style={styles.cardTextInputBox} maxLength={50} type="informacoes" placeholder="Informe aqui suas habilidades!!"/> 
-                    <Text style={{fontSize:18}}>Descrição:</Text><TextInput style={styles.cardTextInputBox} maxLength={50} type="informacoes" placeholder="Informe aqui suas habilidades!!"/>  
-                    <Text style={{fontSize:18}}>Descrição:</Text><TextInput style={styles.cardTextInputBox} maxLength={50} type="informacoes" placeholder="Informe aqui suas habilidades!!"/>  
-                </View>             
-                        
+                    <Text style={styles.cardTextNameBox}>Numero:</Text><TextInput style={styles.cardTextInputBox} maxLength={50} type="informacoes" placeholder=""/>               
+                </View>
+                <View style={styles.cardResultTextDetailsTitle}>   
+                    <Text style={styles.cardTextNameBox}>Complemento:</Text><TextInput style={styles.cardTextInputBox} maxLength={50} type="informacoes" placeholder=""/>
+                </View>   
+                <View style={styles.cardResultTextDetailsTitle}>   
+                    <Text style={styles.cardTextNameBox}>Referencia:</Text><TextInput style={styles.cardTextInputBox} maxLength={50} type="informacoes" placeholder=""/>
+                </View>                       
             </View>
-            <View style={styles.cardBottunConteiner}>             
-                
-                <View style={styles.cardButtonsConteiner}>         
-                <TouchableHighlight style={styles.cardResultButton} onPress={() => this.props.navigation.navigate('provider-register')}>
-                    <Text style={{fontSize: 20}}>Adicionar jornada de trabalho</Text>
+            <View style={styles.cardButtonsUpperConteiner}>         
+                <TouchableHighlight style={styles.cardButtonUpperResult} onPress={() => this.props.navigation.navigate('provider-register')}>
+                    <Text style={{fontSize: 20}}>Capturar</Text>
                 </TouchableHighlight>
-                <TouchableHighlight style={styles.cardResultButton} onPress={() => this.props.navigation.navigate('inform-address')}>
-                    <Text style={{fontSize: 20}}>Adicionar endereço de trabalho</Text>
+                <TouchableHighlight style={styles.cardButtonUpperResult} onPress={() => console.log('Click endereço')}>
+                    <Text style={{fontSize: 20}}>Salvar</Text>
                 </TouchableHighlight>          
             </View>
-            </View>
+            {/* <View style={styles.cardButtonsLowConteiner}>         
+                <TouchableHighlight style={styles.cardButtonLowResult} onPress={() => this.props.navigation.navigate('provider-register')}>
+                    <Text style={{fontSize: 20}}>Informar Manualmente</Text>
+                </TouchableHighlight>                       
+            </View> */}
         </View>
-
 
         )
     }
@@ -38,84 +42,88 @@ render(){
 }
 
 const styles = StyleSheet.create({
-    imageContainer: {
-      flex: 4,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    imageLogo: {
-      width: '100%',
-     
-      marginTop: 10,
-    },
+   
     cardPrimaryConteiner: {
         flex: 1,
-        paddingHorizontal:15,
-        paddingVertical:30,
+        padding:10,
         backgroundColor: '#fff',
-    },
-    cardSelectorConteiner: {
-        flex:1,
-        padding: 15,
-        backgroundColor: '#fff',        
-    },
+    }, 
+    imageContainer: {
+        flex: 3,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },  
     cardDescriptionConteiner: {
-        flex: 4,
-        
+        flex: 2, 
+        flexDirection: 'column',       
         backgroundColor: '#fff',
         alignItems:'stretch',      
-    },
-    cardBottunConteiner: {
-        flex: 4,
+    },    
+    cardButtonsUpperConteiner: {
+        flex: 1,
+        flexDirection: 'row',       
         backgroundColor: '#fff', 
         justifyContent: 'center',  
         alignItems: 'stretch', 
         marginTop:15,    
     },
-    cardSelectTextBox: {       
-        paddingLeft: 20,
-        paddingRight: 20,
-        padding:5,
-        fontSize: 16,
-        backgroundColor: '#fff',
-        borderColor: 'black',
-        borderWidth: 2,
-        borderRadius: 20,
-        justifyContent: 'center',
+    cardBottunLowConteiner: {
+        flex: 1,
+        flexDirection: 'column', 
+        justifyContent: 'center',  
         alignItems: 'center',
-    },
+    },    
+      imageLogo: {
+          marginTop:60,
+        width: '100%',         
+      },   
     cardResultTextDetailsTitle: {        
-        fontSize: 18,
-        backgroundColor: '#fff',
-        marginStart:7,
+        fontSize: 18,       
+        flexDirection: 'row',        
     },
     cardTextInputBox: {
+        flex:2,
         width: '100%',
-        paddingLeft: 7,
-        paddingRight: 7,
-        padding:50,
-        fontSize: 20,
-        backgroundColor: '#fff',
-        borderColor: 'black',
-        borderWidth: 2,
-        borderRadius: 20,
-        borderWidth: 2,        
-        marginTop:1,
-        fontSize:16,
+        paddingLeft: 5,
+        paddingRight: 5,     
+        backgroundColor: '#F8F8F9',        
+        marginTop:10,
+        fontSize:16,        
     },
-    cardResultButton: {
-        borderRadius: 30,       
-        marginHorizontal: '2%',
+    cardTextNameBox: {
+        flex:1,        
+        paddingLeft: 5,
+        paddingRight: 5,      
+        marginTop:10,
+        fontSize:16,        
+    },    
+    cardButtonUpperResult: {
+        flex:1,
+        borderRadius: 30,
+        margin: 5,
         borderColor: 'black',
         borderWidth: 1,
         backgroundColor: '#db382f',
-        marginTop:5,
-        marginBottom:10,
-        width: '95%',
-        height: '30%',
-        alignItems: 'center',          
-        justifyContent: 'center',        
-    },   
+        alignItems: 'center',
+        width: '45%',
+        height: '45%',
+        justifyContent: 'center',
+      },       
+    cardButtonLowResult: {
+        flex:1,
+        borderRadius: 30,
+        width: '70%',
+        margin: 5,
+        borderColor: 'black',
+        borderWidth: 1,
+        backgroundColor: '#db382f',
+        alignItems: 'center',
+        width: '45%',
+        height: '25%',
+        alignItems: 'center',   
+        paddingHorizontal: 15,
+        justifyContent: 'center',
+      },       
+});
 
-});   
 export default InformAddress;

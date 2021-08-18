@@ -32,6 +32,13 @@ class DrawerNavigator extends Component{
           children={() => this.props.loginEmitter.logout()}
           options={{headerShown: false, title: 'Sair'}}
         />
+         <this.drawer.Screen 
+          name="provider-register"
+          component={ProviderRegister}
+          options={{
+            title: "Cadastro do Profissional",
+          }}
+        />
       </this.drawer.Navigator>
     );
   }
@@ -99,15 +106,7 @@ class StackNavigator extends Component{
           options={{
             title: "Filtrar Profissionais",
           }}
-        />
-
-        <this.stack.Screen 
-          name="provider-register"
-          component={ProviderRegister}
-          options={{
-            title: "Cadastro do Profissional",
-          }}
-        />
+        />       
 
         <this.stack.Screen 
           name="inform-address"

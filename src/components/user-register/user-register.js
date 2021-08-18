@@ -21,12 +21,11 @@ class UserRegister extends Component{
         <View style={style.imageContainer}>                    
           <Image style={style.imageLogo} source={require('../../assets/glow-logo.jpeg')}/>
         </View>                
-        <View style={style.container}>                   
-
+        <View style={style.container}> 
           <TextInput style={style.formField} maxLength={50} type="nome" placeholder="Nome"/>
           <TextInput style={style.formField} maxLength={50} type="email" placeholder="E-mail"/>
           <TextInput style={style.formField} type="telefone" placeholder="Tefefone"/>
-          
+                    
           <View style={style.pickerView}>
             <Picker
               style={style.picker}
