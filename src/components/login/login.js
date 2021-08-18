@@ -1,38 +1,43 @@
-import React, { Component } from 'react';
-import { StyleSheet,Text, View, TouchableOpacity, Image } from 'react-native';
-import Input from '../Input';
+import React, { Component } from "react";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import Input from "../Input";
 
-class Login extends Component{
-
-  constructor(props){
+class Login extends Component {
+  constructor(props) {
     super(props);
     this.state = {
       validEmail: true,
       validPassword: true,
-    }
+    };
   }
 
-  _login(){
-    this.props.loginEmitter.login('Bearer dsgpsogspog');
+  _login() {
+    this.props.loginEmitter.login("Bearer dsgpsogspog");
     this.props.navigation.popToTop();
   }
 
-  render(){
-    return(
-      <View style={{flex: 1, backgroundColor: '#fff'}}>
-
+  render() {
+    return (
+      <View style={{ flex: 1, backgroundColor: "#fff" }}>
         <View style={style.imageContainer}>
-          <Image style={style.imageLogo} source={require('../../assets/glow-logo.png')}/>
+          <Image
+            style={style.imageLogo}
+            source={require("../../assets/glow-logo.png")}
+          />
         </View>
 
         <View style={style.container}>
           <Input
-            style={(this.state.validEmail ? style.validEmailField : style.invalidEmailField)}
+            style={
+              this.state.validEmail
+                ? style.validEmailField
+                : style.invalidEmailField
+            }
             maxLength={50}
             placeholder="Email"
-            pattern={'/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/'}
-            onValidation={isValid => {
-              this.setState({...this.state, validEmail: isValid});
+            pattern={"/^[a-zA-Z0-9]+@[a-zA-Z0-9]+.[A-Za-z]+$/"}
+            onValidation={(isValid) => {
+              this.setState({ ...this.state, validEmail: isValid });
             }}
           />
 
@@ -42,27 +47,36 @@ class Login extends Component{
             style={style.passwordField}
           />
 
-          <TouchableOpacity style={style.loginButton} onPress={() => this._login()}>
-            <Text style={{fontSize: 25, fontWeight: 'bold', color: '#fff'}}>Login</Text>
+          <TouchableOpacity
+            style={style.loginButton}
+            onPress={() => this._login()}
+          >
+            <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
+              Login
+            </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={style.registerButton} onPress={() => this.props.navigation.navigate('user-register')}>
-            <Text style={{fontSize: 25, fontWeight: 'bold', color: '#fff'}}>Registre-se</Text>
+          <TouchableOpacity
+            style={style.registerButton}
+            onPress={() => this.props.navigation.navigate("user-register")}
+          >
+            <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
+              Registre-se
+            </Text>
           </TouchableOpacity>
 
           <Text style={style.forgotPassword}>Esqueci minha senha</Text>
         </View>
-
       </View>
-    )
+    );
   }
 }
 
 const style = StyleSheet.create({
   imageContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   imageLogo: {
     marginTop: 70,
@@ -71,68 +85,68 @@ const style = StyleSheet.create({
   },
   container: {
     flex: 3,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
   },
   validEmailField: {
-    width: '80%',
+    width: "80%",
     paddingLeft: 20,
     paddingRight: 20,
     margin: 10,
     fontSize: 20,
-    backgroundColor: '#fff',
-    borderColor: 'black',
+    backgroundColor: "#fff",
+    borderColor: "black",
     borderWidth: 2,
     borderRadius: 20,
   },
   invalidEmailField: {
-    width: '80%',
+    width: "80%",
     paddingLeft: 20,
     paddingRight: 20,
     margin: 10,
     fontSize: 20,
-    backgroundColor: '#fff',
-    borderColor: 'red',
+    backgroundColor: "#fff",
+    borderColor: "red",
     borderWidth: 2,
     borderRadius: 20,
   },
   passwordField: {
-    width: '80%',
+    width: "80%",
     paddingLeft: 20,
     paddingRight: 20,
     margin: 10,
     fontSize: 20,
-    backgroundColor: '#fff',
-    borderColor: 'black',
+    backgroundColor: "#fff",
+    borderColor: "black",
     borderWidth: 2,
     borderRadius: 20,
   },
   loginButton: {
     borderRadius: 30,
-    width: '50%',
+    width: "50%",
     margin: 10,
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
-    backgroundColor: '#db382f',
-    alignItems: 'center',
+    backgroundColor: "#db382f",
+    alignItems: "center",
     elevation: 10,
   },
   registerButton: {
     borderRadius: 30,
-    width: '50%',
+    width: "50%",
     margin: 10,
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
-    backgroundColor: '#db382f',
-    alignItems: 'center',
+    backgroundColor: "#db382f",
+    alignItems: "center",
     elevation: 10,
   },
   forgotPassword: {
-    color: 'blue',
+    color: "blue",
     fontSize: 20,
     margin: 10,
-    textDecorationLine: 'underline'
-  }
+    textDecorationLine: "underline",
+  },
 });
 export default Login;
