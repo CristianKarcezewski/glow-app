@@ -8,8 +8,8 @@ function Search({navigation,loginEmitter}){
 
   const [userLoggedIn, setUser] = useState(false);
 
-  async function loggedIn(value){
-    await setUser(value);
+  function loggedIn(value){
+    setUser(() => value);
   };
   loginEmitter.subscribe('appToolbarButton',loggedIn);
 

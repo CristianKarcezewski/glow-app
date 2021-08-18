@@ -8,7 +8,9 @@ class UserRegister extends Component{
     super();
     this.state = {
       states: ['Santa Catarina', 'Rio Grande do Sul'],
+      cities: ['Caxias do Sul', 'Farroupilha', 'Bento Gonçalves', 'Flores da Cunha'],
       selectedState: 1,
+      selectedCity: 2,
     }
   }
 
@@ -20,23 +22,39 @@ class UserRegister extends Component{
           <Image style={style.imageLogo} source={require('../../assets/glow-logo.jpeg')}/>
         </View>                
         <View style={style.container}>                   
+
           <TextInput style={style.formField} maxLength={50} type="nome" placeholder="Nome"/>
           <TextInput style={style.formField} maxLength={50} type="email" placeholder="E-mail"/>
           <TextInput style={style.formField} type="telefone" placeholder="Tefefone"/>
           
-          <Picker 
-            selectedValue={this.state.selectedState[this.state.selectedState]} 
-            onValueChange={(itemValue, itemIndex) => this.setState({...this.state, selectedState:itemIndex})}
-          >
-            {
-              this.state.states.map((st,index) => {
-                return <Picker.Item label={st} value={st} key={index}/>
-              })
-            }
-          </Picker  >
-                                          
-          <TextInput style={style.formField} type="estado" placeholder="  Estado"/>
-          <TextInput style={style.formField} type="cidade" placeholder="  Cidade"/>
+          <View style={style.pickerView}>
+            <Picker
+              style={style.picker}
+              selectedValue={this.state.states[this.state.selectedState]} 
+              onValueChange={(itemValue, itemIndex) => this.setState({...this.state, selectedState:itemIndex})}
+            >
+              {
+                this.state.states.map((st,index) => {
+                    return <Picker.Item label={st} value={st} key={index}/>
+                })
+              }
+            </Picker>
+          </View>
+
+          <View style={style.pickerView}>
+            <Picker
+              style={style.picker}
+              selectedValue={this.state.cities[this.state.selectedCity]} 
+              onValueChange={(itemValue, itemIndex) => this.setState({...this.state, selectedCity:itemIndex})}
+            >
+              {
+                this.state.cities.map((st,index) => {
+                    return <Picker.Item label={st} value={st} key={index}/>
+                })
+              }
+            </Picker>
+          </View>
+
           <TextInput style={style.formField} type="senha" placeholder="  Senha"/>
           <TextInput style={style.formField} type="confirmaSenha" placeholder="  Confirma Senha"/>
           <TouchableHighlight style={style.registerButton}>
@@ -57,7 +75,7 @@ const style = StyleSheet.create({
     },
     imageLogo: {
       width: '50%',
-      marginTop: 10,
+      marginTop: 30,
     },
     container: {
       flex: 8,
@@ -67,14 +85,23 @@ const style = StyleSheet.create({
     },  
     formField: {
       width: '80%',
-      paddingLeft: 20,
-      paddingRight: 20,
+      paddingHorizontal: 20,
       margin: 5,
       fontSize: 20,
-      backgroundColor: '#fff',
       borderColor: 'black',
-      borderWidth: 2,
+      borderWidth: 1,
       borderRadius: 20,
+    },
+    pickerView: {
+      width: '80%',
+      paddingHorizontal: 20,
+      borderColor: 'black',
+      borderWidth: 1,
+      margin: 5,
+      borderRadius: 20,
+    },
+    picker: {
+      margin: 5,
     },
     registerButton: {
       borderRadius: 30,
