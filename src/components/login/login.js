@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet,Text, View, TextInput, TouchableHighlight, Image } from 'react-native';
+import { StyleSheet,Text, View, TouchableOpacity, Image } from 'react-native';
 import Input from '../Input';
 
 class Login extends Component{
@@ -42,13 +42,13 @@ class Login extends Component{
             style={style.passwordField}
           />
 
-          <TouchableHighlight style={style.loginButton} onPress={() => this._login()}>
+          <TouchableOpacity style={style.loginButton} onPress={() => this._login()}>
             <Text style={{fontSize: 25, fontWeight: 'bold', color: '#fff'}}>Login</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
 
-          <TouchableHighlight style={style.registerButton} onPress={() => this.props.navigation.navigate('user-register')}>
+          <TouchableOpacity style={style.registerButton} onPress={() => this.props.navigation.navigate('user-register')}>
             <Text style={{fontSize: 25, fontWeight: 'bold', color: '#fff'}}>Registre-se</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
 
           <Text style={style.forgotPassword}>Esqueci minha senha</Text>
         </View>

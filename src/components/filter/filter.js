@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableHighlight } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import Checkbox from 'expo-checkbox';
 
@@ -10,7 +10,7 @@ class Filter extends Component{
         this.state = {
             states: ['Santa Catarina', 'Rio Grande do Sul'],
             cities: ['Caxias do Sul', 'Farroupilha', 'Bento Gonçalves', 'Flores da Cunha'],
-            professionTypes: ['Todos','Funileiro','Diarista', 'Eletrcista'],
+            professionTypes: ['Todos','Funileiro','Diarista', 'Eletrecista'],
             selectedState: 1,
             selectedCity: 2,
             selectedProfessionalType: 0,
@@ -22,12 +22,12 @@ class Filter extends Component{
         return(
             <View style={{flex: 1, margin:10, alignItems: 'center', justifyContent: 'center'}}>
                 <Text style={{fontSize: 30, marginBottom:20, borderBottomColor:'#db382f', borderBottomWidth: 1}}>Filtrar Serviços</Text>
-                <TouchableHighlight onPress={() => this.setState({...this.state, favorites: !this.state.favorites})}>
+                <TouchableOpacity onPress={() => this.setState({...this.state, favorites: !this.state.favorites})}>
                     <View style={style.checkboxContainer}>
                         <Checkbox style={style.checkbox} color={'#db382f'} value={this.state.favorites} onValueChange={() => this.setState({...this.state, favorites: !this.state.favorites})}/>
                         <Text style={style.checkboxText}>Meus favoritos</Text>
                     </View>
-                </TouchableHighlight>
+                </TouchableOpacity>
                 <View style={style.pickerView}>
                     <Picker
                     style={style.picker}
@@ -70,12 +70,12 @@ class Filter extends Component{
                     </Picker>
                 </View>
 
-                <TouchableHighlight style={{...style.buttons, backgroundColor: '#db382f'}} onPress={() => this.props.navigation.popToTop()}>
+                <TouchableOpacity style={{...style.buttons, backgroundColor: '#db382f'}} onPress={() => this.props.navigation.popToTop()}>
                     <Text style={{fontSize: 25, fontWeight: 'bold', color: '#fff'}}>Aplicar</Text>
-                </TouchableHighlight>
-                <TouchableHighlight style={style.buttons} onPress={() => this.props.navigation.popToTop()}>
+                </TouchableOpacity>
+                <TouchableOpacity style={style.buttons} onPress={() => this.props.navigation.popToTop()}>
                     <Text style={{fontSize: 25, fontWeight: 'bold', color: 'black'}}>Voltar</Text>
-                </TouchableHighlight>
+                </TouchableOpacity>
             </View>
             
         );

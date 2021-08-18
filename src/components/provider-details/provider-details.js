@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet,Text, View, TouchableHighlight} from 'react-native';
+import { StyleSheet,Text, View, TouchableOpacity} from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 
@@ -29,12 +29,12 @@ class ProviderDetails extends Component{
         </View>
             <Text style={styles.cardResultTextDetailsTitle}>Ir Para:</Text> 
             <View style={styles.cardButtonsConteiner}>         
-                <TouchableHighlight style={styles.cardButtonConteiner} onPress={() => this.props.navigation.navigate('provider-register')}>
+                <TouchableOpacity style={styles.cardButtonConteiner}>
                     <Text style={{fontSize: 20}}>Chat</Text>
-                </TouchableHighlight>
-                <TouchableHighlight style={styles.cardButtonConteiner} onPress={() => console.log('Click endereço')}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.cardButtonConteiner} onPress={() => console.log('Click endereço')}>
                     <Text style={{fontSize: 20}}>Endereço</Text>
-                </TouchableHighlight>          
+                </TouchableOpacity>          
             </View>
       </View>
     )

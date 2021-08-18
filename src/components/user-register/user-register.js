@@ -14,6 +14,11 @@ class UserRegister extends Component{
     }
   }
 
+  _register(){
+    this.props.loginEmitter.login('Bearer dsgpsogspog');
+    this.props.navigation.popToTop();
+  }
+
   render(){
     
     return(
@@ -56,7 +61,7 @@ class UserRegister extends Component{
 
           <TextInput style={style.formField} type="senha" placeholder="  Senha"/>
           <TextInput style={style.formField} type="confirmaSenha" placeholder="  Confirma Senha"/>
-          <TouchableHighlight style={style.registerButton}>
+          <TouchableHighlight style={style.registerButton} onPress={() => this._register()}>
             <Text style={{fontSize: 25, fontWeight: 'bold', color: '#fff'}}>Cadastrar</Text>
           </TouchableHighlight>
         </View>

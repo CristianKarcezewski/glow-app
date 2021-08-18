@@ -4,42 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser, faBars, faStar, faSearch, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
 import Provider from '../../models/provider'
 
-function Search({navigation,loginEmitter}){
-
-  const [userLoggedIn, setUser] = useState(false);
-
-  function loggedIn(value){
-    setUser(() => value);
-  };
-  loginEmitter.subscribe('appToolbarButton',loggedIn);
-
-  React.useLayoutEffect(() => {
-    if (userLoggedIn){
-      navigation.setOptions({
-        headerRight: () => (
-          <FontAwesomeIcon icon={faBars} onPress={() => navigation.toggleDrawer()} />
-        ),
-      });
-    }else{
-      navigation.setOptions({
-        headerRight: () => (
-          <TouchableHighlight style={style.headerLoginButton} onPress={() => navigation.navigate('login')}>
-            <Text style={{fontSize: 20, fontWeight: 'bold', color:'#fff'}}>Login</Text>
-          </TouchableHighlight>
-        ),
-      });
-    }
-  }, [navigation]);
-
-  return (
-    <SearchResult navigation={navigation}/>
-  )
-}
-
 class SearchResult extends Component{
 
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
       providers: [
         new Provider('1', null, 'Encanador', 'João', 'Um dos mais bem avaliados da região'),
@@ -140,19 +108,6 @@ const style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  headerLoginButton: {
-    borderRadius: 30,
-    width: 60,
-    height: 30,
-    marginRight: 10,
-    borderColor: 'black',
-    borderWidth: 1,
-    backgroundColor: '#db382f',
-    alignItems: 'center',
-    elevation: 10,
-    justifyContent: 'center',
-    elevation: 20,
-  },
 });
 
-export default Search;
+export default SearchResult;
