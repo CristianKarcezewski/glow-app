@@ -1,25 +1,25 @@
 import React, { Component } from 'react';
-import { StyleSheet,Text,TextInput, View,TouchableHighlight} from 'react-native';
+import { StyleSheet,Text,TextInput, View, TouchableHighlight, Image} from 'react-native';
 
 
-class ProviderRegister extends Component {
+class InformAddress extends Component {
 
-    render(){
-    return(
-        <View style={styles.cardPrimaryConteiner}>
-            <View style={styles.cardSelectorConteiner}>
-                <TextInput style={styles.cardSelectTextBox} type="atividadeRealizada" placeholder="Atividade Realizada"/>                 
-            </View>
-            <View style={{backgroundColor:'#fff'},styles.cardDescritionConteiner} >
+render(){
+    return (
+        <View>            
+            <View style={styles.imageContainer}>                    
+                <Image style={styles.imageLogo} source={require('../../assets/maps.jpg')}/>
+            </View> 
+             <View style={{backgroundColor:'#fff'},styles.cardDescritionConteiner} >
                 <View style={styles.cardResultTextDetailsTitle}>
-                    <Text style={{fontSize:18}}>Descrição:</Text> 
-                </View>                
-                <View >                     
-                    <TextInput style={styles.cardTextInputBox} maxLength={50} type="informacoes" placeholder="Informe aqui suas habilidades!!"/>                          
-                </View>          
+                    <Text style={{fontSize:18}}>Descrição:</Text><TextInput style={styles.cardTextInputBox} maxLength={50} type="informacoes" placeholder="Informe aqui suas habilidades!!"/> 
+                    <Text style={{fontSize:18}}>Descrição:</Text><TextInput style={styles.cardTextInputBox} maxLength={50} type="informacoes" placeholder="Informe aqui suas habilidades!!"/>  
+                    <Text style={{fontSize:18}}>Descrição:</Text><TextInput style={styles.cardTextInputBox} maxLength={50} type="informacoes" placeholder="Informe aqui suas habilidades!!"/>  
+                </View>             
+                        
             </View>
-            <View style={styles.cardBottunConteiner}>                
-                <Text style={styles.cardResultTextDetailsTitle}>Ir Para:</Text> 
+            <View style={styles.cardBottunConteiner}>             
+                
                 <View style={styles.cardButtonsConteiner}>         
                 <TouchableHighlight style={styles.cardResultButton} onPress={() => this.props.navigation.navigate('provider-register')}>
                     <Text style={{fontSize: 20}}>Adicionar jornada de trabalho</Text>
@@ -30,10 +30,24 @@ class ProviderRegister extends Component {
             </View>
             </View>
         </View>
-    )};
-}
-const styles = StyleSheet.create({
 
+
+        )
+    }
+
+}
+
+const styles = StyleSheet.create({
+    imageContainer: {
+      flex: 4,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    imageLogo: {
+      width: '100%',
+     
+      marginTop: 10,
+    },
     cardPrimaryConteiner: {
         flex: 1,
         paddingHorizontal:15,
@@ -102,6 +116,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',          
         justifyContent: 'center',        
     },   
-});
 
-export default ProviderRegister;
+});   
+export default InformAddress;

@@ -10,6 +10,7 @@ import LoginEmitter from '../models/login-emitter';
 import ProviderDetails from './provider-details';
 import GlowTheme from '../shared/theme';
 import ProviderRegister from './provaider-register';
+import InformAddress from './informAddress';
 
 class DrawerNavigator extends Component{
 
@@ -95,6 +96,13 @@ class StackNavigator extends Component{
           component={ProviderRegister}
           options={{
             title: "Cadastro do Profissional",
+          }}
+        />
+         <this.stack.Screen 
+          name="inform-address"
+          component={InformAddress}
+          options={{
+            title: "Informar Endereço",
           }}
         />
       </this.stack.Navigator>
