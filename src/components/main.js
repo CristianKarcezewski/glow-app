@@ -19,6 +19,7 @@ import GlowTheme from "../shared/theme";
 import Filter from "./filter";
 import ProviderRegister from "./provider-register";
 import InformAddress from "./informAddress";
+import Chat from "./chat";
 
 class DrawerNavigator extends Component {
   constructor(props) {
@@ -64,7 +65,7 @@ class DrawerNavigator extends Component {
           component={ProviderRegister}
           options={({ navigation }) => ({
             headerShown: true,
-            title: "Sou autonomo",
+            title: "Torne-se um prestador",
             headerLeft: () => (
               <TouchableOpacity
                 style={{ marginLeft: 20 }}
@@ -207,6 +208,14 @@ class StackNavigator extends Component {
           component={Filter}
           options={{
             title: "Filtrar Profissionais",
+          }}
+        />
+
+        <this.stack.Screen
+          name="chat"
+          component={Chat}
+          options={{
+            title: "Chat",
           }}
         />
 

@@ -102,6 +102,11 @@ class ProviderDetails extends Component {
                   : styles.disabledButton
               }
               disabled={!this.state.userLoggedIn}
+              onPress={() =>
+                this.props.navigation.navigate("chat", {
+                  companyName: "Empresa do João",
+                })
+              }
             >
               <Text style={{ fontSize: 20 }}>Chat</Text>
             </TouchableOpacity>
