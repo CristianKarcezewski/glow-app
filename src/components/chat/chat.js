@@ -34,14 +34,16 @@ class Chat extends Component {
   }
 
   sendMessage() {
-    const nm = {
-      id: this.state.messages.length.toString(),
-      from: "1",
-      to: "14",
-      message: this.state.newMessage,
-    };
-    this.setState({ ...this.state, messages: [...this.state.messages, nm] });
-    this.setState({ ...this.state.newMessage, newMessage: "" });
+    if (this.state.newMessage != "") {
+      const nm = {
+        id: this.state.messages.length.toString(),
+        from: "1",
+        to: "14",
+        message: this.state.newMessage,
+      };
+      this.setState({ ...this.state, messages: [...this.state.messages, nm] });
+      this.setState({ ...this.state.newMessage, newMessage: "" });
+    }
   }
 
   render() {
