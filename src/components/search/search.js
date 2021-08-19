@@ -12,7 +12,7 @@ import {
   faUser,
   faStar,
   faSearch,
-  faSearchPlus,
+  faFilter,
 } from "@fortawesome/free-solid-svg-icons";
 import Provider from "../../models/provider";
 
@@ -109,7 +109,7 @@ class SearchResult extends Component {
             style={{ flex: 1, alignItems: "center" }}
             onPress={() => this.props.navigation.navigate("filter")}
           >
-            <FontAwesomeIcon icon={faSearchPlus} size={25} color={"#db382f"} />
+            <FontAwesomeIcon icon={faFilter} size={25} color={"#db382f"} />
           </TouchableOpacity>
         </View>
         <View style={{ flex: 14 }}>

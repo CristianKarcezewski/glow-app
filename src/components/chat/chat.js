@@ -16,15 +16,15 @@ class Chat extends Component {
     this.state = {
       newMessage: "",
       messages: [
-        { id: "1", from: "1", to: "14", message: "Oi bom dia" },
+        { id: "0", from: "1", to: "14", message: "Oi bom dia" },
         {
-          id: "2",
+          id: "1",
           from: "1",
           to: "14",
           message: "Conseguiria vir aqui em casa fazer um orçamento?",
         },
         {
-          id: "3",
+          id: "2",
           from: "14",
           to: "1",
           message: "Claro. Que horas vc está em casa?",
@@ -33,13 +33,14 @@ class Chat extends Component {
     };
   }
 
-  sendMessage(value) {
-    this.setState(...this.state.messages, {
-      id: "5",
+  sendMessage() {
+    const nm = {
+      id: this.state.messages.length.toString(),
       from: "1",
       to: "14",
-      message: value,
-    });
+      message: this.state.newMessage,
+    };
+    this.setState({ ...this.state, messages: [...this.state.messages, nm] });
   }
 
   componentDidMount() {
@@ -56,6 +57,8 @@ class Chat extends Component {
             keyExtractor={(item) => item.id}
             data={this.state.messages}
             renderItem={({ item }) => <Message data={item} />}
+            inverted={true}
+            contentContainerStyle={{ flexDirection: "column-reverse" }}
           />
         </View>
         <View
@@ -74,7 +77,7 @@ class Chat extends Component {
           />
           <TouchableOpacity
             style={style.sendButton}
-            onPress={() => this.sendMessage(this.state.newMessage)}
+            onPress={() => this.sendMessage()}
           >
             <FontAwesomeIcon icon={faPaperPlane} size={30} />
           </TouchableOpacity>
