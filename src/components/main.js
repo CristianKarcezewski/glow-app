@@ -212,14 +212,6 @@ class StackNavigator extends Component {
         />
 
         <this.stack.Screen
-          name="chat"
-          component={Chat}
-          options={{
-            title: "Chat",
-          }}
-        />
-
-        <this.stack.Screen
           name="inform-address"
           component={InformAddress}
           options={{
