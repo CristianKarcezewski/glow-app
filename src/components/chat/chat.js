@@ -41,12 +41,7 @@ class Chat extends Component {
       message: this.state.newMessage,
     };
     this.setState({ ...this.state, messages: [...this.state.messages, nm] });
-  }
-
-  componentDidMount() {
-    this.props.navigation.setOptions({
-      title: this.props.route.params.companyName,
-    });
+    this.setState({ ...this.state.newMessage, newMessage: "" });
   }
 
   render() {
@@ -63,18 +58,20 @@ class Chat extends Component {
         </View>
         <View
           style={{
-            flex: 1,
             flexDirection: "row",
             backgroundColor: "ghostWhite",
+            height: 70,
           }}
         >
           <TextInput
             style={style.inputField}
             placeholder="Mensagem"
-            onChangeText={(value) =>
-              this.setState({ ...this.state, newMessage: value })
-            }
+            onChangeText={(value) => {
+              this.setState({ ...this.state, newMessage: value });
+            }}
+            value={this.state.newMessage}
           />
+
           <TouchableOpacity
             style={style.sendButton}
             onPress={() => this.sendMessage()}

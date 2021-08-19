@@ -118,9 +118,7 @@ class SearchResult extends Component {
             data={this.state.providers}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.navigate("provider-details")
-                }
+                onPress={() => this.props.navigation.navigate("provider-tabs")}
               >
                 <CardResult provider={item} />
               </TouchableOpacity>

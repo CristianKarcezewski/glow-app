@@ -93,35 +93,6 @@ class ProviderDetails extends Component {
             <Text style={styles.cardResultTextDetailsTitle}>Sobre:</Text>
             <Text style={styles.cardResultTextDetailsDescription}>{loren}</Text>
           </View>
-          <View style={styles.bottom}>
-            <Text style={styles.cardResultTextDetailsTitle}>Ir Para:</Text>
-            <TouchableOpacity
-              style={
-                this.state.userLoggedIn
-                  ? styles.enabledButton
-                  : styles.disabledButton
-              }
-              disabled={!this.state.userLoggedIn}
-              onPress={() =>
-                this.props.navigation.navigate("chat", {
-                  companyName: "Empresa do João",
-                })
-              }
-            >
-              <Text style={{ fontSize: 20 }}>Chat</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={
-                this.state.userLoggedIn
-                  ? styles.enabledButton
-                  : styles.disabledButton
-              }
-              onPress={() => console.log("Click endereço")}
-              disabled={!this.state.userLoggedIn}
-            >
-              <Text style={{ fontSize: 20 }}>Endereço</Text>
-            </TouchableOpacity>
-          </View>
         </View>
       );
     }
@@ -155,36 +126,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     width: "100%",
     backgroundColor: "#F8F8F9",
-  },
-  bottom: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  enabledButton: {
-    borderRadius: 30,
-    width: "50%",
-    margin: 5,
-    borderColor: "black",
-    borderWidth: 1,
-    backgroundColor: "#db382f",
-    alignItems: "center",
-    alignItems: "center",
-    justifyContent: "center",
-    elevation: 10,
-  },
-  disabledButton: {
-    borderRadius: 30,
-    width: "50%",
-    margin: 5,
-    borderColor: "black",
-    borderWidth: 1,
-    backgroundColor: "#fff",
-    color: "green",
-    alignItems: "center",
-    alignItems: "center",
-    justifyContent: "center",
-    elevation: 10,
   },
 });
 
