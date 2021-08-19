@@ -14,7 +14,7 @@ import Search from "./search";
 import Login from "./login";
 import UserRegister from "./user-register";
 import LoginEmitter from "../models/login-emitter";
-import ProviderTabs from "./provider-tabs";
+import ProviderDetailTabs from "./provider-detail-tabs";
 import GlowTheme from "../shared/theme";
 import Filter from "./filter";
 import ProviderRegister from "./provider-register";
@@ -190,13 +190,16 @@ class StackNavigator extends Component {
         </this.stack.Screen>
 
         <this.stack.Screen
-          name="provider-tabs"
+          name="provider-detail-tabs"
           options={{
             title: "Detalhes do Profissional",
           }}
         >
           {(props) => (
-            <ProviderTabs {...props} loginEmitter={this.props.loginEmitter} />
+            <ProviderDetailTabs
+              {...props}
+              loginEmitter={this.props.loginEmitter}
+            />
           )}
         </this.stack.Screen>
 

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAddressCard, faComments } from "@fortawesome/free-solid-svg-icons";
 import Chat from "../chat";
 
-class ProviderTabs extends Component {
+class ProviderDetailTabs extends Component {
   constructor(props) {
     super(props);
     this.tabs = createBottomTabNavigator();
@@ -60,4 +60,4 @@ class ProviderTabs extends Component {
   }
 }
 
-export default ProviderTabs;
+export default ProviderDetailTabs;
