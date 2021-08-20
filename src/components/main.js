@@ -13,13 +13,13 @@ import { faArrowLeft, faBars } from "@fortawesome/free-solid-svg-icons";
 import Search from "./search";
 import Login from "./login";
 import UserRegister from "./user-register";
-import LoginEmitter from "../models/login-emitter";
+import LoginEmitter from "../emitters/login-emitter";
+import LocationsEmitter from "../emitters/locations-emitter";
 import ProviderDetailTabs from "./provider-detail-tabs";
 import GlowTheme from "../shared/theme";
 import ProviderFilter from "./provider-filter";
 import ProviderRegister from "./provider-register";
 import InformAddress from "./informAddress";
-import Chat from "./chat";
 
 class DrawerNavigator extends Component {
   constructor(props) {
@@ -43,7 +43,7 @@ class DrawerNavigator extends Component {
               <DrawerItem
                 label="Sair"
                 onPress={() => {
-                  this.props.loginEmitter.logout();
+                  this.props.emitters.loginEmitter.logout();
                   props.navigation.goBack();
                 }}
               />
@@ -56,7 +56,7 @@ class DrawerNavigator extends Component {
           options={{ headerShown: false, title: "Início" }}
         >
           {(props) => (
-            <StackNavigator {...props} loginEmitter={this.props.loginEmitter} />
+            <StackNavigator {...props} emitters={this.props.emitters} />
           )}
         </this.drawer.Screen>
 
@@ -101,14 +101,14 @@ class StackNavigator extends Component {
   }
 
   componentDidMount() {
-    this.props.loginEmitter.subscribe(
+    this.props.emitters.loginEmitter.subscribe(
       this.componentKey,
       this._handleLogin.bind(this)
     );
   }
 
   componentWillUnmount() {
-    this.props.loginEmitter.unsubscribe(this.componentKey);
+    this.props.emitters.loginEmitter.unsubscribe(this.componentKey);
   }
 
   render() {
@@ -161,7 +161,7 @@ class StackNavigator extends Component {
           {(props) => (
             <Search
               {...props}
-              loginEmitter={this.props.loginEmitter}
+              emitters={this.props.emitters}
               userLoggedIn={this.state.userLoggedIn}
             />
           )}
@@ -173,9 +173,7 @@ class StackNavigator extends Component {
             title: "Login",
           }}
         >
-          {(props) => (
-            <Login {...props} loginEmitter={this.props.loginEmitter} />
-          )}
+          {(props) => <Login {...props} emitters={this.props.emitters} />}
         </this.stack.Screen>
 
         <this.stack.Screen
@@ -185,7 +183,7 @@ class StackNavigator extends Component {
           }}
         >
           {(props) => (
-            <UserRegister {...props} loginEmitter={this.props.loginEmitter} />
+            <UserRegister {...props} emitters={this.props.emitters} />
           )}
         </this.stack.Screen>
 
@@ -196,20 +194,20 @@ class StackNavigator extends Component {
           }}
         >
           {(props) => (
-            <ProviderDetailTabs
-              {...props}
-              loginEmitter={this.props.loginEmitter}
-            />
+            <ProviderDetailTabs {...props} emitters={this.props.emitters} />
           )}
         </this.stack.Screen>
 
         <this.stack.Screen
           name="provider-filter"
-          component={ProviderFilter}
           options={{
             title: "Filtrar Profissionais",
           }}
-        />
+        >
+          {(props) => (
+            <ProviderFilter {...props} emitters={this.props.emitters} />
+          )}
+        </this.stack.Screen>
 
         <this.stack.Screen
           name="inform-address"
@@ -226,13 +224,16 @@ class StackNavigator extends Component {
 class Main extends Component {
   constructor() {
     super();
-    this.loginEmitter = new LoginEmitter();
+    this.emitters = {
+      loginEmitter: new LoginEmitter(),
+      locationsEmitter: new LocationsEmitter(),
+    };
   }
 
   render() {
     return (
       <NavigationContainer theme={GlowTheme}>
-        <DrawerNavigator loginEmitter={this.loginEmitter} />
+        <DrawerNavigator emitters={this.emitters} />
       </NavigationContainer>
     );
   }

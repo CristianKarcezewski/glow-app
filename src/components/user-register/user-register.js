@@ -10,23 +10,16 @@ import {
 import { Picker } from "@react-native-picker/picker";
 
 class UserRegister extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      states: ["Santa Catarina", "Rio Grande do Sul"],
-      cities: [
-        "Caxias do Sul",
-        "Farroupilha",
-        "Bento Gonçalves",
-        "Flores da Cunha",
-      ],
-      selectedState: 1,
-      selectedCity: 2,
+      selectedState: null,
+      selectedCity: null,
     };
   }
 
   _register() {
-    this.props.loginEmitter.login("Bearer dsgpsogspog");
+    this.props.emitters.loginEmitter.login("Bearer dsgpsogspog");
     this.props.navigation.popToTop();
   }
 
@@ -36,7 +29,7 @@ class UserRegister extends Component {
         <View style={style.imageContainer}>
           <Image
             style={style.imageLogo}
-            source={require("../../assets/glow-logo.jpeg")}
+            source={require("../../assets/glow-logo.png")}
           />
         </View>
         <View style={style.container}>
@@ -61,28 +54,44 @@ class UserRegister extends Component {
           <View style={style.pickerView}>
             <Picker
               style={style.picker}
-              selectedValue={this.state.states[this.state.selectedState]}
+              selectedValue={this.state.selectedState}
               onValueChange={(itemValue, itemIndex) =>
                 this.setState({ ...this.state, selectedState: itemIndex })
               }
             >
-              {this.state.states.map((st, index) => {
-                return <Picker.Item label={st} value={st} key={index} />;
-              })}
+              <Picker.Item
+                label={"Selecione seu estado"}
+                value={null}
+                key={""}
+              />
+              {this.props.emitters.locationsEmitter
+                .getAllStates()
+                .map((st, index) => {
+                  return (
+                    <Picker.Item label={st.name} value={st.uf} key={index} />
+                  );
+                })}
             </Picker>
           </View>
 
           <View style={style.pickerView}>
             <Picker
               style={style.picker}
-              selectedValue={this.state.cities[this.state.selectedCity]}
+              selectedValue={this.state.selectedCity}
               onValueChange={(itemValue, itemIndex) =>
                 this.setState({ ...this.state, selectedCity: itemIndex })
               }
             >
-              {this.state.cities.map((st, index) => {
-                return <Picker.Item label={st} value={st} key={index} />;
-              })}
+              <Picker.Item
+                label={"Selecione sua cidade"}
+                value={null}
+                key={""}
+              />
+              {this.props.emitters.locationsEmitter
+                .getStateByIndex(this.state.selectedState)
+                ?.cities.map((city, index) => {
+                  return <Picker.Item label={city} value={city} key={index} />;
+                })}
             </Picker>
           </View>
 
@@ -117,8 +126,9 @@ const style = StyleSheet.create({
     justifyContent: "center",
   },
   imageLogo: {
-    width: "50%",
     marginTop: 30,
+    width: 150,
+    height: 40,
   },
   container: {
     flex: 8,

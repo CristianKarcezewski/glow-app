@@ -12,7 +12,7 @@ class Login extends Component {
   }
 
   _login() {
-    this.props.loginEmitter.login("Bearer dsgpsogspog");
+    this.props.emitters.loginEmitter.login("Bearer dsgpsogspog");
     this.props.navigation.popToTop();
   }
 
