@@ -16,7 +16,7 @@ import UserRegister from "./user-register";
 import LoginEmitter from "../models/login-emitter";
 import ProviderDetailTabs from "./provider-detail-tabs";
 import GlowTheme from "../shared/theme";
-import Filter from "./filter";
+import ProviderFilter from "./provider-filter";
 import ProviderRegister from "./provider-register";
 import InformAddress from "./informAddress";
 import Chat from "./chat";
@@ -204,8 +204,8 @@ class StackNavigator extends Component {
         </this.stack.Screen>
 
         <this.stack.Screen
-          name="filter"
-          component={Filter}
+          name="provider-filter"
+          component={ProviderFilter}
           options={{
             title: "Filtrar Profissionais",
           }}

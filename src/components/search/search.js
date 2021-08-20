@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import {
   StyleSheet,
   Text,
@@ -107,7 +107,7 @@ class SearchResult extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={{ flex: 1, alignItems: "center" }}
-            onPress={() => this.props.navigation.navigate("filter")}
+            onPress={() => this.props.navigation.navigate("provider-filter")}
           >
             <FontAwesomeIcon icon={faFilter} size={25} color={"#db382f"} />
           </TouchableOpacity>

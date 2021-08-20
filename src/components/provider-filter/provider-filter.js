@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Checkbox from "expo-checkbox";
 
-class Filter extends Component {
+class ProviderFilter extends Component {
   constructor() {
     super();
     this.state = {
@@ -166,4 +166,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default Filter;
+export default ProviderFilter;

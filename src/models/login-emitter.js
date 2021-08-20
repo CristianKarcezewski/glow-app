@@ -19,6 +19,7 @@ export default class LoginEmitter {
     } else {
       this.subscribes.push({ key: key, handler });
     }
+    handler(this.userLoggedIn);
   }
 
   unsubscribe(key) {
@@ -31,7 +32,7 @@ export default class LoginEmitter {
 
   emit() {
     this.subscribes.map((sub) => {
-      sub.handler(this.userLoggedIn, sub);
+      sub.handler(this.userLoggedIn);
     });
   }
 
