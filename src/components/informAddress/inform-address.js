@@ -1,4 +1,4 @@
-import React, { Component,useSta } from 'react';
+import React, { Component } from 'react';
 import { StyleSheet,Text,TextInput, View, TouchableHighlight, Image} from 'react-native';
 
 
@@ -10,7 +10,7 @@ render(){
             <View style={styles.imageContainer}>                    
                 <Image style={styles.imageLogo} source={require('../../assets/maps.jpg')}/>
             </View> 
-             <View style={{backgroundColor:'#fff'},styles.cardDescriptionConteiner} >
+            <View style={{backgroundColor:'#fff'},styles.cardDescriptionConteiner} >
                 <View style={styles.cardResultTextDetailsTitle}>
                     <Text style={styles.cardTextNameBox}>Numero:</Text><TextInput style={styles.cardTextInputBox} maxLength={50} type="informacoes" placeholder=""/>               
                 </View>
@@ -19,22 +19,28 @@ render(){
                 </View>   
                 <View style={styles.cardResultTextDetailsTitle}>   
                     <Text style={styles.cardTextNameBox}>Referencia:</Text><TextInput style={styles.cardTextInputBox} maxLength={50} type="informacoes" placeholder=""/>
-                </View>                       
-            </View>
-            <View style={styles.cardButtonsUpperConteiner}>         
-                <TouchableHighlight style={styles.cardButtonUpperResult} onPress={() => this.props.navigation.navigate('provider-register')}>
-                    <Text style={{fontSize: 20}}>Capturar</Text>
-                </TouchableHighlight>
-                <TouchableHighlight style={styles.cardButtonUpperResult} onPress={() => console.log('Click endereço')}>
-                    <Text style={{fontSize: 20}}>Salvar</Text>
-                </TouchableHighlight>          
-            </View>
-            {/* <View style={styles.cardButtonsLowConteiner}>         
-                <TouchableHighlight style={styles.cardButtonLowResult} onPress={() => this.props.navigation.navigate('provider-register')}>
-                    <Text style={{fontSize: 20}}>Informar Manualmente</Text>
-                </TouchableHighlight>                       
-            </View> */}
-        </View>
+                </View>  
+            </View>                         
+            <View style= {{flex:3}}>
+                <View style={styles.cardButtonsUpperConteiner}>         
+                    <TouchableHighlight style={styles.cardButtonUpperResult} onPress={() => console.log('Click endereço')}>
+                    <Text  style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>Capturar</Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight style={styles.cardButtonUpperResult} onPress={() => console.log('Click endereço')}>
+                    <Text  style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>Salvar</Text>
+                    </TouchableHighlight> 
+                    <TouchableHighlight style={styles.cardButtonUpperResult} onPress={() => console.log('Click endereço')}>
+                    <Text  style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>Descartar</Text>
+                    </TouchableHighlight>                
+                </View>
+                <View style={styles.cardButtonsLowConteiner}>         
+                    <TouchableHighlight style={styles.cardButtonLowResult}  onPress={() => this.props.navigation.navigate("inform-address-manual")}>
+                    <Text  style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>Manualmente</Text>
+                    </TouchableHighlight>                       
+                </View>
+
+            </View> 
+        </View>       
 
         )
     }
@@ -52,9 +58,10 @@ const styles = StyleSheet.create({
         flex: 3,
         alignItems: 'center',
         justifyContent: 'center',
+        marginTop:40,
       },  
     cardDescriptionConteiner: {
-        flex: 2, 
+        flex: 2.5, 
         flexDirection: 'column',       
         backgroundColor: '#fff',
         alignItems:'stretch',      
@@ -64,17 +71,19 @@ const styles = StyleSheet.create({
         flexDirection: 'row',       
         backgroundColor: '#fff', 
         justifyContent: 'center',  
-        alignItems: 'stretch', 
-        marginTop:15,    
+        alignItems: 'stretch',         
+        alignItems: 'center'   
     },
-    cardBottunLowConteiner: {
+    cardButtonsLowConteiner: {
         flex: 1,
         flexDirection: 'column', 
-        justifyContent: 'center',  
+        justifyContent: 'flex-start',  
         alignItems: 'center',
+        width: '90%',
+        height: '1%',
     },    
       imageLogo: {
-          marginTop:60,
+        marginTop:60,
         width: '100%',         
       },   
     cardResultTextDetailsTitle: {        
@@ -98,8 +107,9 @@ const styles = StyleSheet.create({
         fontSize:16,        
     },    
     cardButtonUpperResult: {
-        flex:1,
-        borderRadius: 30,
+        flex:2,
+        borderRadius: 15,
+        padding:5,
         margin: 5,
         borderColor: 'black',
         borderWidth: 1,
@@ -108,22 +118,17 @@ const styles = StyleSheet.create({
         width: '45%',
         height: '45%',
         justifyContent: 'center',
-      },       
-    cardButtonLowResult: {
-        flex:1,
-        borderRadius: 30,
-        width: '70%',
-        margin: 5,
-        borderColor: 'black',
+      },    
+    cardButtonLowResult: {        
+        borderRadius: 15,       
+        borderColor: "black",
         borderWidth: 1,
-        backgroundColor: '#db382f',
-        alignItems: 'center',
-        width: '45%',
-        height: '25%',
-        alignItems: 'center',   
-        paddingHorizontal: 15,
-        justifyContent: 'center',
-      },       
+        backgroundColor: "#db382f",
+        alignItems: "center",      
+        padding: 5, 
+        marginStart: 38,   
+        width: '75%',     
+      },      
 });
 
 export default InformAddress;

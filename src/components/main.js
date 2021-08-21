@@ -20,6 +20,7 @@ import GlowTheme from "../shared/theme";
 import ProviderFilter from "./provider-filter";
 import ProviderRegister from "./provider-register";
 import InformAddress from "./informAddress";
+import InformAddressManual from "./inform-address-manual";
 
 class DrawerNavigator extends Component {
   constructor(props) {
@@ -216,7 +217,21 @@ class StackNavigator extends Component {
             title: "Informar Endereço",
           }}
         />
+
+        <this.stack.Screen
+          name="inform-address-manual"   
+          //component={InformAddressManual}      
+          options={{
+            title: "Informar Endereço Manual",
+          }}
+          >
+          {(props) => (
+            <InformAddressManual {...props} emitters={this.props.emitters} />
+          )}
+        </this.stack.Screen>
+
       </this.stack.Navigator>
+      
     );
   }
 }

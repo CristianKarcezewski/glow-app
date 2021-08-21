@@ -37,22 +37,15 @@ class ProviderRegister extends Component {
           <Text style={styles.cardResultTextDetailsTitle}>Ir Para:</Text>
           <View style={styles.cardButtonsConteiner}>
             <TouchableHighlight
-              style={styles.cardResultButton}
-              onPress={() =>
-                this.props.navigation.navigate("provider-register")
+              style={styles.cardResultButton} onPress={() => this.props.navigation.navigate("provider-register")
               }
             >
-              <Text style={{ fontSize: 20 }}>
-                Adicionar jornada de trabalho
-              </Text>
+               <Text  style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>Adicionar jornada de trabalho</Text>
             </TouchableHighlight>
             <TouchableHighlight
-              style={styles.cardResultButton}
-              onPress={() => this.props.navigation.navigate("inform-address")}
+              style={styles.cardResultButton} onPress={() => this.props.navigation.navigate("inform-address")}
             >
-              <Text style={{ fontSize: 20 }}>
-                Adicionar endereço de trabalho
-              </Text>
+              <Text  style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>Adicionar endereço de trabalho</Text>
             </TouchableHighlight>
           </View>
         </View>
@@ -92,8 +85,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: "#fff",
     borderColor: "black",
-    borderWidth: 2,
-    borderRadius: 20,
+    borderWidth: 1,
+    borderRadius: 15,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -110,25 +103,26 @@ const styles = StyleSheet.create({
     fontSize: 20,
     backgroundColor: "#fff",
     borderColor: "black",
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderRadius: 20,
     borderWidth: 2,
     marginTop: 1,
     fontSize: 16,
   },
   cardResultButton: {
-    borderRadius: 30,
+    borderRadius: 15,
     marginHorizontal: "2%",
     borderColor: "black",
     borderWidth: 1,
     backgroundColor: "#db382f",
-    marginTop: 5,
+    marginTop: 15,
     marginBottom: 10,
     width: "95%",
-    height: "30%",
+    height: "27%",
     alignItems: "center",
     justifyContent: "center",
   },
+
 });
 
 export default ProviderRegister;
