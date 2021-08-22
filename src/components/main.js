@@ -21,6 +21,8 @@ import ProviderFilter from "./provider-filter";
 import ProviderRegister from "./provider-register";
 import InformAddress from "./informAddress";
 import InformAddressManual from "./inform-address-manual";
+import Schedule from "./schedule";
+
 
 class DrawerNavigator extends Component {
   constructor(props) {
@@ -81,7 +83,27 @@ class DrawerNavigator extends Component {
             ),
           })}
         />
-      </this.drawer.Navigator>
+        <this.drawer.Screen
+          name="schedule"
+          component={Schedule}
+          options={({ navigation }) => ({
+            headerShown: true,
+            title: "Agenda",
+            headerLeft: () => (
+              <TouchableOpacity
+                style={{ marginLeft: 20 }}
+                onPress={() => navigation.goBack()}
+              >
+                <FontAwesomeIcon
+                  icon={faArrowLeft}
+                  size={20}
+                  style={{ flex: 1 }}
+                />
+              </TouchableOpacity>
+            ),
+          })}
+        />
+      </this.drawer.Navigator>      
     );
   }
 }
@@ -260,8 +282,9 @@ const style = StyleSheet.create({
     height: 40,
   },
   headerLoginButton: {
-    borderRadius: 30,
-    width: 60,
+    borderRadius: 10,
+    padding:3,
+    width: 70,
     height: 30,
     marginRight: 10,
     borderColor: "black",
