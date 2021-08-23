@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import Input from "../Input";
+import { login } from "../../services/auth-service";
 
 class Login extends Component {
   constructor(props) {
@@ -12,8 +13,11 @@ class Login extends Component {
   }
 
   _login() {
-    this.props.emitters.loginEmitter.login("Bearer dsgpsogspog");
-    this.props.navigation.popToTop();
+    login("a", "b", "c")
+      .then((response) => console.log(response))
+      .catch((err) => console.log(err));
+    // this.props.emitters.loginEmitter.login("Bearer dsgpsogspog");
+    // this.props.navigation.popToTop();
   }
 
   render() {
@@ -93,7 +97,7 @@ const style = StyleSheet.create({
     width: "80%",
     paddingLeft: 20,
     paddingRight: 20,
-    padding:5,
+    padding: 5,
     margin: 10,
     fontSize: 18,
     backgroundColor: "#fff",
@@ -104,7 +108,7 @@ const style = StyleSheet.create({
   invalidEmailField: {
     width: "80%",
     paddingLeft: 20,
-    paddingRight: 20,  
+    paddingRight: 20,
     margin: 10,
     fontSize: 18,
     backgroundColor: "#fff",
@@ -116,7 +120,7 @@ const style = StyleSheet.create({
     width: "80%",
     paddingLeft: 20,
     paddingRight: 20,
-    padding:5,
+    padding: 5,
     margin: 10,
     fontSize: 18,
     backgroundColor: "#fff",
@@ -128,7 +132,7 @@ const style = StyleSheet.create({
     borderRadius: 15,
     width: "50%",
     margin: 10,
-    padding:2,
+    padding: 2,
     borderColor: "black",
     borderWidth: 1,
     backgroundColor: "#db382f",
@@ -144,7 +148,7 @@ const style = StyleSheet.create({
     backgroundColor: "#db382f",
     alignItems: "center",
     elevation: 10,
-    padding:2,
+    padding: 2,
   },
   forgotPassword: {
     color: "blue",
