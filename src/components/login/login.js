@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Platform,
+} from "react-native";
 import Input from "../Input";
 import { login } from "../../services/auth-service";
 
@@ -7,17 +14,29 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      email: "",
+      password: "",
       validEmail: true,
       validPassword: true,
     };
   }
 
   _login() {
-    login("a", "b", "c")
-      .then((response) => console.log(response))
-      .catch((err) => console.log(err));
-    // this.props.emitters.loginEmitter.login("Bearer dsgpsogspog");
-    // this.props.navigation.popToTop();
+    if (
+      this.state.validEmail &&
+      this.state.validPassword &&
+      this.state.email != "" &&
+      this.state != ""
+    ) {
+      login(Platform.OS, this.state.email, this.state.password)
+        .then(({ status, data }) => {
+          if (status === 200) {
+            this.props.emitters.loginEmitter.login(data.authorization);
+            this.props.navigation.popToTop();
+          }
+        })
+        .catch((err) => console.log("error", err));
+    }
   }
 
   render() {
@@ -43,12 +62,20 @@ class Login extends Component {
             onValidation={(isValid) => {
               this.setState({ ...this.state, validEmail: isValid });
             }}
+            onChangeText={(value) => {
+              this.setState({ ...this.state, email: value });
+            }}
+            value={this.state.email}
           />
 
           <Input
             placeholder="Password"
             secureTextEntry={true}
             style={style.passwordField}
+            onChangeText={(value) => {
+              this.setState({ ...this.state, password: value });
+            }}
+            value={this.state.password}
           />
 
           <TouchableOpacity
@@ -109,10 +136,11 @@ const style = StyleSheet.create({
     width: "80%",
     paddingLeft: 20,
     paddingRight: 20,
+    padding: 5,
     margin: 10,
     fontSize: 18,
     backgroundColor: "#fff",
-    borderColor: "red",
+    borderColor: "#db382f",
     borderWidth: 2,
     borderRadius: 15,
   },

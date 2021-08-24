@@ -16,7 +16,7 @@ export const login = async (platform, email, pwd) => {
     });
 
     let json = await response.json();
-    return json;
+    return { status: response.status, data: json };
   } catch (error) {
     return error;
   }
@@ -35,7 +35,7 @@ export const register = async (platform, newUser) => {
     });
 
     let json = await response.json();
-    return json;
+    return { status: response.status, data: json };
   } catch (error) {
     return error;
   }
