@@ -6,9 +6,11 @@ import {
   TouchableOpacity,
   Image,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import Input from "../Input";
 import { login } from "../../services/auth-service";
+import Toast from "react-native-root-toast";
 
 class Login extends Component {
   constructor(props) {
@@ -18,88 +20,105 @@ class Login extends Component {
       password: "",
       validEmail: true,
       validPassword: true,
+      loading: false,
     };
   }
 
   _login() {
-    if (
-      this.state.validEmail &&
-      this.state.validPassword &&
-      this.state.email != "" &&
-      this.state != ""
-    ) {
+    if (this.state.validEmail && this.state.validPassword) {
+      this.setState({ ...this.state, loading: true });
       login(Platform.OS, this.state.email, this.state.password)
         .then(({ status, data }) => {
           if (status === 200) {
             this.props.emitters.loginEmitter.login(data.authorization);
+            this.setState({ ...this.state, loading: false });
             this.props.navigation.popToTop();
+          } else {
+            this.setState({ ...this.state, loading: false });
+            Toast.show("Usuário ou senha inválidos...", {
+              duration: Toast.durations.LONG,
+            });
           }
         })
-        .catch((err) => console.log("error", err));
+        .catch((err) => {
+          console.log("error", err);
+          this.setState({ ...this.state, loading: false });
+        });
     }
   }
 
   render() {
-    return (
-      <View style={{ flex: 1, backgroundColor: "#fff" }}>
-        <View style={style.imageContainer}>
-          <Image
-            style={style.imageLogo}
-            source={require("../../assets/glow-logo.png")}
-          />
+    if (this.state.loading) {
+      return (
+        <ActivityIndicator
+          size={"large"}
+          color={"#db382f"}
+          animating={this.state.laoding}
+          style={{ flex: 1 }}
+        />
+      );
+    } else {
+      return (
+        <View style={{ flex: 1, backgroundColor: "#fff" }}>
+          <View style={style.imageContainer}>
+            <Image
+              style={style.imageLogo}
+              source={require("../../assets/glow-logo.png")}
+            />
+          </View>
+
+          <View style={style.container}>
+            <Input
+              style={
+                this.state.validEmail
+                  ? style.validEmailField
+                  : style.invalidEmailField
+              }
+              maxLength={50}
+              placeholder="Email"
+              pattern={"/^[a-zA-Z0-9]+@[a-zA-Z0-9]+.[A-Za-z]+$/"}
+              onValidation={(isValid) => {
+                this.setState({ ...this.state, validEmail: isValid });
+              }}
+              onChangeText={(value) => {
+                this.setState({ ...this.state, email: value });
+              }}
+              value={this.state.email}
+            />
+
+            <Input
+              placeholder="Password"
+              secureTextEntry={true}
+              style={style.passwordField}
+              onChangeText={(value) => {
+                this.setState({ ...this.state, password: value });
+              }}
+              value={this.state.password}
+            />
+
+            <TouchableOpacity
+              style={style.loginButton}
+              onPress={() => this._login()}
+            >
+              <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
+                Login
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={style.registerButton}
+              onPress={() => this.props.navigation.navigate("user-register")}
+            >
+              <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
+                Registre-se
+              </Text>
+            </TouchableOpacity>
+
+            <Text style={style.forgotPassword}>Esqueci minha senha</Text>
+          </View>
         </View>
-
-        <View style={style.container}>
-          <Input
-            style={
-              this.state.validEmail
-                ? style.validEmailField
-                : style.invalidEmailField
-            }
-            maxLength={50}
-            placeholder="Email"
-            pattern={"/^[a-zA-Z0-9]+@[a-zA-Z0-9]+.[A-Za-z]+$/"}
-            onValidation={(isValid) => {
-              this.setState({ ...this.state, validEmail: isValid });
-            }}
-            onChangeText={(value) => {
-              this.setState({ ...this.state, email: value });
-            }}
-            value={this.state.email}
-          />
-
-          <Input
-            placeholder="Password"
-            secureTextEntry={true}
-            style={style.passwordField}
-            onChangeText={(value) => {
-              this.setState({ ...this.state, password: value });
-            }}
-            value={this.state.password}
-          />
-
-          <TouchableOpacity
-            style={style.loginButton}
-            onPress={() => this._login()}
-          >
-            <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
-              Login
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={style.registerButton}
-            onPress={() => this.props.navigation.navigate("user-register")}
-          >
-            <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
-              Registre-se
-            </Text>
-          </TouchableOpacity>
-
-          <Text style={style.forgotPassword}>Esqueci minha senha</Text>
-        </View>
-      </View>
-    );
+      );
+    }
   }
 }
 

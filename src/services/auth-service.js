@@ -18,7 +18,7 @@ export const login = async (platform, email, pwd) => {
     let json = await response.json();
     return { status: response.status, data: json };
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 

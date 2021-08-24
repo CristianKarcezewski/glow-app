@@ -23,7 +23,6 @@ import InformAddress from "./informAddress";
 import InformAddressManual from "./inform-address-manual";
 import Schedule from "./schedule";
 
-
 class DrawerNavigator extends Component {
   constructor(props) {
     super(props);
@@ -103,7 +102,7 @@ class DrawerNavigator extends Component {
             ),
           })}
         />
-      </this.drawer.Navigator>      
+      </this.drawer.Navigator>
     );
   }
 }
@@ -147,7 +146,7 @@ class StackNavigator extends Component {
               />
             ),
             headerRight: () => {
-              if (this.state.userLoggedIn) {
+              if (this.state.token) {
                 return (
                   <TouchableOpacity
                     style={style.headerLoginButton}
@@ -241,19 +240,17 @@ class StackNavigator extends Component {
         />
 
         <this.stack.Screen
-          name="inform-address-manual"   
-          //component={InformAddressManual}      
+          name="inform-address-manual"
+          //component={InformAddressManual}
           options={{
             title: "Informar Endereço Manual",
           }}
-          >
+        >
           {(props) => (
             <InformAddressManual {...props} emitters={this.props.emitters} />
           )}
         </this.stack.Screen>
-
       </this.stack.Navigator>
-      
     );
   }
 }
@@ -283,7 +280,7 @@ const style = StyleSheet.create({
   },
   headerLoginButton: {
     borderRadius: 10,
-    padding:3,
+    padding: 3,
     width: 70,
     height: 30,
     marginRight: 10,

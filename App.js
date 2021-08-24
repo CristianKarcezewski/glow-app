@@ -1,13 +1,16 @@
-import React, { Component } from 'react';
-import { StyleSheet,SafeAreaView,StatusBar } from 'react-native';
-import Main from './src/components';
-import 'react-native-gesture-handler';
+import React, { Component } from "react";
+import { StyleSheet, SafeAreaView, StatusBar } from "react-native";
+import Main from "./src/components";
+import "react-native-gesture-handler";
+import { RootSiblingParent } from "react-native-root-siblings";
 
 class App extends Component {
-  render(){
+  render() {
     return (
       <SafeAreaView style={styles.container}>
-        <Main/>
+        <RootSiblingParent>
+          <Main />
+        </RootSiblingParent>
       </SafeAreaView>
     );
   }
@@ -16,7 +19,7 @@ class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     paddingTop: StatusBar.currentHeight,
   },
 });
