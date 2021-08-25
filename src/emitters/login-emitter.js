@@ -6,8 +6,9 @@ export default class LoginEmitter {
 
   constructor() {
     this.subscribes = [];
-    this.readToken();
+    // this.readToken();
     this.token = null;
+    this.userLoggedIn = false;
   }
 
   async readToken() {
@@ -42,12 +43,12 @@ export default class LoginEmitter {
 
   emit() {
     this.subscribes.map((sub) => {
-      sub.handler(this.token);
+      sub.handler(this.userLoggedIn);
     });
   }
 
-  async login(value) {
-    await SecureStore.setItemAsync(this.tokenKey, value);
+  login(value) {
+    // SecureStore.setItemAsync(this.tokenKey, value);
     this.userLoggedIn = true;
     this.emit();
   }

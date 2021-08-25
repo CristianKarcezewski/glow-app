@@ -24,7 +24,7 @@ export const login = async (platform, email, pwd) => {
 
 export const register = async (platform, newUser) => {
   try {
-    let response = await fetch(`${API}/login`, {
+    let response = await fetch(`${API}/user/register`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -37,6 +37,6 @@ export const register = async (platform, newUser) => {
     let json = await response.json();
     return { status: response.status, data: json };
   } catch (error) {
-    return error;
+    throw error;
   }
 };

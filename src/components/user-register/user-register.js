@@ -6,53 +6,174 @@ import {
   TextInput,
   TouchableHighlight,
   Image,
+  ActivityIndicator,
+  Platform,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import { register } from "../../services/auth-service";
+import Toast from "react-native-root-toast";
 
 class UserRegister extends Component {
-  
+  emailPattern =
+    /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([\t]*\r\n)?[\t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([\t]*\r\n)?[\t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+  passwordPattern =
+    /^([@#](?=[^aeiou]{7,13}$)(?=[[:alnum:]]{7,13}$)(?=.*[A-Z]{1,}.*$).+)$/;
+
   constructor(props) {
     super(props);
     this.state = {
-      selectedState: null,
-      selectedCity: null,
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      validName: true,
+      validEmail: true,
+      validPassword: true,
+      validConfirmPassword: true,
+      loading: false,
     };
   }
 
-  _register() {
-    this.props.emitters.loginEmitter.login("Bearer dsgpsogspog");
-    this.props.navigation.popToTop();
+  _handleRegister() {
+    if (
+      this.state.validName &&
+      this.state.validEmail &&
+      this.state.validPassword &&
+      this.state.validConfirmPassword
+    ) {
+      this.setState({ ...this.state, loading: true });
+      let newUser = {
+        userName: this.state.name,
+        email: this.state.email,
+        password: this.state.password,
+      };
+      register(Platform.OS, newUser)
+        .then(({ status, data }) => {
+          if (status === 200) {
+            this.props.emitters.loginEmitter.login(data.authorization);
+            this.setState({ ...this.state, loading: false });
+            this.props.navigation.popToTop();
+          } else {
+            this.setState({ ...this.state, loading: false });
+            Toast.show("Erro ao cadastrar usuário", {
+              duration: Toast.durations.LONG,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log("error", err);
+          this.setState({ ...this.state, loading: false });
+        });
+    } else {
+      if (this.state.email != "" || this.state.password != "") {
+        Toast.show("Dados inválidos", {
+          duration: Toast.durations.SHORT,
+        });
+      } else {
+        Toast.show("Preencha todos os campos.", {
+          duration: Toast.durations.SHORT,
+        });
+      }
+    }
+  }
+
+  _handleName(value) {
+    if (value) {
+      this.setState({ ...this.state, name: value, validName: true });
+    } else {
+      this.setState({ ...this.state, name: value, validName: false });
+    }
+  }
+
+  _handleEmail(value) {
+    if (this.emailPattern.test(value.toLowerCase()) === true) {
+      this.setState({
+        ...this.state,
+        validEmail: true,
+        email: value.toLowerCase(),
+      });
+    } else {
+      this.setState({ ...this.state, validEmail: false, email: value });
+    }
+  }
+
+  _handlePassword(value) {
+    if (this.state.password.length >= 6) {
+      this.setState({ ...this.state, validPassword: true, password: value });
+    } else {
+      this.setState({ ...this.state, validPassword: false, password: value });
+    }
+  }
+
+  _handleCheckPassword(value) {
+    if (
+      this.state.confirmPassword.length >= 6 &&
+      this.state.password === value
+    ) {
+      this.setState({
+        ...this.state,
+        validConfirmPassword: true,
+        confirmPassword: value,
+      });
+    } else {
+      this.setState({
+        ...this.state,
+        validConfirmPassword: false,
+        confirmPassword: value,
+      });
+    }
   }
 
   render() {
-    return (
-      <View style={{ flex: 1, backgroundColor: "#fff" }}>
-        <View style={style.imageContainer}>
-          <Image
-            style={style.imageLogo}
-            source={require("../../assets/glow-logo.png")}
-          />
-        </View>
-        <View style={style.container}>
-          <TextInput
-            style={style.formField}
-            maxLength={50}
-            type="nome"
-            placeholder="Nome"
-          />
-          <TextInput
-            style={style.formField}
-            maxLength={50}
-            type="email"
-            placeholder="E-mail"
-          />
-          <TextInput
+    if (this.state.loading) {
+      return (
+        <ActivityIndicator
+          size={"large"}
+          color={"#db382f"}
+          animating={this.state.laoding}
+          style={{ flex: 1 }}
+        />
+      );
+    } else {
+      return (
+        <View style={{ flex: 1, backgroundColor: "#fff" }}>
+          <View style={style.imageContainer}>
+            <Image
+              style={style.imageLogo}
+              source={require("../../assets/glow-logo.png")}
+            />
+          </View>
+          <View style={style.container}>
+            <TextInput
+              style={
+                this.state.validName
+                  ? style.validFormField
+                  : style.invalidFormField
+              }
+              maxLength={50}
+              placeholder="Nome"
+              onChangeText={(value) => this._handleName(value)}
+              value={this.state.name}
+            />
+            <TextInput
+              style={
+                this.state.validEmail
+                  ? style.validFormField
+                  : style.invalidFormField
+              }
+              maxLength={50}
+              type="email"
+              placeholder="E-mail"
+              onChangeText={(value) => this._handleEmail(value)}
+              value={this.state.email}
+            />
+            {/* <TextInput
             style={style.formField}
             type="telefone"
             placeholder="Tefefone"
-          />
+          /> */}
 
-          <View style={style.pickerView}>
+            {/* <View style={style.pickerView}>
             <Picker
               style={style.picker}
               selectedValue={this.state.selectedState}
@@ -94,29 +215,42 @@ class UserRegister extends Component {
                   return <Picker.Item label={city} value={city} key={index} />;
                 })}
             </Picker>
-          </View>
+          </View> */}
 
-          <TextInput
-            style={style.formField}
-            type="senha"
-            placeholder="  Senha"
-          />
-          <TextInput
-            style={style.formField}
-            type="confirmaSenha"
-            placeholder="  Confirma Senha"
-          />
-          <TouchableHighlight
-            style={style.registerButton}
-            onPress={() => this._register()}
-          >
-            <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
-              Cadastrar
-            </Text>
-          </TouchableHighlight>
+            <TextInput
+              style={
+                this.state.validPassword
+                  ? style.validFormField
+                  : style.invalidFormField
+              }
+              secureTextEntry={true}
+              placeholder="Senha"
+              onChangeText={(value) => this._handlePassword(value)}
+              value={this.state.password}
+            />
+            <TextInput
+              style={
+                this.state.validConfirmPassword
+                  ? style.validFormField
+                  : style.invalidFormField
+              }
+              secureTextEntry={true}
+              placeholder="Confirmar Senha"
+              onChangeText={(value) => this._handleCheckPassword(value)}
+              value={this.state.confirmPassword}
+            />
+            <TouchableHighlight
+              style={style.registerButton}
+              onPress={() => this._handleRegister()}
+            >
+              <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
+                Cadastrar
+              </Text>
+            </TouchableHighlight>
+          </View>
         </View>
-      </View>
-    );
+      );
+    }
   }
 }
 
@@ -137,12 +271,22 @@ const style = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  formField: {
+  validFormField: {
     width: "80%",
     paddingHorizontal: 20,
     margin: 5,
     fontSize: 18,
     borderColor: "black",
+    borderWidth: 1,
+    borderRadius: 15,
+    padding: 5,
+  },
+  invalidFormField: {
+    width: "80%",
+    paddingHorizontal: 20,
+    margin: 5,
+    fontSize: 18,
+    borderColor: "#db382f",
     borderWidth: 1,
     borderRadius: 15,
     padding: 5,
@@ -154,7 +298,7 @@ const style = StyleSheet.create({
     borderWidth: 1,
     margin: 5,
     borderRadius: 15,
-    height:40,
+    height: 40,
   },
   picker: {
     margin: 5,

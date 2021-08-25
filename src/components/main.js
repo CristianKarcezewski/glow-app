@@ -119,7 +119,7 @@ class StackNavigator extends Component {
   }
 
   _handleLogin(value) {
-    this.setState({ userLoggedIn: value });
+    this.setState({ ...this.state, userLoggedIn: value });
   }
 
   componentDidMount() {
@@ -146,7 +146,7 @@ class StackNavigator extends Component {
               />
             ),
             headerRight: () => {
-              if (this.state.token) {
+              if (this.state.userLoggedIn) {
                 return (
                   <TouchableOpacity
                     style={style.headerLoginButton}

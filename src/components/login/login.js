@@ -7,12 +7,17 @@ import {
   Image,
   Platform,
   ActivityIndicator,
+  TextInput,
 } from "react-native";
-import Input from "../Input";
 import { login } from "../../services/auth-service";
 import Toast from "react-native-root-toast";
 
 class Login extends Component {
+  emailPattern =
+    /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([\t]*\r\n)?[\t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([\t]*\r\n)?[\t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+  passwordPattern =
+    /^([@#](?=[^aeiou]{7,13}$)(?=[[:alnum:]]{7,13}$)(?=.*[A-Z]{1,}.*$).+)$/;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -24,8 +29,12 @@ class Login extends Component {
     };
   }
 
-  _login() {
-    if (this.state.validEmail && this.state.validPassword) {
+  _handleLogin() {
+    if (
+      this.state.validEmail &&
+      this.state.validPassword &&
+      this.state.email != ""
+    ) {
       this.setState({ ...this.state, loading: true });
       login(Platform.OS, this.state.email, this.state.password)
         .then(({ status, data }) => {
@@ -44,6 +53,36 @@ class Login extends Component {
           console.log("error", err);
           this.setState({ ...this.state, loading: false });
         });
+    } else {
+      if (this.state.email != "" || this.state.password != "") {
+        Toast.show("Dados inválidos", {
+          duration: Toast.durations.SHORT,
+        });
+      } else {
+        Toast.show("Preencha os campos.", {
+          duration: Toast.durations.SHORT,
+        });
+      }
+    }
+  }
+
+  _handleEmail(value) {
+    if (this.emailPattern.test(value.toLowerCase()) === true) {
+      this.setState({
+        ...this.state,
+        validEmail: true,
+        email: value.toLowerCase(),
+      });
+    } else {
+      this.setState({ ...this.state, validEmail: false, email: value });
+    }
+  }
+
+  _handlePassword(value) {
+    if (this.state.password.length >= 6) {
+      this.setState({ ...this.state, validPassword: true, password: value });
+    } else {
+      this.setState({ ...this.state, validPassword: false, password: value });
     }
   }
 
@@ -68,7 +107,7 @@ class Login extends Component {
           </View>
 
           <View style={style.container}>
-            <Input
+            <TextInput
               style={
                 this.state.validEmail
                   ? style.validEmailField
@@ -76,29 +115,25 @@ class Login extends Component {
               }
               maxLength={50}
               placeholder="Email"
-              pattern={"/^[a-zA-Z0-9]+@[a-zA-Z0-9]+.[A-Za-z]+$/"}
-              onValidation={(isValid) => {
-                this.setState({ ...this.state, validEmail: isValid });
-              }}
-              onChangeText={(value) => {
-                this.setState({ ...this.state, email: value });
-              }}
+              onChangeText={(value) => this._handleEmail(value)}
               value={this.state.email}
             />
 
-            <Input
-              placeholder="Password"
+            <TextInput
+              placeholder="Senha"
               secureTextEntry={true}
-              style={style.passwordField}
-              onChangeText={(value) => {
-                this.setState({ ...this.state, password: value });
-              }}
+              style={
+                this.state.validPassword
+                  ? style.validPasswordField
+                  : style.invalidPasswordField
+              }
+              onChangeText={(value) => this._handlePassword(value)}
               value={this.state.password}
             />
 
             <TouchableOpacity
               style={style.loginButton}
-              onPress={() => this._login()}
+              onPress={() => this._handleLogin()}
             >
               <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
                 Login
@@ -163,7 +198,7 @@ const style = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 15,
   },
-  passwordField: {
+  validPasswordField: {
     width: "80%",
     paddingLeft: 20,
     paddingRight: 20,
@@ -172,6 +207,18 @@ const style = StyleSheet.create({
     fontSize: 18,
     backgroundColor: "#fff",
     borderColor: "black",
+    borderWidth: 2,
+    borderRadius: 15,
+  },
+  invalidPasswordField: {
+    width: "80%",
+    paddingLeft: 20,
+    paddingRight: 20,
+    padding: 5,
+    margin: 10,
+    fontSize: 18,
+    backgroundColor: "#fff",
+    borderColor: "#db382f",
     borderWidth: 2,
     borderRadius: 15,
   },
