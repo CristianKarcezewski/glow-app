@@ -22,7 +22,8 @@ import ProviderRegister from "./provider-register";
 import InformAddress from "./informAddress";
 import InformAddressManual from "./inform-address-manual";
 import Schedule from "./schedule";
-
+import Gallery from "./gallery";
+import ServicePacks from "./service-packs";
 
 class DrawerNavigator extends Component {
   constructor(props) {
@@ -103,7 +104,47 @@ class DrawerNavigator extends Component {
             ),
           })}
         />
-      </this.drawer.Navigator>      
+        <this.drawer.Screen
+          name="gallery"
+          component={Gallery}
+          options={({ navigation }) => ({
+            headerShown: true,
+            title: "Galeria",
+            headerLeft: () => (
+              <TouchableOpacity
+                style={{ marginLeft: 20 }}
+                onPress={() => navigation.goBack()}
+              >
+                <FontAwesomeIcon
+                  icon={faArrowLeft}
+                  size={20}
+                  style={{ flex: 1 }}
+                />
+              </TouchableOpacity>
+            ),
+          })}
+        />
+        <this.drawer.Screen
+          name="service-packs"
+          component={ServicePacks}
+          options={({ navigation }) => ({
+            headerShown: true,
+            title: "Pacotes de Serviço",
+            headerLeft: () => (
+              <TouchableOpacity
+                style={{ marginLeft: 20 }}
+                onPress={() => navigation.goBack()}
+              >
+                <FontAwesomeIcon
+                  icon={faArrowLeft}
+                  size={20}
+                  style={{ flex: 1 }}
+                />
+              </TouchableOpacity>
+            ),
+          })}
+        />
+      </this.drawer.Navigator>
     );
   }
 }
@@ -241,19 +282,17 @@ class StackNavigator extends Component {
         />
 
         <this.stack.Screen
-          name="inform-address-manual"   
-          //component={InformAddressManual}      
+          name="inform-address-manual"
+          //component={InformAddressManual}
           options={{
             title: "Informar Endereço Manual",
           }}
-          >
+        >
           {(props) => (
             <InformAddressManual {...props} emitters={this.props.emitters} />
           )}
         </this.stack.Screen>
-
       </this.stack.Navigator>
-      
     );
   }
 }
@@ -283,7 +322,7 @@ const style = StyleSheet.create({
   },
   headerLoginButton: {
     borderRadius: 10,
-    padding:3,
+    padding: 3,
     width: 70,
     height: 30,
     marginRight: 10,
