@@ -22,6 +22,8 @@ import ProviderRegister from "./provider-register";
 import InformAddress from "./informAddress";
 import InformAddressManual from "./inform-address-manual";
 import Schedule from "./schedule";
+import Gallery from "./gallery";
+import ServicePacks from "./service-packs";
 
 class DrawerNavigator extends Component {
   constructor(props) {
@@ -88,6 +90,46 @@ class DrawerNavigator extends Component {
           options={({ navigation }) => ({
             headerShown: true,
             title: "Agenda",
+            headerLeft: () => (
+              <TouchableOpacity
+                style={{ marginLeft: 20 }}
+                onPress={() => navigation.goBack()}
+              >
+                <FontAwesomeIcon
+                  icon={faArrowLeft}
+                  size={20}
+                  style={{ flex: 1 }}
+                />
+              </TouchableOpacity>
+            ),
+          })}
+        />
+        <this.drawer.Screen
+          name="gallery"
+          component={Gallery}
+          options={({ navigation }) => ({
+            headerShown: true,
+            title: "Galeria",
+            headerLeft: () => (
+              <TouchableOpacity
+                style={{ marginLeft: 20 }}
+                onPress={() => navigation.goBack()}
+              >
+                <FontAwesomeIcon
+                  icon={faArrowLeft}
+                  size={20}
+                  style={{ flex: 1 }}
+                />
+              </TouchableOpacity>
+            ),
+          })}
+        />
+        <this.drawer.Screen
+          name="service-packs"
+          component={ServicePacks}
+          options={({ navigation }) => ({
+            headerShown: true,
+            title: "Pacotes de Serviço",
             headerLeft: () => (
               <TouchableOpacity
                 style={{ marginLeft: 20 }}
