@@ -3,10 +3,10 @@ import { StyleSheet, Image, TouchableOpacity, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
+        createDrawerNavigator,
+        DrawerContentScrollView,
+        DrawerItemList,
+        DrawerItem,
 } from "@react-navigation/drawer";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft, faBars } from "@fortawesome/free-solid-svg-icons";
@@ -24,6 +24,7 @@ import InformAddressManual from "./inform-address-manual";
 import Schedule from "./schedule";
 import Gallery from "./gallery";
 import ServicePacks from "./service-packs";
+import AddressList from './address-list';
 
 class DrawerNavigator extends Component {
   constructor(props) {
@@ -130,6 +131,26 @@ class DrawerNavigator extends Component {
           options={({ navigation }) => ({
             headerShown: true,
             title: "Pacotes de Serviço",
+            headerLeft: () => (
+              <TouchableOpacity
+                style={{ marginLeft: 20 }}
+                onPress={() => navigation.goBack()}
+              >
+                <FontAwesomeIcon
+                  icon={faArrowLeft}
+                  size={20}
+                  style={{ flex: 1 }}
+                />
+              </TouchableOpacity>
+            ),
+          })}
+        />
+        <this.drawer.Screen
+          name="address-list"
+          component={AddressList}
+          options={({ navigation }) => ({
+            headerShown: true,
+            title: "Lista de Endereços",
             headerLeft: () => (
               <TouchableOpacity
                 style={{ marginLeft: 20 }}

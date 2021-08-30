@@ -29,9 +29,8 @@ class InformAddressManual extends Component {
             <View style={styles.cardPrimaryConteiner}>
                 <Text style={styles.cardTitleTextBox}>Cadastre um endereço:</Text>
                 <View style={styles.cardDescriptionConteiner}>
-                   
-                    <TextInput style={styles.cardSelectTextBox} type="cep" placeholder="Informe o cep"
-                    />                     
+                    <TextInput style={styles.cardSelectTextBox} type="name" placeholder="Informe um nome para o endereço"/>                   
+                    <TextInput style={styles.cardSelectTextBox} type="cep" placeholder="Informe o cep"/>                     
                     <View style={styles.pickerView}>
                         <Picker style={styles.picker} selectedValue={this.state.selectedState}
                         onValueChange={(itemValue, itemIndex) =>
@@ -87,7 +86,7 @@ class InformAddressManual extends Component {
                 <View style={styles.cardBottunConteiner}>
                     <TouchableHighlight style={styles.saveButton} onPress={() => this.props.navigation.navigate("inform-address")}
                         >
-                        <Text  style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>Salvar</Text>
+                        <Text  style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>Adicionar Endereço</Text>
                     </TouchableHighlight>
                 </View>
             </View>
@@ -97,28 +96,27 @@ class InformAddressManual extends Component {
 }
 
 const styles = StyleSheet.create({
- 
-cardPrimaryConteiner: {
+  cardPrimaryConteiner: {
     flex: 1,
     paddingHorizontal: 15,
     paddingVertical: 30,
     backgroundColor: "#fff",
-    },  
-cardDescriptionConteiner: {
+  },
+  cardDescriptionConteiner: {
     flex: 7,
     backgroundColor: "#fff",
     alignItems: "stretch",
-    },
-cardBottunConteiner: {
+  },
+  cardBottunConteiner: {
     flex: 1,
     backgroundColor: "#fff",
     justifyContent: "center",
-    alignItems: "center",    
-    flexDirection:'column',
-    },
-cardSelectTextBox: {
+    alignItems: "center",
+    flexDirection: "column",
+  },
+  cardSelectTextBox: {
     paddingLeft: 20,
-    paddingRight: 20,
+    paddingRight: 5,
     padding: 5,
     fontSize: 16,
     backgroundColor: "#fff",
@@ -127,37 +125,38 @@ cardSelectTextBox: {
     borderRadius: 15,
     justifyContent: "center",
     alignItems: "center",
-    marginTop:10,
+    marginTop: 8,
+    height: 35,
   },
-  cardTitleTextBox: {   
+  cardTitleTextBox: {
     padding: 5,
     fontSize: 18,
-    backgroundColor: "#fff",    
+    backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
-  },    
+  },
   saveButton: {
     borderRadius: 15,
-    flexDirection:'column',   
-    width: "50%",  
+    flexDirection: "column",
+    width: "70%",
     borderColor: "black",
     borderWidth: 1,
     backgroundColor: "#db382f",
-    alignItems: "center",    
-    alignSelf: 'auto',  
-    padding: 5,  
+    alignItems: "center",
+    alignSelf: "auto",
+    padding: 5,
   },
-  pickerView: {    
+  pickerView: {
     paddingHorizontal: 5,
     borderColor: "black",
-    borderWidth: 1,   
+    borderWidth: 1,
     borderRadius: 15,
-    marginTop:10,
+    marginTop: 8,
   },
   picker: {
     margin: 8,
+    height: 20,
   },
- 
 });
 
 export default InformAddressManual;
