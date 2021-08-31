@@ -31,9 +31,9 @@ class ProviderDetails extends Component {
   componentDidMount() {
     this.setState({
       ...this.state,
-      userLoggedIn: this.props.loginEmitter.userLoggedIn,
+      userLoggedIn: this.props.emitters.loginEmitter.userLoggedIn,
     });
-    this.props.loginEmitter.subscribe(
+    this.props.emitters.loginEmitter.subscribe(
       this.componentKey,
       this._handleLogin.bind(this)
     );
@@ -44,7 +44,7 @@ class ProviderDetails extends Component {
   }
 
   componentWillUnmount() {
-    this.props.loginEmitter.unsubscribe(this.componentKey);
+    this.props.emitters.loginEmitter.unsubscribe(this.componentKey);
   }
 
   render() {

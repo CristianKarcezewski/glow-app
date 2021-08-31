@@ -2,8 +2,13 @@ import React, { Component } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ProviderDetails from "../provider-details";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faAddressCard, faComments } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAddressCard,
+  faComments,
+  faPhotoVideo,
+} from "@fortawesome/free-solid-svg-icons";
 import Chat from "../chat";
+import Gallery from "../gallery";
 
 class ProviderDetailTabs extends Component {
   constructor(props) {
@@ -37,23 +42,31 @@ class ProviderDetailTabs extends Component {
                 />
               );
             }
+            if (route.name === "galery") {
+              return (
+                <FontAwesomeIcon
+                  icon={faPhotoVideo}
+                  color={focused ? "#db382f" : "black"}
+                  size={24}
+                />
+              );
+            }
           },
           tabBarLabelStyle: { fontSize: 20 },
         })}
       >
         <this.tabs.Screen name="provider-details" options={{ title: "Sobre" }}>
           {(props) => (
-            <ProviderDetails
-              {...props}
-              loginEmitter={this.props.loginEmitter}
-            />
+            <ProviderDetails {...props} emitters={this.props.emitters} />
           )}
         </this.tabs.Screen>
 
         <this.tabs.Screen name="chat" options={{ title: "Chat" }}>
-          {(props) => (
-            <Chat {...props} loginEmitter={this.props.loginEmitter} />
-          )}
+          {(props) => <Chat {...props} emitters={this.props.emitters} />}
+        </this.tabs.Screen>
+
+        <this.tabs.Screen name="galery" options={{ title: "Galeria" }}>
+          {(props) => <Gallery {...props} emitters={this.props.emitters} />}
         </this.tabs.Screen>
       </this.tabs.Navigator>
     );
