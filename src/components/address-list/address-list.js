@@ -4,16 +4,16 @@ import {
   Text,
   View,
   FlatList,
-  TouchableOpacity,
-  TextInput,
-  Image,
+  TouchableOpacity, 
+  Image
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Address from "../../models/address";
-import imagem from "../../assets/endereco.jpg";
+import image from "../../assets/endereco.jpg";
 import ActionButton from "react-native-action-button";
-import commonStyles from "../commonStyles";
+import commonStyles from "../../shared/commonStyles";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 class AddressList extends Component {
   constructor(props) {
@@ -27,7 +27,8 @@ class AddressList extends Component {
           "Caxias do Sul",
           "Dante Franciasco Zatera",
           "310",
-          ""
+          "",
+          true
         ),
         new Address(
           "2",
@@ -36,7 +37,8 @@ class AddressList extends Component {
           "Farroupliha",
           "José Franciasco Borges",
           "310",
-          "Apto 301"
+          "Apto 301",
+          false
         ),
         new Address(
           "3",
@@ -45,7 +47,8 @@ class AddressList extends Component {
           "Torres",
           "Independencia",
           "110",
-          ""
+          "",
+          false
         ),
         new Address(
           "1",
@@ -54,7 +57,8 @@ class AddressList extends Component {
           "Caxias do Sul",
           "Dante Franciasco Zatera",
           "310",
-          ""
+          "",
+          false
         ),
         new Address(
           "2",
@@ -63,7 +67,8 @@ class AddressList extends Component {
           "Farroupliha",
           "José Franciasco Borges",
           "310",
-          "Apto 301"
+          "Apto 301",
+          false
         ),
         new Address(
           "3",
@@ -72,7 +77,8 @@ class AddressList extends Component {
           "Torres",
           "Independencia",
           "110",
-          ""
+          "",
+          false
         ),
       ],
     };
@@ -97,7 +103,9 @@ class AddressList extends Component {
             data={this.state.address}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate()}
+                onPress={() =>
+                  this.props.navigation.navigate("inform-address-manual")
+                }
               >
                 <CardResult address={item} />
               </TouchableOpacity>
@@ -107,18 +115,15 @@ class AddressList extends Component {
         <View
           style={{
             flex: 3,
-            // flexDirection: "row",
-            //alignItems: "center",
-            //width: "100%",
             backgroundColor: "#FFF",
             marginTop: 20,
           }}
         >
-          <ActionButton            
+          <ActionButton
             buttonColor={commonStyles.colors.today}
-            onPress={() => {
-              this.setState({});
-            }}
+            onPress={() =>
+              this.props.navigation.navigate("inform-address-manual")
+            }
           />
         </View>
       </View>
@@ -128,15 +133,25 @@ class AddressList extends Component {
 
 class CardResult extends Component {
   render() {
+    let check = null;
+    if (this.props.address.active === true) {
+      check = (
+        <View style={style.done}>
+          <Icon name="check" size={20} color={commonStyles.colors.secondary} />
+        </View>
+      );
+    } else {
+      check = <View style={style.pending} />;
+    }
+
     return (
       <View style={style.cardResultContainer}>
         <View style={style.cardResultImage}>
           <Image
-            source={imagem}
+            source={image}
             style={{ flex: 1, width: "100%", borderRadius: 30 }}
           ></Image>
         </View>
-
         <View style={{ flex: 3, justifyContent: "center" }}>
           <Text style={style.cardResultName}>{this.props.address.name}</Text>
           <Text style={{ fontSize: 20 }}>{this.props.address.city}</Text>
@@ -148,10 +163,11 @@ class CardResult extends Component {
         <View style={style.cardResultRating}>
           <TouchableOpacity
             style={{ flex: 1, alignItems: "center" }}
-            onPress={() => this.props.navigation.navigate("provider-filter")}
+            onPress={() => this.props.navigation.navigate("inform-address-manual")}          
           >
             <FontAwesomeIcon icon={faTrash} size={25} color={"#db382f"} />
           </TouchableOpacity>
+          <View style={style.checkContainer}>{check}</View>
         </View>
       </View>
     );
@@ -164,7 +180,6 @@ const style = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 10,
     padding: 10,
-    // borderColor: "#db382f",
     borderWidth: 1,
     borderRadius: 20,
     height: 100,
@@ -186,7 +201,27 @@ const style = StyleSheet.create({
   },
   cardResultRating: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  checkContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: "30%",
+  },
+  pending: {
+    borderWidth: 1,
+    height: 25,
+    width: 25,
+    borderRadius: 15,
+    borderColor: "#555",
+  },
+  done: {
+    height: 25,
+    width: 25,
+    borderRadius: 15,
+    backgroundColor: "#4D7031",
     alignItems: "center",
     justifyContent: "center",
   },

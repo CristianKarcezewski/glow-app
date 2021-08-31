@@ -7,7 +7,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome'
 import moment from 'moment'
 //import 'moment/locale/pt-br'
-import commonStyles from './commonStyles'
+import commonStyles from '../../shared/commonStyles'
 
 export default props => {
 

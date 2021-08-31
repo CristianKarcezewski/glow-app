@@ -4,95 +4,115 @@ import {
   Text,
   View,
   TextInput,
-  TouchableHighlight  
+  TouchableHighlight,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
-
 class InformAddressManual extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedState: null,
+      selectedCity: null,
+    };
+  }
 
-    constructor(props) {
-        super(props);
-        this.state = {
-          selectedState: null,
-          selectedCity: null,
-        };
-      }
-    
-      _register() {
-        this.props.emitters.loginEmitter.login("Bearer dsgpsogspog");
-        this.props.navigation.popToTop();
-    }
+  _register() {
+    this.props.emitters.loginEmitter.login("Bearer dsgpsogspog");
+    this.props.navigation.popToTop();
+  }
 
-    render(){
-        return (
-            <View style={styles.cardPrimaryConteiner}>
-                <Text style={styles.cardTitleTextBox}>Cadastre um endereço:</Text>
-                <View style={styles.cardDescriptionConteiner}>
-                    <TextInput style={styles.cardSelectTextBox} type="name" placeholder="Informe um nome para o endereço"/>                   
-                    <TextInput style={styles.cardSelectTextBox} type="cep" placeholder="Informe o cep"/>                     
-                    <View style={styles.pickerView}>
-                        <Picker style={styles.picker} selectedValue={this.state.selectedState}
-                        onValueChange={(itemValue, itemIndex) =>
-                            this.setState({ ...this.state, selectedState: itemIndex })
-                        }
-                        >
-                        <Picker.Item
-                            label={"Selecione seu estado"}
-                            value={null}
-                            key={""}
-                        />
-                        {this.props.emitters.locationsEmitter
-                            .getAllStates()
-                            .map((st, index) => {
-                            return (
-                                <Picker.Item label={st.name} value={st.uf} key={index} />
-                            );
-                            })}
-                        </Picker>
-                    </View>
-                    <View style={styles.pickerView}>
-                        <Picker  style={styles.picker} selectedValue={this.state.selectedCity}
-                        onValueChange={(itemValue, itemIndex) =>
-                            this.setState({ ...this.state, selectedCity: itemIndex })
-                        }
-                        >
-                        <Picker.Item
-                            label={"Selecione sua cidade"}
-                            value={null}
-                            key={""}
-                        />
-                        {this.props.emitters.locationsEmitter
-                            .getStateByIndex(this.state.selectedState)
-                            ?.cities.map((city, index) => {
-                            return <Picker.Item label={city} value={city} key={index} />;
-                            })}
-                        </Picker>
-                    </View>
-                     <TextInput
-                    style={styles.cardSelectTextBox} type="cidade" placeholder="Informe a cidade"
-                    />
-                     <TextInput
-                    style={styles.cardSelectTextBox} type="logradouro" placeholder="Informe o logradouro"
-                    />
-                     <TextInput
-                    style={styles.cardSelectTextBox} type="numero" placeholder="Informe o número"
-                    />
-                     <TextInput
-                    style={styles.cardSelectTextBox} type="complemento" placeholder="Informe o complemento"
-                    />                
-                    
-                </View>
-                <View style={styles.cardBottunConteiner}>
-                    <TouchableHighlight style={styles.saveButton} onPress={() => this.props.navigation.navigate("inform-address")}
-                        >
-                        <Text  style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>Adicionar Endereço</Text>
-                    </TouchableHighlight>
-                </View>
-            </View>
-
-        )
-    }
+  render() {
+    return (
+      <View style={styles.cardPrimaryConteiner}>
+        <Text style={styles.cardTitleTextBox}>Cadastre um endereço:</Text>
+        <View style={styles.cardDescriptionConteiner}>
+          <TextInput
+            style={styles.cardSelectTextBox}
+            type="name"
+            placeholder="Informe um nome para o endereço"
+          />
+          <TextInput
+            style={styles.cardSelectTextBox}
+            type="cep"
+            placeholder="Informe o cep"
+          />
+          <View style={styles.pickerView}>
+            <Picker
+              style={styles.picker}
+              selectedValue={this.state.selectedState}
+              onValueChange={(itemValue, itemIndex) =>
+                this.setState({ ...this.state, selectedState: itemIndex })
+              }
+            >
+              <Picker.Item
+                label={"Selecione seu estado"}
+                value={null}
+                key={""}
+              />
+              {this.props.emitters.locationsEmitter
+                .getAllStates()
+                .map((st, index) => {
+                  return (
+                    <Picker.Item label={st.name} value={st.uf} key={index} />
+                  );
+                })}
+            </Picker>
+          </View>
+          <View style={styles.pickerView}>
+            <Picker
+              style={styles.picker}
+              selectedValue={this.state.selectedCity}
+              onValueChange={(itemValue, itemIndex) =>
+                this.setState({ ...this.state, selectedCity: itemIndex })
+              }
+            >
+              <Picker.Item
+                label={"Selecione sua cidade"}
+                value={null}
+                key={""}
+              />
+              {this.props.emitters.locationsEmitter
+                .getStateByIndex(this.state.selectedState)
+                ?.cities.map((city, index) => {
+                  return <Picker.Item label={city} value={city} key={index} />;
+                })}
+            </Picker>
+          </View>
+          <TextInput
+            style={styles.cardSelectTextBox}
+            type="cidade"
+            placeholder="Informe a cidade"
+          />
+          <TextInput
+            style={styles.cardSelectTextBox}
+            type="logradouro"
+            placeholder="Informe o logradouro"
+          />
+          <TextInput
+            style={styles.cardSelectTextBox}
+            type="numero"
+            placeholder="Informe o número"
+          />
+          <TextInput
+            style={styles.cardSelectTextBox}
+            type="complemento"
+            placeholder="Informe o complemento"
+          />
+        </View>
+        <View style={styles.cardBottunConteiner}>
+          <TouchableHighlight
+            style={styles.saveButton}
+            onPress={() => this.props.navigation.navigate("address-list")}
+          >
+            <Text style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>
+              Salvar
+            </Text>
+          </TouchableHighlight>
+        </View>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

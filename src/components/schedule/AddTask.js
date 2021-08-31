@@ -11,7 +11,7 @@ import {
   Alert,
 } from "react-native";
 import moment from "moment";
-import commonStyles from "../commonStyles";
+import commonStyles from "../../shared/commonStyles";
 
 const initialState = { desc: "", date: new Date() };
 

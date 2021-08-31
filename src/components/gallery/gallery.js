@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { View, Image, FlatList } from "react-native";
 import Post from './post'
 import ActionButton from "react-native-action-button";
-import commonStyles from "../commonStyles";
+import commonStyles from "../../shared/commonStyles";
   
  export default class Gallery extends Component {
 

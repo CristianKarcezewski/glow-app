@@ -306,7 +306,7 @@ class StackNavigator extends Component {
           name="inform-address-manual"
           //component={InformAddressManual}
           options={{
-            title: "Informar Endereço Manual",
+            title: "Informar Endereço",
           }}
         >
           {(props) => (

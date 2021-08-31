@@ -1,5 +1,5 @@
 export default class Address {
-  constructor(id, imageUrl, name, city, publicPlace, number, complement) {
+  constructor(id, imageUrl, name, city, publicPlace, number, complement,active) {
     this.id = id;
     this.imageUrl = imageUrl;
     this.name = name;
@@ -7,5 +7,6 @@ export default class Address {
     this.publicPlace = publicPlace;
     this.number = number;
     this.complement = complement;
+    this.active = active;
   }
 }
