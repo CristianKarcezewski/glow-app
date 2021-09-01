@@ -8,3 +8,4 @@ export const USER_REGISTER_API = `${API}/user/register`;
 export const STATES_API = `${API}/states`;
 export const CITIES_API = `${API}/cities`;
 export const USER_ADDRESSES = `${API}/user/addresses`;
+export const REGISTER_ADDRESS = `${API}/addresses/regster`;

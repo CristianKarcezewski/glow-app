@@ -50,6 +50,13 @@ class AddressList extends Component {
       });
   }
 
+  appendAddress(address) {
+    this.setState({
+      ...this.state,
+      addresses: [...this.state.addresses, address],
+    });
+  }
+
   componentDidMount() {
     this._handleLoadUserAddresses();
   }
@@ -76,7 +83,10 @@ class AddressList extends Component {
                   this.props.navigation.navigate("inform-address-manual")
                 }
               >
-                <CardResult address={item} />
+                <CardResult
+                  address={item}
+                  appendAddress={this.appendAddress.bind(this)}
+                />
               </TouchableOpacity>
             )}
           />

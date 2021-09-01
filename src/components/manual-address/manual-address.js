@@ -10,13 +10,21 @@ import {
 import { Picker } from "@react-native-picker/picker";
 import Toast from "react-native-root-toast";
 import { loadStates, loadCities } from "../../services/location-service";
+import { registerAddress } from "../../services/address-service";
 
 class ManualAddress extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      name: null,
+      postalCode: null,
       selectedState: null,
       selectedCity: null,
+      neighborhood: null,
+      street: null,
+      number: null,
+      complement: null,
+      referencePoint: null,
       loading: false,
     };
   }
@@ -77,6 +85,42 @@ class ManualAddress extends Component {
     this._handleLoadCities(stateId);
   }
 
+  _handleAddressRegister() {
+    this.setState({ ...this.state, loading: true });
+    address = {
+      name: this.state.name,
+      postalCode: this.state.postalCode,
+      selectedState: this.state.selectedState,
+      selectedCity: this.state.selectedCity,
+      neighborhood: this.state.neighborhood,
+      street: this.state.street,
+      number: this.state.number,
+      complement: this.state.complement,
+      referencePoint: this.state.referencePoint,
+    };
+
+    registerAddress(Platform.OS)
+      .then(({ status, data }) => {
+        if (status === 200) {
+          this.props.appendAddress(data);
+          this.setState({ ...this.state, loading: false });
+          this.props.navigation.goBack();
+        } else {
+          this.setState({ ...this.state, loading: false });
+          Toast.show("Erro ao carregar localizações", {
+            duration: Toast.durations.LONG,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        this.setState({ ...this.state, loading: false });
+        Toast.show("Erro ao carregar localizações", {
+          duration: Toast.durations.LONG,
+        });
+      });
+  }
+
   componentDidMount() {
     if (this.props.emitters.locationsEmitter.states.length == 0) {
       this._handleLoadStates();
@@ -109,7 +153,9 @@ class ManualAddress extends Component {
             }
             maxLength={50}
             placeholder="Nome do endereço"
-            onChangeText={(value) => this._handleName(value)}
+            onChangeText={(value) =>
+              this.setState({ ...this.state, name: value })
+            }
             value={this.state.name}
           />
           <TextInput
@@ -120,7 +166,9 @@ class ManualAddress extends Component {
             }
             maxLength={50}
             placeholder="CEP"
-            onChangeText={(value) => this._handleName(value)}
+            onChangeText={(value) =>
+              this.setState({ ...this.state, postalCode: value })
+            }
             value={this.state.name}
           />
           <View style={style.pickerView}>
@@ -166,7 +214,9 @@ class ManualAddress extends Component {
             }
             maxLength={50}
             placeholder="Logradouro"
-            onChangeText={(value) => this._handleName(value)}
+            onChangeText={(value) =>
+              this.setState({ ...this.state, neighborhood: value })
+            }
             value={this.state.name}
           />
           <TextInput
@@ -177,7 +227,9 @@ class ManualAddress extends Component {
             }
             maxLength={50}
             placeholder="Numero"
-            onChangeText={(value) => this._handleName(value)}
+            onChangeText={(value) =>
+              this.setState({ ...this.state, number: value })
+            }
             value={this.state.name}
           />
           <TextInput
@@ -188,16 +240,33 @@ class ManualAddress extends Component {
             }
             maxLength={50}
             placeholder="Complemento"
-            onChangeText={(value) => this._handleName(value)}
+            onChangeText={(value) =>
+              this.setState({ ...this.state, complement: value })
+            }
+            value={this.state.name}
+          />
+          <TextInput
+            style={
+              this.state.validName
+                ? style.validFormField
+                : style.invalidFormField
+            }
+            maxLength={50}
+            placeholder="Ponto de referencia"
+            onChangeText={(value) =>
+              this.setState({ ...this.state, referencePoint: value })
+            }
             value={this.state.name}
           />
           <View>
             <TouchableHighlight
               style={style.saveButton}
-              onPress={() => this.props.navigation.navigate("address-list")}
+              onPress={() => this._handleAddressRegister()}
             >
-              <Text style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>
-                Salvar
+              <Text
+                style={{ fontSize: 20, fontWeight: "bold", color: "#db382f" }}
+              >
+                Cadastrar
               </Text>
             </TouchableHighlight>
           </View>
