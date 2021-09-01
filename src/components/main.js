@@ -9,7 +9,7 @@ import {
   DrawerItem,
 } from "@react-navigation/drawer";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faArrowLeft, faBars } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faBars, faPlus } from "@fortawesome/free-solid-svg-icons";
 import Search from "./search";
 import Login from "./login";
 import UserRegister from "./user-register";
@@ -20,7 +20,7 @@ import GlowTheme from "../shared/theme";
 import ProviderFilter from "./provider-filter";
 import ProviderRegister from "./provider-register";
 import InformAddress from "./informAddress";
-import InformAddressManual from "./inform-address-manual";
+import ManualAddress from "./manual-address";
 import Schedule from "./schedule";
 import ServicePacks from "./service-packs";
 import AddressList from "./address-list";
@@ -126,10 +126,9 @@ class DrawerNavigator extends Component {
         />
         <this.drawer.Screen
           name="address-list"
-          component={AddressList}
           options={({ navigation }) => ({
             headerShown: true,
-            title: "Lista de Endereços",
+            title: "Meus Endereços",
             headerLeft: () => (
               <TouchableOpacity
                 style={{ marginLeft: 20 }}
@@ -142,8 +141,18 @@ class DrawerNavigator extends Component {
                 />
               </TouchableOpacity>
             ),
+            headerRight: () => (
+              <TouchableOpacity
+                style={style.headerLoginButton}
+                onPress={() => navigation.navigate("manual-address")}
+              >
+                <FontAwesomeIcon icon={faPlus} color={"#fff"} size={20} />
+              </TouchableOpacity>
+            ),
           })}
-        />
+        >
+          {(props) => <AddressList {...props} emitters={this.props.emitters} />}
+        </this.drawer.Screen>
       </this.drawer.Navigator>
     );
   }
@@ -282,14 +291,13 @@ class StackNavigator extends Component {
         />
 
         <this.stack.Screen
-          name="inform-address-manual"
-          //component={InformAddressManual}
+          name="manual-address"
           options={{
             title: "Informar Endereço",
           }}
         >
           {(props) => (
-            <InformAddressManual {...props} emitters={this.props.emitters} />
+            <ManualAddress {...props} emitters={this.props.emitters} />
           )}
         </this.stack.Screen>
       </this.stack.Navigator>

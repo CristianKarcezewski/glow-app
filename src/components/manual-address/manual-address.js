@@ -1,26 +1,22 @@
 import React, { Component } from "react";
 import {
   StyleSheet,
-  View,
   Text,
-  TouchableOpacity,
+  View,
+  TextInput,
+  TouchableHighlight,
   ActivityIndicator,
-  Platform,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import Checkbox from "expo-checkbox";
-import { loadStates, loadCities } from "../../services/location-service";
 import Toast from "react-native-root-toast";
+import { loadStates, loadCities } from "../../services/location-service";
 
-class ProviderFilter extends Component {
+class ManualAddress extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      professionTypes: ["Todos", "Funileiro", "Diarista", "Eletrecista"],
-      selectedState: 0,
-      selectedCity: 0,
-      selectedProfessionalType: 0,
-      favorites: false,
+      selectedState: null,
+      selectedCity: null,
       loading: false,
     };
   }
@@ -71,11 +67,11 @@ class ProviderFilter extends Component {
       });
   }
 
-  async _handleStateChange(stateId) {
-    await this.setState({
+  _handleStateChange(stateId) {
+    this.setState({
       ...this.state,
+      selectedCity: null,
       selectedState: stateId,
-      selectedCity: 0,
     });
     this.props.emitters.locationsEmitter.cities = [];
     this._handleLoadCities(stateId);
@@ -103,51 +99,37 @@ class ProviderFilter extends Component {
       );
     } else {
       return (
-        <View
-          style={{
-            flex: 1,
-            margin: 10,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 30,
-              marginBottom: 20,
-              borderBottomColor: "#db382f",
-              borderBottomWidth: 1,
-            }}
-          >
-            Filtrar Serviços
-          </Text>
-          <TouchableOpacity
-            onPress={() =>
-              this.setState({ ...this.state, favorites: !this.state.favorites })
+        <View style={style.container}>
+          <Text>Cadastre um endereço:</Text>
+          <TextInput
+            style={
+              this.state.validName
+                ? style.validFormField
+                : style.invalidFormField
             }
-          >
-            <View style={style.checkboxContainer}>
-              <Checkbox
-                style={style.checkbox}
-                color={"#db382f"}
-                value={this.state.favorites}
-                onValueChange={() =>
-                  this.setState({
-                    ...this.state,
-                    favorites: !this.state.favorites,
-                  })
-                }
-              />
-              <Text style={style.checkboxText}>Meus favoritos</Text>
-            </View>
-          </TouchableOpacity>
+            maxLength={50}
+            placeholder="Nome do endereço"
+            onChangeText={(value) => this._handleName(value)}
+            value={this.state.name}
+          />
+          <TextInput
+            style={
+              this.state.validName
+                ? style.validFormField
+                : style.invalidFormField
+            }
+            maxLength={50}
+            placeholder="CEP"
+            onChangeText={(value) => this._handleName(value)}
+            value={this.state.name}
+          />
           <View style={style.pickerView}>
             <Picker
               style={style.picker}
               selectedValue={this.state.selectedState}
               onValueChange={(state) => this._handleStateChange(state.stateId)}
             >
-              <Picker.Item label={"Estado"} value={0} key={""} />
+              <Picker.Item label={"Estado"} value={""} key={""} />
               {this.props.emitters.locationsEmitter.states?.map((st) => {
                 return (
                   <Picker.Item label={st.name} value={st} key={st.stateId} />
@@ -164,7 +146,7 @@ class ProviderFilter extends Component {
                 this.setState({ ...this.state, selectedCity: city.cityId })
               }
             >
-              <Picker.Item label={"Cidade"} value={0} key={""} />
+              <Picker.Item label={"Cidade"} value={""} key={""} />
               {this.props.emitters.locationsEmitter.cities?.map((city) => {
                 return (
                   <Picker.Item
@@ -176,42 +158,49 @@ class ProviderFilter extends Component {
               })}
             </Picker>
           </View>
-
-          <View style={style.pickerView}>
-            <Picker
-              style={style.picker}
-              selectedValue={
-                this.state.professionTypes[this.state.selectedProfessionalType]
-              }
-              onValueChange={(itemValue, itemIndex) =>
-                this.setState({
-                  ...this.state,
-                  selectedProfessionalType: itemIndex,
-                })
-              }
+          <TextInput
+            style={
+              this.state.validName
+                ? style.validFormField
+                : style.invalidFormField
+            }
+            maxLength={50}
+            placeholder="Logradouro"
+            onChangeText={(value) => this._handleName(value)}
+            value={this.state.name}
+          />
+          <TextInput
+            style={
+              this.state.validName
+                ? style.validFormField
+                : style.invalidFormField
+            }
+            maxLength={50}
+            placeholder="Numero"
+            onChangeText={(value) => this._handleName(value)}
+            value={this.state.name}
+          />
+          <TextInput
+            style={
+              this.state.validName
+                ? style.validFormField
+                : style.invalidFormField
+            }
+            maxLength={50}
+            placeholder="Complemento"
+            onChangeText={(value) => this._handleName(value)}
+            value={this.state.name}
+          />
+          <View>
+            <TouchableHighlight
+              style={style.saveButton}
+              onPress={() => this.props.navigation.navigate("address-list")}
             >
-              {this.state.professionTypes.map((st, index) => {
-                return <Picker.Item label={st} value={st} key={index} />;
-              })}
-            </Picker>
+              <Text style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>
+                Salvar
+              </Text>
+            </TouchableHighlight>
           </View>
-
-          <TouchableOpacity
-            style={{ ...style.buttons, backgroundColor: "#db382f" }}
-            onPress={() => this.props.navigation.popToTop()}
-          >
-            <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
-              Aplicar
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={style.buttons}
-            onPress={() => this.props.navigation.popToTop()}
-          >
-            <Text style={{ fontSize: 25, fontWeight: "bold", color: "black" }}>
-              Voltar
-            </Text>
-          </TouchableOpacity>
         </View>
       );
     }
@@ -219,18 +208,32 @@ class ProviderFilter extends Component {
 }
 
 const style = StyleSheet.create({
-  checkboxContainer: {
-    flexDirection: "row",
+  container: {
+    flex: 1,
+    margin: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff",
+  },
+  validFormField: {
     width: "80%",
     paddingHorizontal: 20,
+    margin: 5,
+    fontSize: 18,
     borderColor: "black",
     borderWidth: 1,
-    margin: 5,
-    borderRadius: 20,
+    borderRadius: 15,
+    padding: 5,
   },
-  checkboxText: {
-    fontSize: 20,
-    paddingTop: 5,
+  invalidFormField: {
+    width: "80%",
+    paddingHorizontal: 20,
+    margin: 5,
+    fontSize: 18,
+    borderColor: "#db382f",
+    borderWidth: 1,
+    borderRadius: 15,
+    padding: 5,
   },
   pickerView: {
     width: "80%",
@@ -241,17 +244,8 @@ const style = StyleSheet.create({
     borderRadius: 20,
   },
   picker: {
-    margin: 5,
-  },
-  buttons: {
-    borderRadius: 30,
-    width: "50%",
     margin: 10,
-    borderColor: "black",
-    borderWidth: 2,
-    alignItems: "center",
-    elevation: 10,
   },
 });
 
-export default ProviderFilter;
+export default ManualAddress;

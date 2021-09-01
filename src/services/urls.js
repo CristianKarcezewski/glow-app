@@ -7,3 +7,4 @@ export const LOGIN_API = `${API}/login`;
 export const USER_REGISTER_API = `${API}/user/register`;
 export const STATES_API = `${API}/states`;
 export const CITIES_API = `${API}/cities`;
+export const USER_ADDRESSES = `${API}/user/addresses`;
