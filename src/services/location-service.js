@@ -1,18 +1,14 @@
-import { LOGIN_API, USER_REGISTER_API } from "./urls";
+import { STATES_API, CITIES_API } from "./urls";
 
-export const login = async (platform, email, pwd) => {
+export const loadStates = async (platform) => {
   try {
-    let response = await fetch(LOGIN_API, {
-      method: "POST",
+    let response = await fetch(STATES_API, {
+      method: "GET",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         platform,
       },
-      body: JSON.stringify({
-        email,
-        password: pwd,
-      }),
     });
 
     let json = await response.json();
@@ -22,16 +18,15 @@ export const login = async (platform, email, pwd) => {
   }
 };
 
-export const register = async (platform, newUser) => {
+export const loadCities = async (platform, stateId) => {
   try {
-    let response = await fetch(USER_REGISTER_API, {
-      method: "POST",
+    let response = await fetch(`${CITIES_API}?stateId=${stateId}`, {
+      method: "GET",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         platform,
       },
-      body: JSON.stringify(newUser),
     });
 
     let json = await response.json();

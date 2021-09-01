@@ -1,21 +1,31 @@
 import * as SecureStore from "expo-secure-store";
-import { sub } from "react-native-reanimated";
 
 export default class LoginEmitter {
   tokenKey = "authorization";
 
   constructor() {
     this.subscribes = [];
-    // this.readToken();
+    this.readToken();
     this.token = null;
     this.userLoggedIn = false;
   }
 
   async readToken() {
     await SecureStore.getItemAsync(this.tokenKey).then((token) => {
-      this.token = token;
-      this.emit();
+      if (token != null) {
+        this.token = token;
+        this.userLoggedIn = true;
+        this.emit();
+      }
     });
+  }
+
+  async saveToken(value) {
+    await SecureStore.setItemAsync(this.tokenKey, value);
+  }
+
+  async removeToken() {
+    await SecureStore.deleteItemAsync(this.tokenKey);
   }
 
   subscribe(key, handler) {
@@ -48,13 +58,13 @@ export default class LoginEmitter {
   }
 
   login(value) {
-    // SecureStore.setItemAsync(this.tokenKey, value);
+    this.saveToken(value);
     this.userLoggedIn = true;
     this.emit();
   }
 
   logout() {
-    console.log("logout");
+    this.removeToken();
     this.userLoggedIn = false;
     this.emit();
   }

@@ -8,6 +8,11 @@ import {
 } from "react-native";
 
 class ProviderRegister extends Component {
+  constructor(props) {
+    super(props);
+    console.log("provider");
+  }
+
   render() {
     return (
       <View style={styles.cardPrimaryConteiner}>
@@ -37,15 +42,22 @@ class ProviderRegister extends Component {
           <Text style={styles.cardResultTextDetailsTitle}>Ir Para:</Text>
           <View style={styles.cardButtonsConteiner}>
             <TouchableHighlight
-              style={styles.cardResultButton} onPress={() => this.props.navigation.navigate("provider-register")
+              style={styles.cardResultButton}
+              onPress={() =>
+                this.props.navigation.navigate("provider-register")
               }
             >
-               <Text  style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>Adicionar jornada de trabalho</Text>
+              <Text style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>
+                Adicionar jornada de trabalho
+              </Text>
             </TouchableHighlight>
             <TouchableHighlight
-              style={styles.cardResultButton} onPress={() => this.props.navigation.navigate("inform-address")}
+              style={styles.cardResultButton}
+              onPress={() => this.props.navigation.navigate("inform-address")}
             >
-              <Text  style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>Adicionar endereço de trabalho</Text>
+              <Text style={{ fontSize: 20, fontWeight: "bold", color: "#fff" }}>
+                Adicionar endereço de trabalho
+              </Text>
             </TouchableHighlight>
           </View>
         </View>
@@ -122,7 +134,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
 });
 
 export default ProviderRegister;

@@ -1,11 +1,5 @@
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
+import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faUser,
