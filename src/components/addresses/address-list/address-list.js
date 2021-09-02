@@ -10,12 +10,11 @@ import {
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import Address from "../../models/address";
-import image from "../../assets/endereco.jpg";
+import Address from "../../../models/address";
 import ActionButton from "react-native-action-button";
-import commonStyles from "../../shared/commonStyles";
+import commonStyles from "../../../shared/commonStyles";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { loadUserAddresses } from "../../services/address-service";
+import { loadUserAddresses } from "../../../services/address-service";
 import Toast from "react-native-root-toast";
 
 class AddressList extends Component {
@@ -112,10 +111,10 @@ class CardResult extends Component {
     return (
       <View style={style.cardResultContainer}>
         <View style={style.cardResultImage}>
-          <Image
+          {/* <Image
             source={image}
             style={{ flex: 1, width: "100%", borderRadius: 30 }}
-          ></Image>
+          ></Image> */}
         </View>
         <View style={{ flex: 3, justifyContent: "center" }}>
           <Text style={style.cardResultName}>{this.props.address.name}</Text>

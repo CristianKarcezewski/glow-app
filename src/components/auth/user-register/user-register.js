@@ -9,8 +9,7 @@ import {
   ActivityIndicator,
   Platform,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
-import { register } from "../../services/auth-service";
+import { register } from "../../../services/auth-service";
 import Toast from "react-native-root-toast";
 
 class UserRegister extends Component {
@@ -140,7 +139,7 @@ class UserRegister extends Component {
           <View style={style.imageContainer}>
             <Image
               style={style.imageLogo}
-              source={require("../../assets/glow-logo.png")}
+              source={require("../../../assets/glow-logo.png")}
             />
           </View>
           <View style={style.container}>

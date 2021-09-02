@@ -11,19 +11,18 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft, faBars, faPlus } from "@fortawesome/free-solid-svg-icons";
 import Search from "./search";
-import Login from "./login";
-import UserRegister from "./user-register";
+import Login from "./auth/login";
+import UserRegister from "./auth/user-register";
 import LoginEmitter from "../emitters/login-emitter";
 import LocationsEmitter from "../emitters/locations-emitter";
-import ProviderDetailTabs from "./provider-detail-tabs";
+import ProviderDetailTabs from "./provider/provider-detail-tabs";
 import GlowTheme from "../shared/theme";
 import ProviderFilter from "./provider-filter";
-import ProviderRegister from "./provider-register";
-import InformAddress from "./informAddress";
-import ManualAddress from "./manual-address";
+import ProviderRegister from "./provider/provider-register";
+import ManualAddress from "./addresses/manual-address";
 import Schedule from "./schedule";
 import ServicePacks from "./service-packs";
-import AddressList from "./address-list";
+import AddressList from "./addresses/address-list";
 
 class DrawerNavigator extends Component {
   constructor(props) {
@@ -281,14 +280,6 @@ class StackNavigator extends Component {
             <ProviderFilter {...props} emitters={this.props.emitters} />
           )}
         </this.stack.Screen>
-
-        <this.stack.Screen
-          name="inform-address"
-          component={InformAddress}
-          options={{
-            title: "Informar Endereço",
-          }}
-        />
 
         <this.stack.Screen
           name="manual-address"

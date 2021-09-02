@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   TextInput,
 } from "react-native";
-import { login } from "../../services/auth-service";
+import { login } from "../../../services/auth-service";
 import Toast from "react-native-root-toast";
 
 class Login extends Component {
@@ -102,7 +102,7 @@ class Login extends Component {
           <View style={style.imageContainer}>
             <Image
               style={style.imageLogo}
-              source={require("../../assets/glow-logo.png")}
+              source={require("../../../assets/glow-logo.png")}
             />
           </View>
 

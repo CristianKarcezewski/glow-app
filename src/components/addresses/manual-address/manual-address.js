@@ -9,8 +9,8 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Toast from "react-native-root-toast";
-import { loadStates, loadCities } from "../../services/location-service";
-import { registerAddress } from "../../services/address-service";
+import { loadStates, loadCities } from "../../../services/location-service";
+import { registerAddress } from "../../../services/address-service";
 
 class ManualAddress extends Component {
   constructor(props) {
