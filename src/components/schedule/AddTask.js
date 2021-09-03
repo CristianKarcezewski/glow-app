@@ -1,32 +1,56 @@
 import React, { Component } from "react";
 import {
+  Plataform,
   Modal,
   View,
   Text,
   TextInput,
-  DatePickerIOS,
+  // DatePickerIOS,
   StyleSheet,
   TouchableWithoutFeedback,
   TouchableOpacity,
-  Alert,
+  Platform,
 } from "react-native";
 import moment from "moment";
 import commonStyles from "../../shared/commonStyles";
+import DateTimePicker from '@react-native-community/datetimepicker'
 
-const initialState = { desc: "", date: new Date() };
+
+const initialState = { desc: "", date: new Date(), showDatePicker: false};
 
 export default class AddTask extends Component {
-  state = { ...initialState };
 
+  state = { ...initialState }
+
+  getDatePicker = () => {
+    let datePicker = <DateTimePicker value={this.state.date}
+    onChange={(_, date) => this.setState ({date, showDatePicker: false})}
+    mode='date' />
+
+    const dateString = moment(this.state.date).format('ddd, D [de] MMMM [de] YYYY')
+    if(Platform.OS=== 'android'){
+      datePicker = (
+        <View>
+          <TouchableOpacity onPress={() => this.setState({showDatePicker: true})}>
+            <Text style={styles.date}>
+              {dateString}
+            </Text>
+          </TouchableOpacity>
+          {this.state.showDatePicker && datePicker}
+        </View>
+      );
+    }
+    return datePicker
+  }
   save = () => {
-      if (!this.state.desc.trim()) {
-          Alert.alert('Dados Inválidos', 'Informe uma descrição para a tarefa')
-          return
-      }
-    const data = { ...this.state };
-    this.props.onSave(data);
-    this.setState({ ...initialState });
+     const newTask = {
+       desc: this.state.desc,
+       date: this.state.date
+     }
+     this.props.onSave && this.props.onSave(newTask)
+     this.setState({...initialState})
   };
+
   render() {
     return (
       <Modal
@@ -36,27 +60,24 @@ export default class AddTask extends Component {
         transparent={true}
       >
         <TouchableWithoutFeedback onPress={this.props.onCancel}>
-          <View style={styles.offset}></View>
+          <View style={styles.background}></View>
         </TouchableWithoutFeedback>
         <View style={styles.container}>
           <Text style={styles.header}>Nova Tarefa!</Text>
           <TextInput
-            placeholder="Decrição..."
+            placeholder="Informe a decrição..."
             style={styles.input}
             onChangeText={(desc) => this.setState({ desc })}
             value={this.state.desc}
           />
-          <DatePickerIOS
+          {this.getDatePicker()}
+          {/* <DatePickerIOS
             mode="date"
             date={this.state.date}
             onDateChange={(date) => this.setState({ date })}
-          />
+          /> */}
           <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "flex-end",
-            }}
-          >
+            style={styles.buttons}>
             <TouchableOpacity onPress={this.props.onCancel}>
               <Text style={styles.button}>Cancelar</Text>
             </TouchableOpacity>
@@ -66,7 +87,7 @@ export default class AddTask extends Component {
           </View>
         </View>
         <TouchableWithoutFeedback onPress={this.props.onCancel}>
-          <View style={styles.offset}></View>
+          <View style={styles.background}></View>
         </TouchableWithoutFeedback>
       </Modal>
     );
@@ -75,33 +96,42 @@ export default class AddTask extends Component {
 
 var styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
-    justifyContent: "space-between",
+    backgroundColor: "#FFF",
   },
-  offset: {
-    flex: 1,
+  background: {
+    flex: 2,
     backgroundColor: "rgba(0,0,0,0.7)",
   },
-  botton: {
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  button: {
     margin: 20,
     marginRight: 30,
-    color: commonStyles.colors.default,
+    color: commonStyles.colors.today,
   },
-  headers: {
+  header: {
     //fontFamily: commonStyles.fontFamily,
-    backgroundColor: commonStyles.colors.secondary,
+    backgroundColor: commonStyles.colors.today,
+    color: commonStyles.colors.secondary,
     textAlign: "center",
     padding: 15,
-    fontSize: 15,
+    fontSize: 18,
   },
   input: {
     //fontFamily: commonStyles.fontFamily,
-    width: "90%",
     height: 40,
-    marginTop: 10,
+    margin: 15,
     marginLeft: 10,
-    backgroundColor: "white",
-    borderColor: 1,
+    borderWidth: 1,
+    backgroundColor: "#FFF",
+    borderColor: "#E3E3E3",
     borderRadius: 6,
+  },
+  date: {
+    //fontFamily:commonStyles.fontFamily,
+    fontSize: 18,
+    marginLeft: 15,
   },
 });

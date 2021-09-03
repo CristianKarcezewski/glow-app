@@ -3,11 +3,14 @@ import {
     StyleSheet,
     Text,
     TouchableWithoutFeedback,
-    View } from 'react-native'
+    View,
+    TouchableOpacity
+} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import moment from 'moment'
-//import 'moment/locale/pt-br'
 import commonStyles from '../../shared/commonStyles'
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export default props => {
 
@@ -24,23 +27,26 @@ export default props => {
         check = <View style={styles.pending} />
     }
 
-    const descStyle = props.doneAt !== null ?
+    const doneOrNotStyle = props.doneAt !== null ?
         {textDecorationLine: 'line-through'} :{}
 
+    const date = props.doneAT ? props.doneAT : props.estimateAt
+
+    const formattedDate = moment(date)
+      .locale("pt-br")
+      .format("ddd, D [de] MMMM [de] YYYY");   
+
     return (
-        <View style={styles.container}>
-            <TouchableWithoutFeedback onPress={() => props.toggleTask(props.id)}>
-                <View style={styles.checkContainer}>{check}</View>                
-            </TouchableWithoutFeedback>               
-            
-            <View>
-                <Text style={[styles.description, descStyle]}>{props.desc}
-                </Text>
-                <Text style={styles.date}>{moment(props.estimateAt).format('ddd, D [de] MMMM')}
-                </Text>
-            </View>
-        </View>        
-    )
+      <View style={styles.container}>
+        <TouchableWithoutFeedback onPress={() => props.toggleTask(props.id)}>
+          <View style={styles.checkContainer}>{check}</View>
+        </TouchableWithoutFeedback>
+        <View>
+          <Text style={[styles.description, doneOrNotStyle]}>{props.desc}</Text>
+          <Text style={styles.date}>{formattedDate}</Text>
+        </View>       
+      </View>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -49,13 +55,13 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         flexDirection: 'row',
         borderBottomWidth: 1,
-        borderColor: 'black',
+        borderColor: 'black',       
     },   
     checkContainer: {
         alignItems: 'center',
         justifyContent: 'center',
         width: '20%',
-    },
+    },   
     pending: {
         borderWidth: 1,
         height: 25,

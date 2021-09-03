@@ -6,11 +6,12 @@ import {
     ImageBackground,
     FlatList,
     TouchableOpacity,
-    Platform
+    Platform,
+    Alert
 } from 'react-native'
 import moment from 'moment'
-//import 'moment/locale/pt-br'
-import today from '../../assets/ImagemAgenda.jpg'
+import 'moment/locale/pt-br'
+import Image from '../../assets/today.jpg'
 import commonStyles from '../../shared/commonStyles'
 import Task from './Task'
 import  Icon  from 'react-native-vector-icons/FontAwesome'
@@ -25,33 +26,25 @@ export default class Schedule extends Component {
                 estimateAt: new Date(), doneAt: new Date() },
             { id: Math.random(), desc: 'Iniciar serviço Padaria do Joana',
                 estimateAt: new Date(), doneAt: null },
-            { id: Math.random(), desc: 'Orçar serviço João da Silva',
-                estimateAt: new Date(), doneAt: new Date() },
-            { id: Math.random(), desc: 'Iniciar serviço Padaria do Joana',
-                estimateAt: new Date(), doneAt: null},
-                { id: Math.random(), desc: 'Orçar serviço João da Silva',
-                estimateAt: new Date(), doneAt: new Date() },
-            { id: Math.random(), desc: 'Iniciar serviço Padaria do Joana',
-                estimateAt: new Date(), doneAt: null },
-            { id: Math.random(), desc: 'Orçar serviço João da Silva',
-                estimateAt: new Date(), doneAt: new Date() },
-            { id: Math.random(), desc: 'Iniciar serviço Padaria do Joana',
-                estimateAt: new Date(), doneAt: null},           
+           
         ],
         visibleTasks: [],
         showDoneTasks: true,
         showAddTask: false,
     }
-    addTask = task => {
+    addTask = newTask => {
+            if (!newTask.desc || !newTask.desc.trim()) {
+                Alert.alert('Dados Invalidos', 'Descrição não informada')
+                return
+        }
         const tasks = [...this.state.tasks]
         tasks.push({
-            id: Math.random(),
-            desc: task.desc,
-            estimateAt: task.date,
+            id:Math.random(),
+            desc: newTask.desc,
+            estimateAt: newTask.date,
             doneAt: null
         })
-        this.setState({ tasks, showAddTask: false}
-            , this.filterTasks)
+        this.setState({ tasks, showAddTask: false}, this.filterTasks)
     }
 
     filterTasks = () => {
@@ -83,12 +76,13 @@ export default class Schedule extends Component {
         this.setState({ tasks }, this.filterTasks)
     }
     render(){
+        const today = moment().locale('pt-br').format('ddd, D [de] MMMM')
         return(
             <View style={styles.container}>
                 <AddTask isVisible={this.state.showAddTask}
                     onSave={this.addTask}
                     onCancel={() => this.setState({ showAddTask: false})} />
-                <ImageBackground source={today} style={styles.background}>
+                <ImageBackground source={Image} style={styles.background}>
                     <View style={styles.iconBar}>
                         <TouchableOpacity onPress={this.toggleFilter}>
                             <Icon name={ this.state.showDoneTasks ? 'eye' : 'eye-slash'}
@@ -97,7 +91,7 @@ export default class Schedule extends Component {
                     </View>                   
                     <View style={styles.titleBar}>
                         <Text style={styles.title}>Hoje</Text>
-                        <Text style={styles.subtitle}>{moment().format('ddd, D [de] MMMM')}</Text>
+                        <Text style={styles.subtitle}>{today}</Text>
                     </View>                    
                 </ImageBackground>
                 
