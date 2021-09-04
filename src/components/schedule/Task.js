@@ -44,7 +44,10 @@ export default props => {
         <View>
           <Text style={[styles.description, doneOrNotStyle]}>{props.desc}</Text>
           <Text style={styles.date}>{formattedDate}</Text>
-        </View>       
+        </View>
+        <TouchableWithoutFeedback onPress={() => props.onDelete && props.onDelete(props.id)}>
+          <FontAwesomeIcon icon={faTrash} size={25} color={"#db382f"} />
+        </TouchableWithoutFeedback>
       </View>
     );
 }
@@ -52,10 +55,12 @@ export default props => {
 const styles = StyleSheet.create({
 
     container: {
+        flex:1,
         paddingVertical: 10,
         flexDirection: 'row',
         borderBottomWidth: 1,
-        borderColor: 'black',       
+        borderColor: 'black', 
+        justifyContent:'space-around'      
     },   
     checkContainer: {
         alignItems: 'center',
@@ -81,6 +86,7 @@ const styles = StyleSheet.create({
         //fontFamily: commonStyles.fontFamily,
         color: commonStyles.colors.mainText,
         fontSize: 15,
+        width:250,
     },
     date: {        
         //fontSize: commonStyles.fontFamily,
