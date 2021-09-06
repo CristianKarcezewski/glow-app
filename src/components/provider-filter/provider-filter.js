@@ -25,52 +25,6 @@ class ProviderFilter extends Component {
     };
   }
 
-  _handleLoadStates() {
-    this.setState({ ...this.state, loading: true });
-    loadStates(Platform.OS)
-      .then(({ status, data }) => {
-        if (status === 200) {
-          this.props.emitters.locationsEmitter.states = data;
-          this.setState({ ...this.state, loading: false });
-        } else {
-          this.setState({ ...this.state, loading: false });
-          Toast.show("Erro ao carregar localizações", {
-            duration: Toast.durations.LONG,
-          });
-        }
-      })
-      .catch((err) => {
-        console.log("error", err);
-        this.setState({ ...this.state, loading: false });
-        Toast.show("Erro ao carregar localizações", {
-          duration: Toast.durations.LONG,
-        });
-      });
-  }
-
-  _handleLoadCities(stateId) {
-    this.setState({ ...this.state, loading: true });
-    loadCities(Platform.OS, stateId)
-      .then(({ status, data }) => {
-        if (status === 200) {
-          this.props.emitters.locationsEmitter.cities = data;
-          this.setState({ ...this.state, loading: false });
-        } else {
-          this.setState({ ...this.state, loading: false });
-          Toast.show("Erro ao carregar localizações", {
-            duration: Toast.durations.LONG,
-          });
-        }
-      })
-      .catch((err) => {
-        console.log("error", err);
-        this.setState({ ...this.state, loading: false });
-        Toast.show("Erro ao carregar localizações", {
-          duration: Toast.durations.LONG,
-        });
-      });
-  }
-
   async _handleStateChange(stateId) {
     await this.setState({
       ...this.state,
