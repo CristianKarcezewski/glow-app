@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { NavigationContainer, Platform } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import LoginEmitter from "../emitters/login-emitter";
 import LocationsEmitter from "../emitters/locations-emitter";
 import GlowTheme from "../shared/theme";
@@ -10,7 +10,7 @@ class Main extends Component {
     super();
     this.emitters = {
       loginEmitter: new LoginEmitter(),
-      locationsEmitter: new LocationsEmitter(Platform.OS),
+      locationsEmitter: new LocationsEmitter(),
     };
   }
 

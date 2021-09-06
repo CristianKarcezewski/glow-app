@@ -1,17 +1,17 @@
-import { loadStates, loadCities } from "../services/location-service";
+import * as SecureStore from "expo-secure-store";
 
 export default class LocationsEmitter {
-  statesKey = "statesCache";
-  citiesKey = "citiesCache";
-
-  constructor(platform) {
+  constructor() {
+    this.statesKey = "statesCache";
+    this.citiesKey = "citiesCache";
     this.subscribes = [];
     this.states = [];
     this.cities = [];
-    this._loadCache(platform);
+    this._loadCache();
+    this.subscribe("locationEmitter", this._saveData);
   }
 
-  async _loadCache(platform) {
+  async _loadCache() {
     await SecureStore.getItemAsync(this.statesKey).then((states) => {
       if (states != null) {
         this.states = states;
@@ -23,57 +23,60 @@ export default class LocationsEmitter {
         this.cities = cities;
       }
     });
+  }
 
-    if (this.states.length == 0) {
-      this._handleLoadStates(platform);
+  _saveData() {
+    if (this.statesKey && this.states.length > 0) {
+      SecureStore.setItemAsync(this.statesKey, this.states);
+    }
+    if (this.citiesKey && this.cities.length > 0) {
+      SecureStore.setItemAsync(this.citiesKey, this.cities);
     }
   }
 
-  async _handleLoadStates(platform) {
-    await loadStates(platform)
-      .then(({ status, data }) => {
-        if (status === 200) {
-          this.states = data;
-        } else {
-          Toast.show("Erro ao carregar localizações", {
-            duration: Toast.durations.LONG,
-          });
-        }
-      })
-      .catch((err) => {
-        console.log("error", err);
-        Toast.show("Erro ao carregar localizações", {
-          duration: Toast.durations.LONG,
-        });
-      });
-  }
-
-  async _handleLoadCities(platform, stateId) {
-    await loadCities(platform, stateId)
-      .then(({ status, data }) => {
-        if (status === 200) {
-          this.cities = [...this.cities, data];
-        } else {
-          Toast.show("Erro ao carregar localizações", {
-            duration: Toast.durations.LONG,
-          });
-        }
-      })
-      .catch((err) => {
-        console.log("error", err);
-        Toast.show("Erro ao carregar localizações", {
-          duration: Toast.durations.LONG,
-        });
-      });
-  }
-
-  async getCityByStateId(platform, stateId) {
-    let ct = this.cities.filter((c) => c.stateId == stateId);
-    if (ct.length > 0) {
-      return ct;
+  subscribe(key, handler) {
+    let position = null;
+    this.subscribes.forEach((sub, index) => {
+      if (sub.key === key) {
+        position = index;
+      }
+    });
+    if (position) {
+      this.subscribes[position] = { key: key, handler };
     } else {
-      await this._handleLoadCities(platform, stateId);
-      return this.cities.filter((c) => c.stateId == stateId);
+      this.subscribes.push({ key: key, handler });
     }
+    handler();
+  }
+
+  unsubscribe(key) {
+    this.subscribes.filter((sub, index) => {
+      if (sub.key === key) {
+        this.subscribes.splice(index, 1);
+      }
+    });
+  }
+
+  _emit() {
+    this.subscribes.map((sub) => {
+      sub.handler();
+    });
+  }
+
+  setStates(states) {
+    this.states = states;
+    this._emit();
+  }
+
+  setCities(cities) {
+    this.cities = [...this.cities, cities];
+    this._emit();
+  }
+
+  getCitiesByStateId(stateId) {
+    if (stateId) {
+      return this.cities.filter((c) => c.cityId === stateId);
+    }
+    return [];
   }
 }

@@ -27,22 +27,56 @@ class ProviderFilter extends Component {
     };
   }
 
-  async _handleStateChange(stateId) {
-    await this.setState({
-      ...this.state,
-      selectedState: stateId,
-      selectedCity: 0,
-    });
+  _handleLoadStates() {
+    this.setState({ ...this.state, loading: true });
+    loadStates(Platform.OS)
+      .then(({ status, data }) => {
+        if (status === 200) {
+          this.props.emitters.locationsEmitter.setStates(data);
+          this.setState({ ...this.state, loading: false });
+        } else {
+          this.setState({ ...this.state, loading: false });
+          Toast.show("Não foi possível carregar estados.", {
+            duration: Toast.durations.LONG,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        this.setState({ ...this.state, loading: false });
+        Toast.show("Sem conexão com internet.", {
+          duration: Toast.durations.LONG,
+        });
+      });
+  }
+
+  _handleLoadCities() {
+    this.setState({ ...this.state, loading: true });
+    loadStates(Platform.OS, this.state.selectedCity)
+      .then(({ status, data }) => {
+        if (status === 200) {
+          this.props.emitters.locationsEmitter.setCities(data);
+          this.setState({ ...this.state, loading: false });
+        } else {
+          this.setState({ ...this.state, loading: false });
+          Toast.show("Não foi possível carregar cidades.", {
+            duration: Toast.durations.LONG,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        this.setState({ ...this.state, loading: false });
+        Toast.show("Sem conexão com internet.", {
+          duration: Toast.durations.LONG,
+        });
+      });
   }
 
   componentDidMount() {
     if (this.props.emitters.locationsEmitter.states.length == 0) {
       this._handleLoadStates();
     }
-  }
-
-  componentWillUnmount() {
-    this.props.emitters.locationsEmitter.cities = [];
   }
 
   render() {
@@ -100,13 +134,13 @@ class ProviderFilter extends Component {
             <LocationFilterModal
               visible={this.state.modal}
             ></LocationFilterModal>
-            <TouchableHighlight
+            <TouchableOpacity
               onPress={() => {
                 this.setState({ ...this.state, modal: !this.state.modal });
               }}
             >
-              <Text style={styles.textStyle}>Show Modal</Text>
-            </TouchableHighlight>
+              <Text>Show Modal</Text>
+            </TouchableOpacity>
             {/* <Picker
               style={style.picker}
               selectedValue={this.state.selectedState}
