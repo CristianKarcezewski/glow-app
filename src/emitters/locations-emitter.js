@@ -1,14 +1,17 @@
+import { loadStates, loadCities } from "../services/location-service";
+
 export default class LocationsEmitter {
   statesKey = "statesCache";
   citiesKey = "citiesCache";
 
-  constructor() {
+  constructor(platform) {
     this.subscribes = [];
     this.states = [];
     this.cities = [];
+    this._loadCache(platform);
   }
 
-  async _loadCache() {
+  async _loadCache(platform) {
     await SecureStore.getItemAsync(this.statesKey).then((states) => {
       if (states != null) {
         this.states = states;
@@ -22,12 +25,12 @@ export default class LocationsEmitter {
     });
 
     if (this.states.length == 0) {
-      this._handleLoadStates();
+      this._handleLoadStates(platform);
     }
   }
 
-  _handleLoadStates() {
-    loadStates(Platform.OS)
+  async _handleLoadStates(platform) {
+    await loadStates(platform)
       .then(({ status, data }) => {
         if (status === 200) {
           this.states = data;
@@ -45,8 +48,8 @@ export default class LocationsEmitter {
       });
   }
 
-  _handleLoadCities(stateId) {
-    loadCities(Platform.OS, stateId)
+  async _handleLoadCities(platform, stateId) {
+    await loadCities(platform, stateId)
       .then(({ status, data }) => {
         if (status === 200) {
           this.cities = [...this.cities, data];
@@ -64,41 +67,13 @@ export default class LocationsEmitter {
       });
   }
 
-  subscribe(key, handler) {
-    let position = null;
-    this.cities = [];
-    this.subscribes.forEach((sub, index) => {
-      if (sub.key === key) {
-        position = index;
-      }
-    });
-    if (position) {
-      this.subscribes[position] = { key: key, handler };
-    } else {
-      this.subscribes.push({ key: key, handler });
-    }
-    handler(this.userLoggedIn);
-  }
-
-  unsubscribe(key) {
-    this.subscribes.filter((sub, index) => {
-      if (sub.key === key) {
-        this.subscribes.splice(index, 1);
-      }
-    });
-  }
-
-  emit() {
-    this.subscribes.map((sub) => {
-      sub.handler();
-    });
-  }
-
-  async getCityByStateId(stateId) {
+  async getCityByStateId(platform, stateId) {
     let ct = this.cities.filter((c) => c.stateId == stateId);
     if (ct.length > 0) {
       return ct;
     } else {
+      await this._handleLoadCities(platform, stateId);
+      return this.cities.filter((c) => c.stateId == stateId);
     }
   }
 }

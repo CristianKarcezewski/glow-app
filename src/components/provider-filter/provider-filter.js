@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Checkbox from "expo-checkbox";
+import LocationFilterModal from "../modals/location-filter-modal/location-filter-modal";
 import { loadStates, loadCities } from "../../services/location-service";
 import Toast from "react-native-root-toast";
 
@@ -22,6 +23,7 @@ class ProviderFilter extends Component {
       selectedProfessionalType: 0,
       favorites: false,
       loading: false,
+      modal: false,
     };
   }
 
@@ -31,8 +33,6 @@ class ProviderFilter extends Component {
       selectedState: stateId,
       selectedCity: 0,
     });
-    this.props.emitters.locationsEmitter.cities = [];
-    this._handleLoadCities(stateId);
   }
 
   componentDidMount() {
@@ -95,40 +95,53 @@ class ProviderFilter extends Component {
               <Text style={style.checkboxText}>Meus favoritos</Text>
             </View>
           </TouchableOpacity>
+
           <View style={style.pickerView}>
-            <Picker
+            <LocationFilterModal
+              visible={this.state.modal}
+            ></LocationFilterModal>
+            <TouchableHighlight
+              onPress={() => {
+                this.setState({ ...this.state, modal: !this.state.modal });
+              }}
+            >
+              <Text style={styles.textStyle}>Show Modal</Text>
+            </TouchableHighlight>
+            {/* <Picker
               style={style.picker}
               selectedValue={this.state.selectedState}
               onValueChange={(state) => this._handleStateChange(state.stateId)}
             >
-              <Picker.Item label={"Estado"} value={0} key={""} />
+              <Picker.Item label={"Estado"} key={0} />
               {this.props.emitters.locationsEmitter.states?.map((st) => {
                 return (
                   <Picker.Item label={st.name} value={st} key={st.stateId} />
                 );
               })}
-            </Picker>
+            </Picker> */}
           </View>
 
           <View style={style.pickerView}>
-            <Picker
+            {/* <Picker
               style={style.picker}
               selectedValue={this.state.selectedCity}
               onValueChange={(city) =>
                 this.setState({ ...this.state, selectedCity: city.cityId })
               }
             >
-              <Picker.Item label={"Cidade"} value={0} key={""} />
-              {this.props.emitters.locationsEmitter.cities?.map((city) => {
-                return (
-                  <Picker.Item
-                    label={city.name}
-                    value={city}
-                    key={city.cityId}
-                  />
-                );
-              })}
-            </Picker>
+              <Picker.Item label={"Cidade"} key={0} />
+              {this.props.emitters.locationsEmitter
+                .getCityByStateId(this.state.selectedState)
+                ?.map((city) => {
+                  return (
+                    <Picker.Item
+                      label={city.name}
+                      value={city}
+                      key={city.cityId}
+                    />
+                  );
+                })}
+            </Picker> */}
           </View>
 
           <View style={style.pickerView}>
