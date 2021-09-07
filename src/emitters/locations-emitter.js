@@ -9,8 +9,6 @@ export default class LocationsEmitter {
     this.states = new Array();
     this.cities = new Array();
     this._loadCache();
-    SecureStore.deleteItemAsync(this.statesKey);
-    SecureStore.deleteItemAsync(this.citiesKey);
     this.subscribe("locationEmitter", this._saveData);
   }
 
