@@ -1,13 +1,16 @@
 import * as SecureStore from "expo-secure-store";
 
 export default class LocationsEmitter {
+  statesKey = "statesCache";
+  citiesKey = "citiesCache";
+
   constructor() {
-    this.statesKey = "statesCache";
-    this.citiesKey = "citiesCache";
-    this.subscribes = [];
-    this.states = [];
-    this.cities = [];
-    this._loadCache();
+    this.subscribes = new Array();
+    this.states = new Array();
+    this.cities = new Array();
+    // this._loadCache();
+    SecureStore.deleteItemAsync(this.statesKey);
+    SecureStore.deleteItemAsync(this.citiesKey);
     this.subscribe("locationEmitter", this._saveData);
   }
 
@@ -68,15 +71,12 @@ export default class LocationsEmitter {
     this._emit();
   }
 
-  setCities(cities) {
-    this.cities = [...this.cities, cities];
+  setCities(ct) {
+    ct.forEach((x) => this.cities.push(x));
     this._emit();
   }
 
   getCitiesByStateId(stateId) {
-    if (stateId) {
-      return this.cities.filter((c) => c.cityId === stateId);
-    }
-    return [];
+    return this.cities.filter((c) => c.stateId === stateId) || [];
   }
 }

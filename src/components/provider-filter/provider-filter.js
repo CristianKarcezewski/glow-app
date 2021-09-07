@@ -18,12 +18,13 @@ class ProviderFilter extends Component {
     super(props);
     this.state = {
       professionTypes: ["Todos", "Funileiro", "Diarista", "Eletrecista"],
-      selectedState: 0,
-      selectedCity: 0,
+      selectedState: null,
+      selectedCity: null,
       selectedProfessionalType: 0,
       favorites: false,
+      statesModal: false,
+      citiesModal: false,
       loading: false,
-      modal: false,
     };
   }
 
@@ -42,7 +43,6 @@ class ProviderFilter extends Component {
         }
       })
       .catch((err) => {
-        console.log("error", err);
         this.setState({ ...this.state, loading: false });
         Toast.show("Sem conexão com internet.", {
           duration: Toast.durations.LONG,
@@ -50,13 +50,21 @@ class ProviderFilter extends Component {
       });
   }
 
-  _handleLoadCities() {
-    this.setState({ ...this.state, loading: true });
-    loadStates(Platform.OS, this.state.selectedCity)
+  _handleLoadCities(stateId) {
+    this.setState({
+      ...this.state,
+      statesModal: false,
+      loading: true,
+    });
+    loadCities(Platform.OS, stateId)
       .then(({ status, data }) => {
         if (status === 200) {
           this.props.emitters.locationsEmitter.setCities(data);
-          this.setState({ ...this.state, loading: false });
+          this.setState({
+            ...this.state,
+            loading: false,
+            selectedState: stateId,
+          });
         } else {
           this.setState({ ...this.state, loading: false });
           Toast.show("Não foi possível carregar cidades.", {
@@ -65,12 +73,62 @@ class ProviderFilter extends Component {
         }
       })
       .catch((err) => {
-        console.log("error", err);
         this.setState({ ...this.state, loading: false });
         Toast.show("Sem conexão com internet.", {
           duration: Toast.durations.LONG,
         });
       });
+  }
+
+  _closeStatesModal(data) {
+    if (data) {
+      let len = this.props.emitters.locationsEmitter.getCitiesByStateId(
+        data.stateId
+      ).length;
+
+      if (len == 0) {
+        this._handleLoadCities(data.stateId);
+      } else {
+        this.setState({
+          ...this.state,
+          selectedState: data.stateId,
+          statesModal: false,
+        });
+      }
+    } else {
+      this.setState({
+        ...this.state,
+        statesModal: false,
+      });
+    }
+  }
+
+  _closeCitiesModal(data) {
+    if (data) {
+      this.setState({
+        ...this.state,
+        selectedCity: data.cityId,
+        citiesModal: false,
+      });
+    } else {
+      this.setState({
+        ...this.state,
+        citiesModal: false,
+      });
+    }
+  }
+
+  modalData(showStates) {
+    if (showStates) {
+      return this.props.emitters.locationsEmitter.states;
+    }
+    if (!showStates && this.state.selectedState) {
+      let ct = this.props.emitters.locationsEmitter.getCitiesByStateId(
+        this.state.selectedState
+      );
+      return ct;
+    }
+    return [];
   }
 
   componentDidMount() {
@@ -130,53 +188,46 @@ class ProviderFilter extends Component {
             </View>
           </TouchableOpacity>
 
-          <View style={style.pickerView}>
-            <LocationFilterModal
-              visible={this.state.modal}
-            ></LocationFilterModal>
-            <TouchableOpacity
-              onPress={() => {
-                this.setState({ ...this.state, modal: !this.state.modal });
-              }}
-            >
-              <Text>Show Modal</Text>
-            </TouchableOpacity>
-            {/* <Picker
-              style={style.picker}
-              selectedValue={this.state.selectedState}
-              onValueChange={(state) => this._handleStateChange(state.stateId)}
-            >
-              <Picker.Item label={"Estado"} key={0} />
-              {this.props.emitters.locationsEmitter.states?.map((st) => {
-                return (
-                  <Picker.Item label={st.name} value={st} key={st.stateId} />
-                );
-              })}
-            </Picker> */}
-          </View>
+          <LocationFilterModal
+            visible={this.state.statesModal}
+            close={this._closeStatesModal.bind(this)}
+            searchData={this.modalData.bind(this)}
+            showStates={true}
+          />
+          <TouchableOpacity
+            style={style.modalButton}
+            onPress={() => {
+              this.setState({ ...this.state, statesModal: true });
+            }}
+          >
+            <Text style={{ fontSize: 20, paddingLeft: 20 }}>
+              {this.state.selectedState
+                ? this.props.emitters.locationsEmitter.states.find(
+                    (x) => x.stateId === this.state.selectedState
+                  ).name
+                : "Selecionar estado"}
+            </Text>
+          </TouchableOpacity>
 
-          <View style={style.pickerView}>
-            {/* <Picker
-              style={style.picker}
-              selectedValue={this.state.selectedCity}
-              onValueChange={(city) =>
-                this.setState({ ...this.state, selectedCity: city.cityId })
-              }
-            >
-              <Picker.Item label={"Cidade"} key={0} />
-              {this.props.emitters.locationsEmitter
-                .getCityByStateId(this.state.selectedState)
-                ?.map((city) => {
-                  return (
-                    <Picker.Item
-                      label={city.name}
-                      value={city}
-                      key={city.cityId}
-                    />
-                  );
-                })}
-            </Picker> */}
-          </View>
+          <LocationFilterModal
+            visible={this.state.citiesModal}
+            close={this._closeCitiesModal.bind(this)}
+            searchData={this.modalData.bind(this)}
+          />
+          <TouchableOpacity
+            style={style.modalButton}
+            onPress={() => {
+              this.setState({ ...this.state, citiesModal: true });
+            }}
+          >
+            <Text style={{ fontSize: 20, paddingLeft: 20 }}>
+              {this.state.selectedCity
+                ? this.props.emitters.locationsEmitter
+                    .getCitiesByStateId(this.state.selectedState)
+                    .find((x) => x.cityId === this.state.selectedCity).name
+                : "Selecionar cidade"}
+            </Text>
+          </TouchableOpacity>
 
           <View style={style.pickerView}>
             <Picker
@@ -235,7 +286,6 @@ const style = StyleSheet.create({
   },
   pickerView: {
     width: "80%",
-    paddingHorizontal: 20,
     borderColor: "black",
     borderWidth: 1,
     margin: 5,
@@ -252,6 +302,15 @@ const style = StyleSheet.create({
     borderWidth: 2,
     alignItems: "center",
     elevation: 10,
+  },
+  modalButton: {
+    width: "80%",
+    borderColor: "black",
+    borderWidth: 1,
+    margin: 5,
+    padding: 5,
+    borderRadius: 20,
+    fontSize: 20,
   },
 });
 
