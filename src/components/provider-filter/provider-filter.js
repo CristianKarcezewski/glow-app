@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Checkbox from "expo-checkbox";
-import LocationFilterModal from "../modals/location-filter-modal/location-filter-modal";
+import LocationFilterModal from "../modals/location-filter-modal";
 import { loadStates, loadCities } from "../../services/location-service";
 import Toast from "react-native-root-toast";
 
@@ -120,6 +120,7 @@ class ProviderFilter extends Component {
 
   modalData(showStates) {
     if (showStates) {
+      this.setState({ ...this.state, selectedCity: null });
       return this.props.emitters.locationsEmitter.states;
     }
     if (!showStates && this.state.selectedState) {
@@ -258,7 +259,7 @@ class ProviderFilter extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={style.buttons}
-            onPress={() => this.props.navigation.popToTop()}
+            onPress={() => this.props.close()}
           >
             <Text style={{ fontSize: 25, fontWeight: "bold", color: "black" }}>
               Voltar

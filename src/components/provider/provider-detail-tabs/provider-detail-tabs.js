@@ -22,8 +22,6 @@ class ProviderDetailTabs extends Component {
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarIcon: ({ focused }) => {
-            let iconName;
-
             if (route.name === "provider-details") {
               return (
                 <FontAwesomeIcon

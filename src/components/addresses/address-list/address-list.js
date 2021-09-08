@@ -5,19 +5,18 @@ import {
   View,
   FlatList,
   TouchableOpacity,
-  Image,
   ActivityIndicator,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import Address from "../../../models/address";
-import ActionButton from "react-native-action-button";
 import commonStyles from "../../../shared/commonStyles";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { loadUserAddresses } from "../../../services/address-service";
 import Toast from "react-native-root-toast";
 
 class AddressList extends Component {
+  addressesListKey = "addressesListKey";
+
   constructor(props) {
     super(props);
     this.state = {
@@ -28,11 +27,11 @@ class AddressList extends Component {
 
   _handleLoadUserAddresses() {
     this.setState({ ...this.state, loading: true });
-    loadUserAddresses(Platform.OS, this.props.emitters.loginEmitter.token)
+    loadUserAddresses(Platform.OS, this.props.loginEmitter.token)
       .then(({ status, data }) => {
         if (status === 200) {
-          this.props.emitters.locationsEmitter.states = data;
-          this.setState({ ...this.state, loading: false, addresses: data });
+          this.props.addressesEmitter.setAddresses(data);
+          this.setState({ ...this.state, loading: false });
         } else {
           this.setState({ ...this.state, loading: false });
           Toast.show("Erro ao carregar endereços", {
@@ -49,15 +48,20 @@ class AddressList extends Component {
       });
   }
 
-  appendAddress(address) {
-    this.setState({
-      ...this.state,
-      addresses: [...this.state.addresses, address],
-    });
+  _handleAddressUpdate(addresses) {
+    this.setState({ ...this.state, addresses: addresses });
   }
 
   componentDidMount() {
+    this.props.addressesEmitter.subscribe(
+      this.addressesListKey,
+      this._handleAddressUpdate.bind(this)
+    );
     this._handleLoadUserAddresses();
+  }
+
+  componentWillUnmount() {
+    this.props.addressesEmitter.unsubscribe(this.addressesListKey);
   }
 
   render() {
@@ -71,51 +75,50 @@ class AddressList extends Component {
         />
       );
     } else {
-      return (
-        <View style={{ flex: 1 }}>
-          <FlatList
-            keyExtractor={(item) => item.id}
-            data={this.state.address}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.navigate("inform-address-manual")
-                }
-              >
-                <CardResult
-                  address={item}
-                  appendAddress={this.appendAddress.bind(this)}
-                />
-              </TouchableOpacity>
-            )}
-          />
-        </View>
-      );
+      if (this.state.addresses.length > 0) {
+        return (
+          <View style={{ flex: 1 }}>
+            <FlatList
+              keyExtractor={(item) => item.id}
+              data={this.state.address}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate("inform-address-manual")
+                  }
+                >
+                  <CardResult
+                    address={item}
+                    appendAddress={this.appendAddress.bind(this)}
+                  />
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        );
+      } else {
+        return (
+          <View
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          >
+            <Text style={{ fontSize: 20 }}>
+              Parece que você ainda não possui endereços
+            </Text>
+            <Text style={{ fontSize: 20 }}>
+              Clique no botão de " + " acima para adicionar
+            </Text>
+          </View>
+        );
+      }
     }
   }
 }
 
 class CardResult extends Component {
   render() {
-    let check = null;
-    if (this.props.address.active === true) {
-      check = (
-        <View style={style.done}>
-          <Icon name="check" size={20} color={commonStyles.colors.secondary} />
-        </View>
-      );
-    } else {
-      check = <View style={style.pending} />;
-    }
-
     return (
       <View style={style.cardResultContainer}>
-        <View style={style.cardResultImage}>
-          {/* <Image
-            source={image}
-            style={{ flex: 1, width: "100%", borderRadius: 30 }}
-          ></Image> */}
-        </View>
+        <View style={style.cardResultImage}></View>
         <View style={{ flex: 3, justifyContent: "center" }}>
           <Text style={style.cardResultName}>{this.props.address.name}</Text>
           <Text style={{ fontSize: 20 }}>{this.props.address.city}</Text>
