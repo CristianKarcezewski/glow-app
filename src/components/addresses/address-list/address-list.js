@@ -8,9 +8,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import commonStyles from "../../../shared/commonStyles";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { faMapMarker } from "@fortawesome/free-solid-svg-icons";
 import { loadUserAddresses } from "../../../services/address-service";
 import Toast from "react-native-root-toast";
 
@@ -82,14 +80,10 @@ class AddressList extends Component {
               keyExtractor={(item) => item.id}
               data={this.state.address}
               renderItem={({ item }) => (
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate("inform-address-manual")
-                  }
-                >
+                <TouchableOpacity onPress={() => console.log(item)}>
                   <CardResult
                     address={item}
-                    appendAddress={this.appendAddress.bind(this)}
+                    locationsEmitter={this.props.emitters.locationsEmitter}
                   />
                 </TouchableOpacity>
               )}
@@ -115,34 +109,68 @@ class AddressList extends Component {
 }
 
 class CardResult extends Component {
+  constructor(props) {
+    super(props);
+    this.state =
+      this.props.locationsEmitter.states.find((x) => {
+        x.uf.toLowerCase() === data.uf.toLowerCase();
+      }) || null;
+    this.city =
+      state != null
+        ? this.props.locationsEmitter
+            .getCitiesByStateId(state.stateId)
+            .find((x) =>
+              x.name.toLowerCase().includes(data.localidade.toLowerCase())
+            )
+        : null;
+  }
+
   render() {
     return (
       <View style={style.cardResultContainer}>
-        <View style={style.cardResultImage}></View>
-        <View style={{ flex: 3, justifyContent: "center" }}>
-          <Text style={style.cardResultName}>{this.props.address.name}</Text>
-          <Text style={{ fontSize: 20 }}>{this.props.address.city}</Text>
-          <Text style={{ fontSize: 14 }}>
-            {this.props.address.publicPlace} ,{this.props.address.number}{" "}
-            {this.props.address.complement}
-          </Text>
+        <View style={style.cardResultImage}>
+          <FontAwesomeIcon icon={faMapMarker} size={40} style={{ flex: 1 }} />
         </View>
-        <View style={style.cardResultRating}>
-          <TouchableOpacity
-            style={{ flex: 1, alignItems: "center" }}
-            onPress={() =>
-              this.props.navigation.navigate("inform-address-manual")
-            }
-          >
-            <FontAwesomeIcon icon={faTrash} size={25} color={"#db382f"} />
-          </TouchableOpacity>
-          <View style={style.checkContainer}>{check}</View>
+
+        <View style={{ flex: 4, justifyContent: "center" }}>
+          <Text style={style.cardResultName}>{this.props.address.name}</Text>
+          <Text style={{ fontSize: 20 }}>
+            {`${this.state ? state.uf + " - " : ""}
+            ${this.city ? city.name : ""}`}
+          </Text>
+          <Text>{`${this.props.address.neighbothood}-${this.props.address.street}-${this.props.address.number}`}</Text>
         </View>
       </View>
     );
   }
 }
 
-const style = StyleSheet.create({});
+const style = StyleSheet.create({
+  cardResultContainer: {
+    flexDirection: "row",
+    marginVertical: 5,
+    marginHorizontal: 10,
+    padding: 10,
+    borderColor: "#db382f",
+    borderWidth: 1,
+    borderRadius: 20,
+    height: 100,
+  },
+  cardResultImage: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "black",
+    borderWidth: 1,
+    borderRadius: 40,
+    margin: 10,
+  },
+  cardResultName: {
+    fontSize: 20,
+    fontWeight: "bold",
+    borderBottomColor: "black",
+    borderBottomWidth: 1,
+  },
+});
 
 export default AddressList;

@@ -161,7 +161,7 @@ class UserRegister extends Component {
                   : style.invalidFormField
               }
               maxLength={50}
-              type="email"
+              keyboardType={"email-address"}
               placeholder="E-mail"
               onChangeText={(value) => this._handleEmail(value)}
               value={this.state.email}

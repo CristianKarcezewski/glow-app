@@ -181,9 +181,10 @@ class ManualAddress extends Component {
     findViacepLocation(postalCode)
       .then(({ status, data }) => {
         if (status === 200) {
-          let state = this.props.emitters.locationsEmitter.states.find((x) => {
-            x.uf.toLowerCase() === data.uf.toLowerCase();
-          });
+          let state =
+            this.props.emitters.locationsEmitter.states.find((x) => {
+              x.uf.toLowerCase() === data.uf.toLowerCase();
+            }) || null;
           let city =
             state != null
               ? this.props.emitters.locationsEmitter
@@ -254,7 +255,7 @@ class ManualAddress extends Component {
                   : style.invalidFormField
               }
               maxLength={50}
-              placeholder="Nome do endereço"
+              placeholder="Nome do endereço (ex: casa)"
               onChangeText={(value) =>
                 this.setState({ ...this.state, name: value })
               }
@@ -267,6 +268,7 @@ class ManualAddress extends Component {
                   : style.invalidFormField
               }
               maxLength={50}
+              keyboardType={"numeric"}
               placeholder="CEP"
               onChangeText={(value) => this.autocompleteForm(value)}
               value={this.state.postalCode}
@@ -345,6 +347,7 @@ class ManualAddress extends Component {
               }
               maxLength={50}
               placeholder="Numero"
+              keyboardType={"numeric"}
               onChangeText={(value) =>
                 this.setState({ ...this.state, number: value })
               }

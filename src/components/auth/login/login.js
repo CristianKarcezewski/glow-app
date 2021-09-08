@@ -113,7 +113,8 @@ class Login extends Component {
                   ? style.validEmailField
                   : style.invalidEmailField
               }
-              maxLength={50}
+              maxLength={100}
+              keyboardType={"email-address"}
               placeholder="Email"
               onChangeText={(value) => this._handleEmail(value)}
               value={this.state.email}

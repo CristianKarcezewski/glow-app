@@ -10,3 +10,4 @@ export const STATES_API = `${API}/states`;
 export const CITIES_API = `${API}/cities`;
 export const USER_ADDRESSES = `${API}/user/addresses`;
 export const REGISTER_ADDRESS = `${API}/user/addresses/register`;
+export const PROVIDER_REGISTER = `${API}/provider/register`;

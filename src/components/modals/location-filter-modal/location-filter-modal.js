@@ -51,7 +51,8 @@ class LocationFilterModal extends Component {
               flex: 1,
               flexDirection: "row",
               marginHorizontal: 10,
-              paddingTop: 10,
+              paddingTop: 20,
+              paddingHorizontal: 10,
               alignItems: "center",
             }}
           >
