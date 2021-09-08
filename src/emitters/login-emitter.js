@@ -7,7 +7,7 @@ export default class LoginEmitter {
     this.subscribes = [];
     this.readToken();
     this.token = null;
-    this.userLoggedIn = false;
+    this.userLoggedIn = true;
   }
 
   async readToken() {
