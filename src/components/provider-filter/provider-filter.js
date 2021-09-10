@@ -9,21 +9,19 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Checkbox from "expo-checkbox";
-import LocationFilterModal from "../modals/location-filter-modal";
 import { loadStates, loadCities } from "../../services/location-service";
 import Toast from "react-native-root-toast";
 
 class ProviderFilter extends Component {
+  componentKey = "ProviderFilterKey";
   constructor(props) {
     super(props);
     this.state = {
       professionTypes: ["Todos", "Funileiro", "Diarista", "Eletrecista"],
-      selectedState: null,
-      selectedCity: null,
       selectedProfessionalType: 0,
+      stateName: null,
+      cityName: null,
       favorites: false,
-      statesModal: false,
-      citiesModal: false,
       loading: false,
     };
   }
@@ -80,62 +78,30 @@ class ProviderFilter extends Component {
       });
   }
 
-  _closeStatesModal(data) {
-    if (data) {
-      let len = this.props.emitters.locationsEmitter.getCitiesByStateId(
-        data.stateId
-      ).length;
-
-      if (len == 0) {
-        this._handleLoadCities(data.stateId);
-      } else {
-        this.setState({
-          ...this.state,
-          selectedState: data.stateId,
-          statesModal: false,
-        });
-      }
-    } else {
-      this.setState({
-        ...this.state,
-        statesModal: false,
-      });
-    }
-  }
-
-  _closeCitiesModal(data) {
-    if (data) {
-      this.setState({
-        ...this.state,
-        selectedCity: data.cityId,
-        citiesModal: false,
-      });
-    } else {
-      this.setState({
-        ...this.state,
-        citiesModal: false,
-      });
-    }
-  }
-
-  modalData(showStates) {
-    if (showStates) {
-      this.setState({ ...this.state, selectedCity: null });
-      return this.props.emitters.locationsEmitter.states;
-    }
-    if (!showStates && this.state.selectedState) {
-      let ct = this.props.emitters.locationsEmitter.getCitiesByStateId(
-        this.state.selectedState
-      );
-      return ct;
-    }
-    return [];
+  _changeFilter(filter) {
+    this.setState({
+      ...this.state,
+      stateName:
+        this.props.locationsEmitter.states.find((x) => x.id === filter.stateId)
+          .name || null,
+      cityName:
+        this.props.locationsEmitter.cities.find((x) => x.id === filter.citiId)
+          .name || null,
+    });
   }
 
   componentDidMount() {
-    if (this.props.emitters.locationsEmitter.states.length == 0) {
+    this.props.searchFilterEmitter.subscribe(
+      this.componentKey,
+      this._changeFilter.bind(this)
+    );
+    if (this.props.locationsEmitter.states.length == 0) {
       this._handleLoadStates();
     }
+  }
+
+  componentWillUnmount() {
+    this.props.searchFilterEmitter.unsubscribe(this.componentKey);
   }
 
   render() {
@@ -189,44 +155,27 @@ class ProviderFilter extends Component {
             </View>
           </TouchableOpacity>
 
-          <LocationFilterModal
-            visible={this.state.statesModal}
-            close={this._closeStatesModal.bind(this)}
-            searchData={this.modalData.bind(this)}
-            showStates={true}
-          />
           <TouchableOpacity
             style={style.modalButton}
             onPress={() => {
-              this.setState({ ...this.state, statesModal: true });
+              this.navigation.navigate("select-state");
             }}
           >
             <Text style={{ fontSize: 20, paddingLeft: 20 }}>
-              {this.state.selectedState
-                ? this.props.emitters.locationsEmitter.states.find(
-                    (x) => x.stateId === this.state.selectedState
-                  ).name
+              {this.state.stateName
+                ? this.state.stateName
                 : "Selecionar estado"}
             </Text>
           </TouchableOpacity>
 
-          <LocationFilterModal
-            visible={this.state.citiesModal}
-            close={this._closeCitiesModal.bind(this)}
-            searchData={this.modalData.bind(this)}
-          />
           <TouchableOpacity
             style={style.modalButton}
             onPress={() => {
-              this.setState({ ...this.state, citiesModal: true });
+              this.navigation.navigate("select-city");
             }}
           >
             <Text style={{ fontSize: 20, paddingLeft: 20 }}>
-              {this.state.selectedCity
-                ? this.props.emitters.locationsEmitter
-                    .getCitiesByStateId(this.state.selectedState)
-                    .find((x) => x.cityId === this.state.selectedCity).name
-                : "Selecionar cidade"}
+              {this.state.cityName ? this.state.cityName : "Selecionar cidade"}
             </Text>
           </TouchableOpacity>
 

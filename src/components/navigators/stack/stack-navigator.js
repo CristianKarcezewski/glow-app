@@ -7,7 +7,7 @@ import Search from "../../search";
 import Login from "../../auth/login";
 import UserRegister from "../../auth/user-register";
 import ProviderDetailTabs from "../../provider/provider-detail-tabs";
-import ProviderFilter from "../../provider-filter";
+import ProviderFilterStack from "../../provider-filter";
 
 class StackNavigator extends Component {
   componentKey = "stackNavigator";
@@ -82,13 +82,7 @@ class StackNavigator extends Component {
             },
           })}
         >
-          {(props) => (
-            <Search
-              {...props}
-              emitters={this.props.emitters}
-              userLoggedIn={this.state.userLoggedIn}
-            />
-          )}
+          {(props) => <Search {...props} />}
         </this.stack.Screen>
 
         <this.stack.Screen
@@ -97,7 +91,9 @@ class StackNavigator extends Component {
             title: "Login",
           }}
         >
-          {(props) => <Login {...props} emitters={this.props.emitters} />}
+          {(props) => (
+            <Login {...props} loginEmitter={this.props.emitters.loginEmitter} />
+          )}
         </this.stack.Screen>
 
         <this.stack.Screen
@@ -107,7 +103,10 @@ class StackNavigator extends Component {
           }}
         >
           {(props) => (
-            <UserRegister {...props} emitters={this.props.emitters} />
+            <UserRegister
+              {...props}
+              loginEmitter={this.props.emitters.loginEmitter}
+            />
           )}
         </this.stack.Screen>
 
@@ -117,19 +116,21 @@ class StackNavigator extends Component {
             title: "Detalhes do Profissional",
           }}
         >
-          {(props) => (
-            <ProviderDetailTabs {...props} emitters={this.props.emitters} />
-          )}
+          {(props) => <ProviderDetailTabs {...props} />}
         </this.stack.Screen>
 
         <this.stack.Screen
-          name="provider-filter"
+          name="provider-filter-stack"
           options={{
             title: "Filtrar Profissionais",
           }}
         >
           {(props) => (
-            <ProviderFilter {...props} emitters={this.props.emitters} />
+            <ProviderFilterStack
+              {...props}
+              locationsEmitter={this.props.emitters.locationsEmitter}
+              searchFilterEmitter={this.props.emitters.searchFilterEmitter}
+            />
           )}
         </this.stack.Screen>
       </this.stack.Navigator>

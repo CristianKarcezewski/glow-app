@@ -11,7 +11,7 @@ import Toast from "react-native-root-toast";
 import { loadStates, loadCities } from "../../../services/location-service";
 import { findViacepLocation } from "../../../services/viacep-service";
 import { registerAddress } from "../../../services/address-service";
-import LocationFilterModal from "../../modals/location-filter-modal";
+import LocationFilterModal from "../../modals/location-select";
 
 class ManualAddress extends Component {
   constructor(props) {

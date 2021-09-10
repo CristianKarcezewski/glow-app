@@ -54,17 +54,15 @@ class ProviderDetailTabs extends Component {
         })}
       >
         <this.tabs.Screen name="provider-details" options={{ title: "Sobre" }}>
-          {(props) => (
-            <ProviderDetails {...props} emitters={this.props.emitters} />
-          )}
+          {(props) => <ProviderDetails {...props} />}
         </this.tabs.Screen>
 
         <this.tabs.Screen name="chat" options={{ title: "Chat" }}>
-          {(props) => <Chat {...props} emitters={this.props.emitters} />}
+          {(props) => <Chat {...props} />}
         </this.tabs.Screen>
 
         <this.tabs.Screen name="galery" options={{ title: "Galeria" }}>
-          {(props) => <Gallery {...props} emitters={this.props.emitters} />}
+          {(props) => <Gallery {...props} />}
         </this.tabs.Screen>
       </this.tabs.Navigator>
     );

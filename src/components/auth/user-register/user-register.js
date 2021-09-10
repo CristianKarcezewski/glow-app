@@ -49,7 +49,7 @@ class UserRegister extends Component {
       register(Platform.OS, newUser)
         .then(({ status, data }) => {
           if (status === 200) {
-            this.props.emitters.loginEmitter.login(data.authorization);
+            this.props.loginEmitter.login(data.authorization);
             this.setState({ ...this.state, loading: false });
             this.props.navigation.popToTop();
           } else {
@@ -185,7 +185,7 @@ class UserRegister extends Component {
                 value={null}
                 key={""}
               />
-              {this.props.emitters.locationsEmitter
+              {this.props.locationsEmitter
                 .getAllStates()
                 .map((st, index) => {
                   return (
@@ -208,7 +208,7 @@ class UserRegister extends Component {
                 value={null}
                 key={""}
               />
-              {this.props.emitters.locationsEmitter
+              {this.props.locationsEmitter
                 .getStateByIndex(this.state.selectedState)
                 ?.cities.map((city, index) => {
                   return <Picker.Item label={city} value={city} key={index} />;

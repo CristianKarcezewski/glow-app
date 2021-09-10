@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import AddressesList from "../../addresses/address-list";
 import AddressesEmitter from "../../../emitters/addresses-emitter";
-import AddressModal from "../../modals/address-modal";
+import AddressModal from "../../select-filter/address-modal";
 
 class UserTabs extends Component {
   constructor(props) {
