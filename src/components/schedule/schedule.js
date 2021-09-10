@@ -115,7 +115,7 @@ export default class Schedule extends Component {
                 renderItem={({ item }) => (
                   <Task
                     {...item}
-                    toggleTask={this.toggleTask}
+                    onToggleTask={this.toggleTask}
                     onDelete={this.deletTask}
                   />
                 )}
