@@ -5,12 +5,8 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
-  Platform,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import Checkbox from "expo-checkbox";
-import { loadStates, loadCities } from "../../services/location-service";
-import Toast from "react-native-root-toast";
 
 class ProviderFilter extends Component {
   componentKey = "ProviderFilterKey";
@@ -26,67 +22,24 @@ class ProviderFilter extends Component {
     };
   }
 
-  _handleLoadStates() {
-    this.setState({ ...this.state, loading: true });
-    loadStates(Platform.OS)
-      .then(({ status, data }) => {
-        if (status === 200) {
-          this.props.emitters.locationsEmitter.setStates(data);
-          this.setState({ ...this.state, loading: false });
-        } else {
-          this.setState({ ...this.state, loading: false });
-          Toast.show("Não foi possível carregar estados.", {
-            duration: Toast.durations.LONG,
-          });
-        }
-      })
-      .catch((err) => {
-        this.setState({ ...this.state, loading: false });
-        Toast.show("Sem conexão com internet.", {
-          duration: Toast.durations.LONG,
-        });
-      });
-  }
-
-  _handleLoadCities(stateId) {
-    this.setState({
-      ...this.state,
-      statesModal: false,
-      loading: true,
-    });
-    loadCities(Platform.OS, stateId)
-      .then(({ status, data }) => {
-        if (status === 200) {
-          this.props.emitters.locationsEmitter.setCities(data);
-          this.setState({
-            ...this.state,
-            loading: false,
-            selectedState: stateId,
-          });
-        } else {
-          this.setState({ ...this.state, loading: false });
-          Toast.show("Não foi possível carregar cidades.", {
-            duration: Toast.durations.LONG,
-          });
-        }
-      })
-      .catch((err) => {
-        this.setState({ ...this.state, loading: false });
-        Toast.show("Sem conexão com internet.", {
-          duration: Toast.durations.LONG,
-        });
-      });
-  }
-
   _changeFilter(filter) {
+    this.setState({ ...this.state, loading: true });
+    let st, ct;
+    if (filter.stateId) {
+      st = this.props.locationsEmitter.states.find((x) => {
+        return x.stateId === filter.stateId;
+      });
+    }
+    if (filter.stateId && filter.cityId) {
+      ct = this.props.locationsEmitter.cities.find((x) => {
+        return x.cityId === filter.cityId;
+      });
+    }
     this.setState({
       ...this.state,
-      stateName:
-        this.props.locationsEmitter.states.find((x) => x.id === filter.stateId)
-          .name || null,
-      cityName:
-        this.props.locationsEmitter.cities.find((x) => x.id === filter.citiId)
-          .name || null,
+      stateName: st?.name || null,
+      cityName: ct?.name || null,
+      loading: false,
     });
   }
 
@@ -95,9 +48,6 @@ class ProviderFilter extends Component {
       this.componentKey,
       this._changeFilter.bind(this)
     );
-    if (this.props.locationsEmitter.states.length == 0) {
-      this._handleLoadStates();
-    }
   }
 
   componentWillUnmount() {
@@ -157,9 +107,7 @@ class ProviderFilter extends Component {
 
           <TouchableOpacity
             style={style.modalButton}
-            onPress={() => {
-              this.navigation.navigate("select-state");
-            }}
+            onPress={() => this.props.navigation.navigate("select-state")}
           >
             <Text style={{ fontSize: 20, paddingLeft: 20 }}>
               {this.state.stateName
@@ -170,37 +118,16 @@ class ProviderFilter extends Component {
 
           <TouchableOpacity
             style={style.modalButton}
-            onPress={() => {
-              this.navigation.navigate("select-city");
-            }}
+            onPress={() => this.props.navigation.navigate("select-city")}
           >
             <Text style={{ fontSize: 20, paddingLeft: 20 }}>
               {this.state.cityName ? this.state.cityName : "Selecionar cidade"}
             </Text>
           </TouchableOpacity>
 
-          <View style={style.pickerView}>
-            <Picker
-              style={style.picker}
-              selectedValue={
-                this.state.professionTypes[this.state.selectedProfessionalType]
-              }
-              onValueChange={(itemValue, itemIndex) =>
-                this.setState({
-                  ...this.state,
-                  selectedProfessionalType: itemIndex,
-                })
-              }
-            >
-              {this.state.professionTypes.map((st, index) => {
-                return <Picker.Item label={st} value={st} key={index} />;
-              })}
-            </Picker>
-          </View>
-
           <TouchableOpacity
             style={{ ...style.buttons, backgroundColor: "#db382f" }}
-            onPress={() => this.props.navigation.popToTop()}
+            onPress={() => this.props.navigation.goBack()}
           >
             <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
               Aplicar
@@ -208,7 +135,7 @@ class ProviderFilter extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={style.buttons}
-            onPress={() => this.props.close()}
+            onPress={() => this.props.navigation.goBack()}
           >
             <Text style={{ fontSize: 25, fontWeight: "bold", color: "black" }}>
               Voltar
@@ -233,16 +160,6 @@ const style = StyleSheet.create({
   checkboxText: {
     fontSize: 20,
     paddingTop: 5,
-  },
-  pickerView: {
-    width: "80%",
-    borderColor: "black",
-    borderWidth: 1,
-    margin: 5,
-    borderRadius: 20,
-  },
-  picker: {
-    margin: 5,
   },
   buttons: {
     borderRadius: 30,

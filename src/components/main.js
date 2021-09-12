@@ -9,10 +9,13 @@ import DrawerNavigator from "./navigators/drawer";
 class Main extends Component {
   constructor() {
     super();
+    this.loginEmitter = new LoginEmitter();
+    this.searchFilterEmitter = new SearchFilterEmitter();
+    this.locationsEmitter = new LocationsEmitter(this.searchFilterEmitter);
     this.emitters = {
-      loginEmitter: new LoginEmitter(),
-      locationsEmitter: new LocationsEmitter(),
-      searchFilterEmitter = new SearchFilterEmitter(),
+      loginEmitter: this.loginEmitter,
+      searchFilterEmitter: this.searchFilterEmitter,
+      locationsEmitter: this.locationsEmitter,
     };
   }
 

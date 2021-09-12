@@ -107,7 +107,9 @@ class SearchResult extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={{ flex: 1, alignItems: "center" }}
-            onPress={() => this.props.navigation.navigate("provider-filter")}
+            onPress={() =>
+              this.props.navigation.navigate("provider-filter-stack")
+            }
           >
             <FontAwesomeIcon icon={faFilter} size={25} color={"#db382f"} />
           </TouchableOpacity>

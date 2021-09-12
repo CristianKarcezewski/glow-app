@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { StyleSheet, Image, TouchableOpacity, Text } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Text,
+  ActivityIndicator,
+} from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
@@ -17,11 +23,16 @@ class StackNavigator extends Component {
     this.stack = createNativeStackNavigator();
     this.state = {
       userLoggedIn: false,
+      headerShown: true,
     };
   }
 
   _handleLogin(value) {
     this.setState({ ...this.state, userLoggedIn: value });
+  }
+
+  setHeader(value) {
+    this.setState({ ...this.state, headerShown: value });
   }
 
   componentDidMount() {
@@ -36,105 +47,124 @@ class StackNavigator extends Component {
   }
 
   render() {
-    return (
-      <this.stack.Navigator initialRouteName="glow">
-        <this.stack.Screen
-          name="glow"
-          options={({ navigation }) => ({
-            headerTitle: () => (
-              <Image
-                source={require("../../../assets/glow-logo.png")}
-                style={style.image}
-              />
-            ),
-            headerRight: () => {
-              if (this.state.userLoggedIn) {
-                return (
-                  <TouchableOpacity
-                    style={style.headerLoginButton}
-                    onPress={() => navigation.toggleDrawer()}
-                  >
-                    <FontAwesomeIcon
-                      icon={faBars}
+    if (this.state.loading) {
+      return (
+        <ActivityIndicator
+          size={"large"}
+          color={"#db382f"}
+          animating={!this.state.headerShown}
+          style={{ flex: 1 }}
+        />
+      );
+    } else {
+      return (
+        <this.stack.Navigator initialRouteName="glow">
+          <this.stack.Screen
+            name="glow"
+            options={({ navigation }) => ({
+              headerTitle: () => (
+                <Image
+                  source={require("../../../assets/glow-logo.png")}
+                  style={style.image}
+                />
+              ),
+              headerRight: () => {
+                if (this.state.userLoggedIn) {
+                  return (
+                    <TouchableOpacity
+                      style={style.headerLoginButton}
                       onPress={() => navigation.toggleDrawer()}
-                      color={"#fff"}
-                    />
-                  </TouchableOpacity>
-                );
-              } else {
-                return (
-                  <TouchableOpacity
-                    style={style.headerLoginButton}
-                    onPress={() => navigation.navigate("login")}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        fontWeight: "bold",
-                        color: "#fff",
-                      }}
                     >
-                      Login
-                    </Text>
-                  </TouchableOpacity>
-                );
-              }
-            },
-          })}
-        >
-          {(props) => <Search {...props} />}
-        </this.stack.Screen>
+                      <FontAwesomeIcon
+                        icon={faBars}
+                        onPress={() => navigation.toggleDrawer()}
+                        color={"#fff"}
+                      />
+                    </TouchableOpacity>
+                  );
+                } else {
+                  return (
+                    <TouchableOpacity
+                      style={style.headerLoginButton}
+                      onPress={() => navigation.navigate("login")}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          fontWeight: "bold",
+                          color: "#fff",
+                        }}
+                      >
+                        Login
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                }
+              },
+            })}
+          >
+            {(props) => <Search {...props} />}
+          </this.stack.Screen>
 
-        <this.stack.Screen
-          name="login"
-          options={{
-            title: "Login",
-          }}
-        >
-          {(props) => (
-            <Login {...props} loginEmitter={this.props.emitters.loginEmitter} />
-          )}
-        </this.stack.Screen>
+          <this.stack.Screen
+            name="login"
+            options={{
+              title: "Login",
+              headerShown: this.state.headerShown,
+            }}
+          >
+            {(props) => (
+              <Login
+                {...props}
+                loginEmitter={this.props.emitters.loginEmitter}
+              />
+            )}
+          </this.stack.Screen>
 
-        <this.stack.Screen
-          name="user-register"
-          options={{
-            title: "Cadastro de usuário",
-          }}
-        >
-          {(props) => (
-            <UserRegister
-              {...props}
-              loginEmitter={this.props.emitters.loginEmitter}
-            />
-          )}
-        </this.stack.Screen>
+          <this.stack.Screen
+            name="user-register"
+            options={{
+              title: "Cadastro de usuário",
+              headerShown: this.state.headerShown,
+            }}
+          >
+            {(props) => (
+              <UserRegister
+                {...props}
+                loginEmitter={this.props.emitters.loginEmitter}
+              />
+            )}
+          </this.stack.Screen>
 
-        <this.stack.Screen
-          name="provider-detail-tabs"
-          options={{
-            title: "Detalhes do Profissional",
-          }}
-        >
-          {(props) => <ProviderDetailTabs {...props} />}
-        </this.stack.Screen>
+          <this.stack.Screen
+            name="provider-detail-tabs"
+            options={{
+              title: "Detalhes do Profissional",
+              headerShown: this.state.headerShown,
+            }}
+          >
+            {(props) => <ProviderDetailTabs {...props} />}
+          </this.stack.Screen>
 
-        <this.stack.Screen
-          name="provider-filter-stack"
-          options={{
-            title: "Filtrar Profissionais",
-          }}
-        >
-          {(props) => (
-            <ProviderFilterStack
-              {...props}
-              locationsEmitter={this.props.emitters.locationsEmitter}
-              searchFilterEmitter={this.props.emitters.searchFilterEmitter}
-            />
-          )}
-        </this.stack.Screen>
-      </this.stack.Navigator>
-    );
+          <this.stack.Screen
+            name="provider-filter-stack"
+            options={{
+              title: "Filtrar Profissionais",
+              headerShown: this.state.headerShown,
+            }}
+          >
+            {(props) => (
+              <ProviderFilterStack
+                {...props}
+                locationsEmitter={this.props.emitters.locationsEmitter}
+                searchFilterEmitter={this.props.emitters.searchFilterEmitter}
+                toggleHeader={this.setHeader.bind(this)}
+              />
+            )}
+          </this.stack.Screen>
+        </this.stack.Navigator>
+      );
+    }
   }
 }
 

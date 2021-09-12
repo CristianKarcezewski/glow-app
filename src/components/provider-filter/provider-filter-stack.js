@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ProviderFilter from "./provider-filter";
+import LocationSelect from "../location-select/location-select";
 
 class ProviderFilterStack extends Component {
   constructor(props) {
@@ -10,7 +11,16 @@ class ProviderFilterStack extends Component {
 
   render() {
     return (
-      <this.stack.Navigator initialRouteName="provider-filter">
+      <this.stack.Navigator
+        initialRouteName="provider-filter"
+        screenListeners={({ route }) => {
+          if (route.name === "provider-filter") {
+            this.props.toggleHeader(true);
+          } else {
+            this.props.toggleHeader(false);
+          }
+        }}
+      >
         <this.stack.Screen
           name="provider-filter"
           options={{
@@ -34,11 +44,11 @@ class ProviderFilterStack extends Component {
           }}
         >
           {(props) => (
-            <ProviderFilter
+            <LocationSelect
               {...props}
               locationsEmitter={this.props.locationsEmitter}
               searchFilterEmitter={this.props.searchFilterEmitter}
-              states={true}
+              state={true}
             />
           )}
         </this.stack.Screen>
@@ -50,7 +60,7 @@ class ProviderFilterStack extends Component {
           }}
         >
           {(props) => (
-            <ProviderFilter
+            <LocationSelect
               {...props}
               locationsEmitter={this.props.locationsEmitter}
               searchFilterEmitter={this.props.searchFilterEmitter}
