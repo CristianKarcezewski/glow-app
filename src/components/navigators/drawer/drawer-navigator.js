@@ -36,7 +36,7 @@ class DrawerNavigator extends Component {
               <DrawerItem
                 label="Sair"
                 onPress={() => {
-                  this.props.emitters.loginEmitter.logout();
+                  this.props.loginEmitter.logout();
                   props.navigation.goBack();
                 }}
               />
@@ -49,7 +49,13 @@ class DrawerNavigator extends Component {
           options={{ headerShown: false, title: "Início" }}
         >
           {(props) => (
-            <StackNavigator {...props} emitters={this.props.emitters} />
+            <StackNavigator
+              {...props}
+              loginEmitter={this.props.loginEmitter}
+              searchFilterEmitter={this.props.searchFilterEmitter}
+              addressesFilterEmitter={this.props.addressesFilterEmitter}
+              locationsEmitter={this.props.locationsEmitter}
+            />
           )}
         </this.drawer.Screen>
 
@@ -60,7 +66,14 @@ class DrawerNavigator extends Component {
             title: "Minha conta",
           })}
         >
-          {(props) => <UserTabs {...props} emitters={this.props.emitters} />}
+          {(props) => (
+            <UserTabs
+              {...props}
+              loginEmitter={this.props.loginEmitter}
+              locationsEmitter={this.props.locationsEmitter}
+              addressesFilterEmitter={this.props.addressesFilterEmitter}
+            />
+          )}
         </this.drawer.Screen>
 
         <this.drawer.Screen

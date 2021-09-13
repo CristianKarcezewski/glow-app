@@ -2,6 +2,10 @@ export default class AddressEmitter {
   constructor() {
     this.subscribes = new Array();
     this.addresses = new Array();
+    this.filter = {
+      stateId: null,
+      cityId: null,
+    };
   }
 
   subscribe(key, handler) {
@@ -29,7 +33,7 @@ export default class AddressEmitter {
 
   _emit() {
     this.subscribes.map((sub) => {
-      sub.handler(this.addresses);
+      sub.handler();
     });
   }
 
@@ -38,5 +42,10 @@ export default class AddressEmitter {
       addr.forEach((x) => this.addresses.push(x));
       this._emit();
     }
+  }
+
+  setFilter(filter) {
+    this.filter = filter;
+    this._emit();
   }
 }

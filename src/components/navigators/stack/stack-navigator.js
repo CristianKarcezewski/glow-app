@@ -36,14 +36,14 @@ class StackNavigator extends Component {
   }
 
   componentDidMount() {
-    this.props.emitters.loginEmitter.subscribe(
+    this.props.loginEmitter.subscribe(
       this.componentKey,
       this._handleLogin.bind(this)
     );
   }
 
   componentWillUnmount() {
-    this.props.emitters.loginEmitter.unsubscribe(this.componentKey);
+    this.props.loginEmitter.unsubscribe(this.componentKey);
   }
 
   render() {
@@ -114,10 +114,7 @@ class StackNavigator extends Component {
             }}
           >
             {(props) => (
-              <Login
-                {...props}
-                loginEmitter={this.props.emitters.loginEmitter}
-              />
+              <Login {...props} loginEmitter={this.props.loginEmitter} />
             )}
           </this.stack.Screen>
 
@@ -129,10 +126,7 @@ class StackNavigator extends Component {
             }}
           >
             {(props) => (
-              <UserRegister
-                {...props}
-                loginEmitter={this.props.emitters.loginEmitter}
-              />
+              <UserRegister {...props} loginEmitter={this.props.loginEmitter} />
             )}
           </this.stack.Screen>
 
@@ -156,8 +150,8 @@ class StackNavigator extends Component {
             {(props) => (
               <ProviderFilterStack
                 {...props}
-                locationsEmitter={this.props.emitters.locationsEmitter}
-                searchFilterEmitter={this.props.emitters.searchFilterEmitter}
+                locationsEmitter={this.props.locationsEmitter}
+                searchFilterEmitter={this.props.searchFilterEmitter}
                 toggleHeader={this.setHeader.bind(this)}
               />
             )}

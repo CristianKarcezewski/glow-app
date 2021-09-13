@@ -106,7 +106,7 @@ class ProviderFilter extends Component {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={style.modalButton}
+            style={style.locationButton}
             onPress={() => this.props.navigation.navigate("select-state")}
           >
             <Text style={{ fontSize: 20, paddingLeft: 20 }}>
@@ -117,7 +117,7 @@ class ProviderFilter extends Component {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={style.modalButton}
+            style={style.locationButton}
             onPress={() => this.props.navigation.navigate("select-city")}
           >
             <Text style={{ fontSize: 20, paddingLeft: 20 }}>
@@ -170,7 +170,7 @@ const style = StyleSheet.create({
     alignItems: "center",
     elevation: 10,
   },
-  modalButton: {
+  locationButton: {
     width: "80%",
     borderColor: "black",
     borderWidth: 1,

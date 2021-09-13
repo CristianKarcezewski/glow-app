@@ -47,11 +47,12 @@ class ProviderFilterStack extends Component {
             <LocationSelect
               {...props}
               locationsEmitter={this.props.locationsEmitter}
-              searchFilterEmitter={this.props.searchFilterEmitter}
+              filterEmitter={this.props.searchFilterEmitter}
               state={true}
             />
           )}
         </this.stack.Screen>
+
         <this.stack.Screen
           name="select-city"
           options={{
@@ -63,7 +64,7 @@ class ProviderFilterStack extends Component {
             <LocationSelect
               {...props}
               locationsEmitter={this.props.locationsEmitter}
-              searchFilterEmitter={this.props.searchFilterEmitter}
+              filterEmitter={this.props.searchFilterEmitter}
             />
           )}
         </this.stack.Screen>

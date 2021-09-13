@@ -8,132 +8,25 @@ import {
   ActivityIndicator,
 } from "react-native";
 import Toast from "react-native-root-toast";
-import { loadStates, loadCities } from "../../../services/location-service";
 import { findViacepLocation } from "../../../services/viacep-service";
 import { registerAddress } from "../../../services/address-service";
-import LocationFilterModal from "../../modals/location-select";
 
 class ManualAddress extends Component {
+  componentKey = "ManualAddress";
   constructor(props) {
     super(props);
     this.state = {
       name: null,
       postalCode: null,
-      selectedState: null,
-      selectedCity: null,
+      stateName: null,
+      cityName: null,
       neighborhood: null,
       street: null,
       number: null,
       complement: null,
       referencePoint: null,
       loading: false,
-      statesModal: false,
-      citiesModal: false,
     };
-  }
-
-  _handleLoadStates() {
-    this.setState({ ...this.state, loading: true });
-    loadStates(Platform.OS)
-      .then(({ status, data }) => {
-        if (status === 200) {
-          this.props.emitters.locationsEmitter.setStates(data);
-          this.setState({ ...this.state, loading: false });
-        } else {
-          this.setState({ ...this.state, loading: false });
-          Toast.show("Não foi possível carregar estados.", {
-            duration: Toast.durations.LONG,
-          });
-        }
-      })
-      .catch((err) => {
-        this.setState({ ...this.state, loading: false });
-        Toast.show("Sem conexão com internet.", {
-          duration: Toast.durations.LONG,
-        });
-      });
-  }
-
-  _handleLoadCities(stateId) {
-    this.setState({
-      ...this.state,
-      statesModal: false,
-      loading: true,
-    });
-    loadCities(Platform.OS, stateId)
-      .then(({ status, data }) => {
-        if (status === 200) {
-          this.props.emitters.locationsEmitter.setCities(data);
-          this.setState({
-            ...this.state,
-            loading: false,
-            selectedState: stateId,
-          });
-        } else {
-          this.setState({ ...this.state, loading: false });
-          Toast.show("Não foi possível carregar cidades.", {
-            duration: Toast.durations.LONG,
-          });
-        }
-      })
-      .catch((err) => {
-        this.setState({ ...this.state, loading: false });
-        Toast.show("Sem conexão com internet.", {
-          duration: Toast.durations.LONG,
-        });
-      });
-  }
-
-  _closeStatesModal(data) {
-    if (data) {
-      let len = this.props.emitters.locationsEmitter.getCitiesByStateId(
-        data.stateId
-      ).length;
-
-      if (len == 0) {
-        this._handleLoadCities(data.stateId);
-      } else {
-        this.setState({
-          ...this.state,
-          selectedState: data.stateId,
-          statesModal: false,
-        });
-      }
-    } else {
-      this.setState({
-        ...this.state,
-        statesModal: false,
-      });
-    }
-  }
-
-  _closeCitiesModal(data) {
-    if (data) {
-      this.setState({
-        ...this.state,
-        selectedCity: data.cityId,
-        citiesModal: false,
-      });
-    } else {
-      this.setState({
-        ...this.state,
-        citiesModal: false,
-      });
-    }
-  }
-
-  modalData(showStates) {
-    if (showStates) {
-      this.setState({ ...this.state, selectedCity: null });
-      return this.props.emitters.locationsEmitter.states;
-    }
-    if (!showStates && this.state.selectedState) {
-      let ct = this.props.emitters.locationsEmitter.getCitiesByStateId(
-        this.state.selectedState
-      );
-      return ct;
-    }
-    return [];
   }
 
   _handleAddressRegister() {
@@ -150,11 +43,7 @@ class ManualAddress extends Component {
       referencePoint: this.state.referencePoint,
     };
 
-    registerAddress(
-      Platform.OS,
-      this.props.emitters.loginEmitter.token,
-      address
-    )
+    registerAddress(Platform.OS, this.props.loginEmitter.token, address)
       .then(({ status, data }) => {
         if (status === 200) {
           this.setState({ ...this.state, loading: false });
@@ -181,25 +70,11 @@ class ManualAddress extends Component {
     findViacepLocation(postalCode)
       .then(({ status, data }) => {
         if (status === 200) {
-          let state =
-            this.props.emitters.locationsEmitter.states.find((x) => {
-              x.uf.toLowerCase() === data.uf.toLowerCase();
-            }) || null;
-          let city =
-            state != null
-              ? this.props.emitters.locationsEmitter
-                  .getCitiesByStateId(state.stateId)
-                  .find((x) =>
-                    x.name.toLowerCase().includes(data.localidade.toLowerCase())
-                  )
-              : null;
-          console.log(state, city);
+          this._bindViacepLocation(data);
           this.setState({
             ...this.state,
             loading: false,
             postalCode: data.cep,
-            selectedState: state != null ? state.stateId : null,
-            selectedCity: city != null ? city.cityId : null,
             neighborhood: data.bairro,
             street: data.logradouro,
           });
@@ -216,6 +91,81 @@ class ManualAddress extends Component {
       });
   }
 
+  _bindViacepLocation(data) {
+    let st, ct;
+    if (data?.uf) {
+      st = this.props.locationsEmitter.states.find((x) => {
+        return x.uf.toLowerCase() === data.uf.toLowerCase();
+      });
+    }
+    if (st?.stateId && data?.localidade) {
+      ct = this.props.locationsEmitter.getCitiesByStateId().find((x) => {
+        return x.name.toLowerCase().includes(data.localidade.toLowerCase());
+      });
+    }
+
+    console.log(st, ct);
+
+    this.props.filterEmitter.setFilter({
+      ...this.props.locationsEmitter.filter,
+      stateId: st?.stateId || null,
+      cityId: ct?.cityId || null,
+    });
+  }
+
+  _handleLoadStates() {
+    this.setState({ ...this.state, loading: true });
+    loadStates(Platform.OS)
+      .then(({ status, data }) => {
+        if (status === 200) {
+          this.props.locationsEmitter.setStates(data);
+          this.setState({ ...this.state, loading: false });
+        } else {
+          this.setState({ ...this.state, loading: false });
+          Toast.show("Não foi possível carregar estados.", {
+            duration: Toast.durations.LONG,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        this.setState({ ...this.state, loading: false });
+        Toast.show("Sem conexão com internet.", {
+          duration: Toast.durations.LONG,
+        });
+      });
+  }
+
+  _handleLoadCities(stateId) {
+    this.setState({
+      ...this.state,
+      loading: true,
+    });
+    loadCities(Platform.OS, stateId)
+      .then(({ status, data }) => {
+        if (status === 200) {
+          this.props.locationsEmitter.setCities(data);
+          this.cities = data;
+          this.setState({
+            ...this.state,
+            loading: false,
+          });
+        } else {
+          this.setState({ ...this.state, loading: false });
+          Toast.show("Não foi possível carregar cidades.", {
+            duration: Toast.durations.LONG,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        this.setState({ ...this.state, loading: false });
+        Toast.show("Sem conexão com internet.", {
+          duration: Toast.durations.LONG,
+        });
+      });
+  }
+
   autocompleteForm(value) {
     var st = value.replace(/\D/g, "");
     if (st.length == 8) {
@@ -225,10 +175,39 @@ class ManualAddress extends Component {
     }
   }
 
-  componentDidMount() {
-    if (this.props.emitters.locationsEmitter.states.length == 0) {
-      this._handleLoadStates();
+  _changeFilter() {
+    this.setState({ ...this.state, loading: true });
+    let st, ct;
+    if (this.props.filterEmitter.filter.stateId) {
+      st = this.props.locationsEmitter.states.find((x) => {
+        return x.stateId === this.props.filterEmitter.filter.stateId;
+      });
     }
+    if (
+      this.props.filterEmitter.filter.stateId &&
+      this.props.filterEmitter.filter.cityId
+    ) {
+      ct = this.props.locationsEmitter.cities.find((x) => {
+        return x.cityId === this.props.filterEmitter.filter.cityId;
+      });
+    }
+    this.setState({
+      ...this.state,
+      stateName: st?.name || null,
+      cityName: ct?.name || null,
+      loading: false,
+    });
+  }
+
+  componentDidMount() {
+    this.props.filterEmitter.subscribe(
+      this.componentKey,
+      this._changeFilter.bind(this)
+    );
+  }
+
+  componentWillUnmount() {
+    this.props.filterEmitter.unsubscribe(this.componentKey);
   }
 
   render() {
@@ -243,165 +222,120 @@ class ManualAddress extends Component {
       );
     } else {
       return (
-        <View style={style.container}>
-          <View
-            style={{ flex: 8, alignItems: "center", justifyContent: "center" }}
-          >
-            <Text>Cadastre um endereço:</Text>
-            <TextInput
-              style={
-                this.state.validName
-                  ? style.validFormField
-                  : style.invalidFormField
-              }
-              maxLength={50}
-              placeholder="Nome do endereço (ex: casa)"
-              onChangeText={(value) =>
-                this.setState({ ...this.state, name: value })
-              }
-              value={this.state.name}
-            />
-            <TextInput
-              style={
-                this.state.validName
-                  ? style.validFormField
-                  : style.invalidFormField
-              }
-              maxLength={50}
-              keyboardType={"numeric"}
-              placeholder="CEP"
-              onChangeText={(value) => this.autocompleteForm(value)}
-              value={this.state.postalCode}
-            />
-            <LocationFilterModal
-              visible={this.state.statesModal}
-              close={this._closeStatesModal.bind(this)}
-              searchData={this.modalData.bind(this)}
-              showStates={true}
-            />
-            <TouchableOpacity
-              style={style.modalButton}
-              onPress={() => {
-                this.setState({ ...this.state, statesModal: true });
-              }}
-            >
-              <Text style={{ fontSize: 20, paddingLeft: 20 }}>
-                {this.state.selectedState
-                  ? this.props.emitters.locationsEmitter.states.find(
-                      (x) => x.stateId === this.state.selectedState
-                    ).name
-                  : "Selecionar estado"}
-              </Text>
-            </TouchableOpacity>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            paddingVertical: 30,
+          }}
+        >
+          <TextInput
+            style={style.formField}
+            maxLength={50}
+            placeholder="Nome do endereço (ex: casa)"
+            onChangeText={(value) =>
+              this.setState({ ...this.state, name: value })
+            }
+            value={this.state.name}
+          />
 
-            <LocationFilterModal
-              visible={this.state.citiesModal}
-              close={this._closeCitiesModal.bind(this)}
-              searchData={this.modalData.bind(this)}
-            />
-            <TouchableOpacity
-              style={style.modalButton}
-              onPress={() => {
-                this.setState({ ...this.state, citiesModal: true });
-              }}
-            >
-              <Text style={{ fontSize: 20, paddingLeft: 20 }}>
-                {this.state.selectedCity
-                  ? this.props.emitters.locationsEmitter
-                      .getCitiesByStateId(this.state.selectedState)
-                      .find((x) => x.cityId === this.state.selectedCity).name
-                  : "Selecionar cidade"}
-              </Text>
-            </TouchableOpacity>
-            <TextInput
-              style={
-                this.state.validName
-                  ? style.validFormField
-                  : style.invalidFormField
-              }
-              maxLength={50}
-              placeholder="Bairro"
-              onChangeText={(value) =>
-                this.setState({ ...this.state, neighborhood: value })
-              }
-              value={this.state.neighborhood}
-            />
-            <TextInput
-              style={
-                this.state.validName
-                  ? style.validFormField
-                  : style.invalidFormField
-              }
-              maxLength={50}
-              placeholder="Rua"
-              onChangeText={(value) =>
-                this.setState({ ...this.state, street: value })
-              }
-              value={this.state.street}
-            />
-            <TextInput
-              style={
-                this.state.validName
-                  ? style.validFormField
-                  : style.invalidFormField
-              }
-              maxLength={50}
-              placeholder="Numero"
-              keyboardType={"numeric"}
-              onChangeText={(value) =>
-                this.setState({ ...this.state, number: value })
-              }
-              value={this.state.number}
-            />
-            <TextInput
-              style={
-                this.state.validName
-                  ? style.validFormField
-                  : style.invalidFormField
-              }
-              maxLength={50}
-              placeholder="Complemento"
-              onChangeText={(value) =>
-                this.setState({ ...this.state, complement: value })
-              }
-              value={this.state.complement}
-            />
-            <TextInput
-              style={
-                this.state.validName
-                  ? style.validFormField
-                  : style.invalidFormField
-              }
-              maxLength={50}
-              placeholder="Ponto de referencia"
-              onChangeText={(value) =>
-                this.setState({ ...this.state, referencePoint: value })
-              }
-              value={this.state.referencePoint}
-            />
-          </View>
-          <View
-            style={{ flex: 2, alignItems: "center", justifyContent: "center" }}
+          <TextInput
+            style={style.formField}
+            maxLength={10}
+            placeholder="CEP"
+            onChangeText={(value) => this.autocompleteForm(value)}
+            value={this.state.postalCode}
+          />
+
+          <TouchableOpacity
+            style={style.locationButton}
+            onPress={() => this.props.navigation.navigate("select-state")}
           >
-            <TouchableOpacity
-              style={{ ...style.buttons, backgroundColor: "#db382f" }}
-              onPress={() => this._handleAddressRegister()}
-            >
-              <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
-                Salvar
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={style.buttons}
-              onPress={() => this.props.close()}
-            >
-              <Text
-                style={{ fontSize: 25, fontWeight: "bold", color: "black" }}
-              >
-                Voltar
-              </Text>
-            </TouchableOpacity>
-          </View>
+            <Text style={{ fontSize: 20, paddingLeft: 20 }}>
+              {this.state.stateName
+                ? this.state.stateName
+                : "Selecionar estado"}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={style.locationButton}
+            onPress={() => this.props.navigation.navigate("select-city")}
+          >
+            <Text style={{ fontSize: 20, paddingLeft: 20 }}>
+              {this.state.cityName ? this.state.cityName : "Selecionar cidade"}
+            </Text>
+          </TouchableOpacity>
+
+          <TextInput
+            style={style.formField}
+            maxLength={50}
+            placeholder="Bairro"
+            onChangeText={(value) =>
+              this.setState({ ...this.state, neighborhood: value })
+            }
+            value={this.state.neighborhood}
+          />
+
+          <TextInput
+            style={style.formField}
+            maxLength={50}
+            placeholder="Rua"
+            onChangeText={(value) =>
+              this.setState({ ...this.state, street: value })
+            }
+            value={this.state.street}
+          />
+
+          <TextInput
+            style={style.formField}
+            maxLength={50}
+            placeholder="Numero"
+            keyboardType={"numeric"}
+            onChangeText={(value) =>
+              this.setState({ ...this.state, number: value })
+            }
+            value={this.state.number}
+          />
+
+          <TextInput
+            style={style.formField}
+            maxLength={50}
+            placeholder="Complemento"
+            onChangeText={(value) =>
+              this.setState({ ...this.state, complement: value })
+            }
+            value={this.state.complement}
+          />
+
+          <TextInput
+            style={style.formField}
+            maxLength={50}
+            placeholder="Ponto de referencia"
+            onChangeText={(value) =>
+              this.setState({ ...this.state, referencePoint: value })
+            }
+            value={this.state.referencePoint}
+          />
+
+          <TouchableOpacity
+            style={{ ...style.buttons, backgroundColor: "#db382f" }}
+            onPress={() => this._handleAddressRegister()}
+          >
+            <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
+              Salvar
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={style.buttons}
+            onPress={() => this.props.navigation.goBack()}
+          >
+            <Text style={{ fontSize: 25, fontWeight: "bold", color: "black" }}>
+              Voltar
+            </Text>
+          </TouchableOpacity>
         </View>
       );
     }
@@ -409,37 +343,20 @@ class ManualAddress extends Component {
 }
 
 const style = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginHorizontal: "10%",
-    marginVertical: "20%",
-    borderRadius: 20,
-    borderColor: "black",
-    borderWidth: 1,
-    elevation: 10,
-    backgroundColor: "white",
-  },
-  validFormField: {
+  formField: {
     width: "80%",
-    paddingHorizontal: 20,
-    margin: 5,
+    paddingLeft: 20,
+    paddingRight: 20,
+    padding: 5,
+    margin: 10,
     fontSize: 18,
+    backgroundColor: "#fff",
     borderColor: "black",
     borderWidth: 1,
     borderRadius: 15,
-    padding: 5,
-  },
-  invalidFormField: {
-    width: "80%",
-    paddingHorizontal: 20,
-    margin: 5,
-    fontSize: 18,
-    borderColor: "#db382f",
-    borderWidth: 1,
-    borderRadius: 15,
-    padding: 5,
   },
   buttons: {
+    flex: 1,
     borderRadius: 30,
     width: "50%",
     margin: 10,
@@ -448,7 +365,7 @@ const style = StyleSheet.create({
     alignItems: "center",
     elevation: 10,
   },
-  modalButton: {
+  locationButton: {
     width: "80%",
     borderColor: "black",
     borderWidth: 1,

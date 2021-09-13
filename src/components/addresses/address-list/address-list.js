@@ -50,18 +50,6 @@ class AddressList extends Component {
     this.setState({ ...this.state, addresses: addresses });
   }
 
-  componentDidMount() {
-    this.props.addressesEmitter.subscribe(
-      this.addressesListKey,
-      this._handleAddressUpdate.bind(this)
-    );
-    this._handleLoadUserAddresses();
-  }
-
-  componentWillUnmount() {
-    this.props.addressesEmitter.unsubscribe(this.addressesListKey);
-  }
-
   render() {
     if (this.state.loading) {
       return (
@@ -83,7 +71,7 @@ class AddressList extends Component {
                 <TouchableOpacity onPress={() => console.log(item)}>
                   <CardResult
                     address={item}
-                    locationsEmitter={this.props.emitters.locationsEmitter}
+                    locationsEmitter={this.props.locationsEmitter}
                   />
                 </TouchableOpacity>
               )}

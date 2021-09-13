@@ -4,17 +4,13 @@ export default class LocationsEmitter {
   statesKey = "statesCache";
   citiesKey = "citiesCache";
 
-  constructor(filterEmitter) {
+  constructor(filterEmitter, addressEmitter) {
     this.subscribes = new Array();
     this.states = new Array();
-    this._cities = new Array();
     this.cities = new Array();
     this.filterEmitter = filterEmitter;
+    this.addressEmitter = addressEmitter;
     this._loadCache();
-    this.filterEmitter.subscribe(
-      "locationEmitter-filterCities",
-      this._getCitiesByStateId.bind(this)
-    );
   }
 
   _loadCache() {
@@ -43,7 +39,7 @@ export default class LocationsEmitter {
     SecureStore.getItemAsync(`${this.citiesKey}-${st.stateId}-${index}`).then(
       (ct) => {
         if (ct != null) {
-          this._cities.push(JSON.parse(ct));
+          this.cities.push(JSON.parse(ct));
           return true;
         } else {
           return false;
@@ -52,13 +48,11 @@ export default class LocationsEmitter {
     );
   }
 
-  _getCitiesByStateId() {
-    if (this.filterEmitter.filter.stateId) {
-      this.cities =
-        this._cities.filter(
-          (c) => c.stateId === this.filterEmitter.filter.stateId
-        ) || [];
+  getCitiesByStateId(stateId) {
+    if (stateId) {
+      return this.cities.filter((c) => c.stateId === stateId) || [];
     }
+    return [];
   }
 
   _saveStates() {
@@ -89,7 +83,6 @@ export default class LocationsEmitter {
   }
 
   _emit() {
-    this._getCitiesByStateId();
     this.subscribes.map((sub) => {
       sub.handler();
     });
@@ -103,7 +96,7 @@ export default class LocationsEmitter {
 
   setCities(ct) {
     ct.forEach((ct, index) => {
-      this._cities.push(ct);
+      this.cities.push(ct);
       SecureStore.setItemAsync(
         `${this.citiesKey}-${ct.stateId}-${index}`,
         JSON.stringify(ct)

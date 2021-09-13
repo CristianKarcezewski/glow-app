@@ -15,6 +15,7 @@ import Toast from "react-native-root-toast";
 class LocationSelect extends Component {
   constructor(props) {
     super(props);
+    this.cities = [];
     this.state = {
       search: null,
       loading: false,
@@ -53,6 +54,7 @@ class LocationSelect extends Component {
       .then(({ status, data }) => {
         if (status === 200) {
           this.props.locationsEmitter.setCities(data);
+          this.cities = data;
           this.setState({
             ...this.state,
             loading: false,
@@ -74,30 +76,30 @@ class LocationSelect extends Component {
   }
 
   _filterData() {
-    // this.setState({ ...this.state, loading: true });
     if (this.props.state) {
       let st;
       if (this.state.search) {
         st = this.props.locationsEmitter.states.filter((x) =>
           x.name.toLowerCase().includes(this.state.search.toLowerCase())
         );
-        // this.setState({ ...this.state, loading: false });
         return st;
       } else {
-        // this.setState({ ...this.state, loading: false });
         return this.props.locationsEmitter.states;
       }
     } else {
       let ct;
+      if (this.cities.length == 0) {
+        this.cities = this.props.locationsEmitter.getCitiesByStateId(
+          this.props.filterEmitter.filter.stateId
+        );
+      }
       if (this.state.search) {
-        ct = this.props.locationsEmitter.cities.filter((x) =>
+        ct = this.cities.filter((x) =>
           x.name.toLowerCase().includes(this.state.search.toLowerCase())
         );
-        // this.setState({ ...this.state, loading: false });
         return ct;
       } else {
-        // this.setState({ ...this.state, loading: false });
-        return this.props.locationsEmitter.cities;
+        return this.cities;
       }
     }
   }
@@ -105,13 +107,14 @@ class LocationSelect extends Component {
   _selectData(item) {
     if (item) {
       if (this.props.state) {
-        this.props.searchFilterEmitter.setFilter({
-          ...this.props.searchFilterEmitter.filter,
+        this.props.filterEmitter.setFilter({
+          ...this.props.filterEmitter.filter,
           stateId: item.stateId,
+          cityId: null,
         });
       } else {
-        this.props.searchFilterEmitter.setFilter({
-          ...this.props.searchFilterEmitter.filter,
+        this.props.filterEmitter.setFilter({
+          ...this.props.filterEmitter.filter,
           cityId: item.cityId,
         });
       }
@@ -123,11 +126,11 @@ class LocationSelect extends Component {
     if (this.props.locationsEmitter.states.length == 0) {
       this._handleLoadStates();
     }
-    if (
-      this.props.searchFilterEmitter.filter.stateId != null &&
-      this.props.locationsEmitter.cities.length == 0
-    ) {
-      this._handleLoadCities(this.props.searchFilterEmitter.filter.stateId);
+    this.cities = this.props.locationsEmitter.getCitiesByStateId(
+      this.props.filterEmitter.filter.stateId
+    );
+    if (this.props.filterEmitter.filter.stateId && this.cities.length == 0) {
+      this._handleLoadCities(this.props.filterEmitter.filter.stateId);
     }
   }
 
