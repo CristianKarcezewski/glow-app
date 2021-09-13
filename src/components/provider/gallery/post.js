@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Dimensions, Image } from "react-native";
-import AddComment from "./addComment";
+
 
 class Post extends Component {
   render() {

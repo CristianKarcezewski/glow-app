@@ -7,9 +7,11 @@ import {
      Dimensions,
      Platform,
     ScrollView,
+    TouchableOpacity,
     Alert
 } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 
 class AddPhoto extends Component {

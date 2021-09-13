@@ -9,6 +9,7 @@ import UserRegister from "../../auth/user-register";
 import ProviderDetailTabs from "../../provider/provider-detail-tabs";
 import ProviderFilter from "../../provider-filter";
 import ManualAddress from "../../addresses/manual-address";
+import AddPhoto from "../../provider/gallery/addPhoto";
 
 class StackNavigator extends Component {
   componentKey = "stackNavigator";
@@ -142,6 +143,16 @@ class StackNavigator extends Component {
         >
           {(props) => (
             <ManualAddress {...props} emitters={this.props.emitters} />
+          )}
+        </this.stack.Screen>
+        <this.stack.Screen
+          name="addPhoto"
+          options={{
+            title: "Adicionar Fotos",
+          }}
+        >
+          {(props) => (
+            <AddPhoto {...props} emitters={this.props.emitters} />
           )}
         </this.stack.Screen>
       </this.stack.Navigator>
