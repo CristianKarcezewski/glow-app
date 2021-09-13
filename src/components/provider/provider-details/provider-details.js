@@ -8,39 +8,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 class ProviderDetails extends Component {
-  componentKey = "providerDetails";
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      laodingComponent: true,
-      userLoggedIn: false,
-    };
-  }
-
-  _handleLogin(value) {
-    this.setState({ ...this.setState, userLoggedIn: value });
-  }
-
-  componentDidMount() {
-    this.setState({
-      ...this.state,
-      userLoggedIn: this.props.emitters.loginEmitter.userLoggedIn,
-    });
-    this.props.emitters.loginEmitter.subscribe(
-      this.componentKey,
-      this._handleLogin.bind(this)
-    );
-    setTimeout(
-      () => this.setState({ ...this.state, laodingComponent: false }),
-      2000
-    );
-  }
-
-  componentWillUnmount() {
-    this.props.emitters.loginEmitter.unsubscribe(this.componentKey);
-  }
-
   render() {
     if (this.state.laodingComponent) {
       return (

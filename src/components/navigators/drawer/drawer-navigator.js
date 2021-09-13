@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -7,11 +7,11 @@ import {
   DrawerItem,
 } from "@react-navigation/drawer";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faArrowLeft, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import ProviderRegister from "../../provider/provider-register";
 import Schedule from "../../schedule";
 import ServicePacks from "../../service-packs";
-import AddressList from "../../addresses/address-list";
+import UserTabs from "../../user/user-tabs";
 import StackNavigator from "../stack";
 
 class DrawerNavigator extends Component {
@@ -36,7 +36,7 @@ class DrawerNavigator extends Component {
               <DrawerItem
                 label="Sair"
                 onPress={() => {
-                  this.props.emitters.loginEmitter.logout();
+                  this.props.loginEmitter.logout();
                   props.navigation.goBack();
                 }}
               />
@@ -49,7 +49,30 @@ class DrawerNavigator extends Component {
           options={{ headerShown: false, title: "Início" }}
         >
           {(props) => (
-            <StackNavigator {...props} emitters={this.props.emitters} />
+            <StackNavigator
+              {...props}
+              loginEmitter={this.props.loginEmitter}
+              searchFilterEmitter={this.props.searchFilterEmitter}
+              addressesFilterEmitter={this.props.addressesFilterEmitter}
+              locationsEmitter={this.props.locationsEmitter}
+            />
+          )}
+        </this.drawer.Screen>
+
+        <this.drawer.Screen
+          name="user-details"
+          options={() => ({
+            headerShown: false,
+            title: "Minha conta",
+          })}
+        >
+          {(props) => (
+            <UserTabs
+              {...props}
+              loginEmitter={this.props.loginEmitter}
+              locationsEmitter={this.props.locationsEmitter}
+              addressesFilterEmitter={this.props.addressesFilterEmitter}
+            />
           )}
         </this.drawer.Screen>
 
@@ -113,59 +136,9 @@ class DrawerNavigator extends Component {
             ),
           })}
         />
-        <this.drawer.Screen
-          name="address-list"
-          options={({ navigation }) => ({
-            headerShown: true,
-            title: "Meus Endereços",
-            headerLeft: () => (
-              <TouchableOpacity
-                style={{ marginLeft: 20 }}
-                onPress={() => navigation.goBack()}
-              >
-                <FontAwesomeIcon
-                  icon={faArrowLeft}
-                  size={20}
-                  style={{ flex: 1 }}
-                />
-              </TouchableOpacity>
-            ),
-            headerRight: () => (
-              <TouchableOpacity
-                style={style.headerLoginButton}
-                onPress={() => navigation.navigate("manual-address")}
-              >
-                <FontAwesomeIcon icon={faPlus} color={"#fff"} size={20} />
-              </TouchableOpacity>
-            ),
-          })}
-        >
-          {(props) => <AddressList {...props} emitters={this.props.emitters} />}
-        </this.drawer.Screen>
       </this.drawer.Navigator>
     );
   }
 }
-
-const style = StyleSheet.create({
-  // image: {
-  //   width: 150,
-  //   height: 40,
-  // },
-  headerLoginButton: {
-    borderRadius: 10,
-    padding: 3,
-    width: 70,
-    height: 30,
-    marginRight: 10,
-    borderColor: "black",
-    borderWidth: 1,
-    backgroundColor: "#db382f",
-    alignItems: "center",
-    elevation: 10,
-    justifyContent: "center",
-    elevation: 20,
-  },
-});
 
 export default DrawerNavigator;

@@ -1,2 +1,2 @@
-import ProviderFilter from "./provider-filter";
-export default ProviderFilter;
+import ProviderFilterStack from "./provider-filter-stack";
+export default ProviderFilterStack;

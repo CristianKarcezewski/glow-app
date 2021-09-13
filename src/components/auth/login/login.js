@@ -39,7 +39,7 @@ class Login extends Component {
       login(Platform.OS, this.state.email, this.state.password)
         .then(({ status, data }) => {
           if (status === 200) {
-            this.props.emitters.loginEmitter.login(data.authorization);
+            this.props.loginEmitter.login(data.authorization);
             this.setState({ ...this.state, loading: false });
             this.props.navigation.popToTop();
           } else {
@@ -113,7 +113,8 @@ class Login extends Component {
                   ? style.validEmailField
                   : style.invalidEmailField
               }
-              maxLength={50}
+              maxLength={100}
+              keyboardType={"email-address"}
               placeholder="Email"
               onChangeText={(value) => this._handleEmail(value)}
               value={this.state.email}

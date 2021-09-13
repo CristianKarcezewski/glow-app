@@ -10,7 +10,6 @@ import {
 class ProviderRegister extends Component {
   constructor(props) {
     super(props);
-    console.log("provider");
   }
 
   render() {
@@ -19,7 +18,6 @@ class ProviderRegister extends Component {
         <View style={styles.cardSelectorConteiner}>
           <TextInput
             style={styles.cardSelectTextBox}
-            type="atividadeRealizada"
             placeholder="Atividade Realizada"
           />
         </View>
