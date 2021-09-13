@@ -88,17 +88,17 @@ export default class LocationsEmitter {
 
   setStates(states) {
     this.states = states;
-    this._saveStates();
+    // this._saveStates();
     this._emit();
   }
 
   setCities(ct) {
     ct.forEach((ct, index) => {
       this.cities.push(ct);
-      SecureStore.setItemAsync(
-        `${this.citiesKey}-${ct.stateId}-${index}`,
-        JSON.stringify(ct)
-      );
+      // SecureStore.setItemAsync(
+      //   `${this.citiesKey}-${ct.stateId}-${index}`,
+      //   JSON.stringify(ct)
+      // );
     });
     this._emit();
   }

@@ -49,7 +49,7 @@ class ManualAddress extends Component {
         if (status === 200) {
           this.setState({ ...this.state, loading: false });
           this.props.filterEmitter.setAddresses([data]);
-          this.props.close();
+          this.props.navigation.goBack();
         } else {
           this.setState({ ...this.state, loading: false });
           Toast.show("Erro ao salvar endereço", {

@@ -1,8 +1,8 @@
 // running frontend & backend in localhost
 // must use 'http' and local IP address
 
-//const API = "http://192.168.0.5:8080";
-const API = "http://192.168.0.21:8080";
+const API = "http://192.168.15.5:8080";
+// const API = "http://192.168.0.21:8080";
 export const VIACEP = `https://viacep.com.br/ws`;
 
 export const LOGIN_API = `${API}/login`;
