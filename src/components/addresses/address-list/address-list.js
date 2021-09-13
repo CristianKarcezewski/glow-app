@@ -135,9 +135,16 @@ class CardResult extends Component {
           <Text>{`${this.props.address.street}-${this.props.address.number}`}</Text>
         </View>
 
-        <View style={{ flex: 1 }}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
           <TouchableOpacity onPress={() => console.log(item)}>
-            <FontAwesomeIcon icon={faTrash} size={20} style={{ flex: 1 }} />
+            <FontAwesomeIcon
+              icon={faTrash}
+              color={"#db382f"}
+              size={30}
+              style={{ flex: 1 }}
+            />
           </TouchableOpacity>
         </View>
       </View>
