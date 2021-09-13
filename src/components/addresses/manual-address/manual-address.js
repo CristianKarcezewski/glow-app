@@ -34,8 +34,8 @@ class ManualAddress extends Component {
     let address = {
       name: this.state.name,
       postalCode: this.state.postalCode,
-      stateId: this.state.selectedState,
-      cityId: this.state.selectedCity,
+      stateId: this.props.filterEmitter.filter.stateId,
+      cityId: this.props.filterEmitter.filter.cityId,
       neighborhood: this.state.neighborhood,
       street: this.state.street,
       number: parseInt(this.state.number.replace(/\D/g, "")),
@@ -47,7 +47,7 @@ class ManualAddress extends Component {
       .then(({ status, data }) => {
         if (status === 200) {
           this.setState({ ...this.state, loading: false });
-          this.props.addressesEmitter.setAddresses([data]);
+          this.props.filterEmitter.setAddresses([data]);
           this.props.close();
         } else {
           this.setState({ ...this.state, loading: false });
@@ -104,8 +104,6 @@ class ManualAddress extends Component {
       });
     }
 
-    console.log(st, ct);
-
     this.props.filterEmitter.setFilter({
       ...this.props.locationsEmitter.filter,
       stateId: st?.stateId || null,
@@ -128,7 +126,7 @@ class ManualAddress extends Component {
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.log("error", err);
         this.setState({ ...this.state, loading: false });
         Toast.show("Sem conexão com internet.", {
           duration: Toast.durations.LONG,
@@ -158,7 +156,7 @@ class ManualAddress extends Component {
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.log("error", err);
         this.setState({ ...this.state, loading: false });
         Toast.show("Sem conexão com internet.", {
           duration: Toast.durations.LONG,

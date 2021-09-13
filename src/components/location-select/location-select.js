@@ -37,7 +37,7 @@ class LocationSelect extends Component {
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.log("error", err);
         this.setState({ ...this.state, loading: false });
         Toast.show("Sem conexão com internet.", {
           duration: Toast.durations.LONG,
@@ -67,7 +67,7 @@ class LocationSelect extends Component {
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.log("error", err);
         this.setState({ ...this.state, loading: false });
         Toast.show("Sem conexão com internet.", {
           duration: Toast.durations.LONG,

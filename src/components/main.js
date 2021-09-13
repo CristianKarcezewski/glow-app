@@ -13,10 +13,7 @@ class Main extends Component {
     this.loginEmitter = new LoginEmitter();
     this.searchFilterEmitter = new SearchFilterEmitter();
     this.addressesFilterEmitter = new AddressEmitter();
-    this.locationsEmitter = new LocationsEmitter(
-      this.searchFilterEmitter,
-      this.addressesFilterEmitter
-    );
+    this.locationsEmitter = new LocationsEmitter();
   }
 
   render() {

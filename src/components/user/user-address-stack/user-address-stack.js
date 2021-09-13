@@ -48,6 +48,7 @@ class UserAddressStack extends Component {
               {...props}
               loginEmitter={this.props.loginEmitter}
               filterEmitter={this.props.addressesFilterEmitter}
+              locationsEmitter={this.props.locationsEmitter}
             />
           )}
         </this.stack.Screen>

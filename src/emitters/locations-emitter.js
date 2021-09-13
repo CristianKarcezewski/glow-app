@@ -4,17 +4,15 @@ export default class LocationsEmitter {
   statesKey = "statesCache";
   citiesKey = "citiesCache";
 
-  constructor(filterEmitter, addressEmitter) {
+  constructor() {
     this.subscribes = new Array();
     this.states = new Array();
     this.cities = new Array();
-    this.filterEmitter = filterEmitter;
-    this.addressEmitter = addressEmitter;
     this._loadCache();
   }
 
   _loadCache() {
-    if (this.statesKey && this.states.length > 0) {
+    if (this.statesKey && this.states.length == 0) {
       SecureStore.getItemAsync(this.statesKey).then((states) => {
         if (states != null) {
           this.states = JSON.parse(states);
@@ -24,10 +22,19 @@ export default class LocationsEmitter {
             let flag = true;
 
             while (flag) {
-              flag = this._loadCity(st, index);
+              this._loadCity(st, index).then((ct) => {
+                if (ct != null) {
+                  this.cities.push(JSON.parse(ct));
+                  flag = true;
+                } else {
+                  flag = false;
+                }
+              });
+
               if (flag) {
-                index++;
+                index = index + 1;
               }
+              console.log(flag, index);
             }
           });
         }
@@ -36,16 +43,7 @@ export default class LocationsEmitter {
   }
 
   _loadCity(st, index) {
-    SecureStore.getItemAsync(`${this.citiesKey}-${st.stateId}-${index}`).then(
-      (ct) => {
-        if (ct != null) {
-          this.cities.push(JSON.parse(ct));
-          return true;
-        } else {
-          return false;
-        }
-      }
-    );
+    return SecureStore.getItemAsync(`${this.citiesKey}-${st.stateId}-${index}`);
   }
 
   getCitiesByStateId(stateId) {

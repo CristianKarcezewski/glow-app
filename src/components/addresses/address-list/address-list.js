@@ -18,7 +18,6 @@ class AddressList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      addresses: [],
       loading: false,
     };
   }
@@ -28,7 +27,7 @@ class AddressList extends Component {
     loadUserAddresses(Platform.OS, this.props.loginEmitter.token)
       .then(({ status, data }) => {
         if (status === 200) {
-          this.props.addressesEmitter.setAddresses(data);
+          this.props.filterEmitter.setAddresses(data);
           this.setState({ ...this.state, loading: false });
         } else {
           this.setState({ ...this.state, loading: false });
@@ -46,6 +45,12 @@ class AddressList extends Component {
       });
   }
 
+  componentDidMount() {
+    if (this.props.filterEmitter.addresses.length == 0) {
+      this._handleLoadUserAddresses();
+    }
+  }
+
   _handleAddressUpdate(addresses) {
     this.setState({ ...this.state, addresses: addresses });
   }
@@ -56,17 +61,17 @@ class AddressList extends Component {
         <ActivityIndicator
           size={"large"}
           color={"#db382f"}
-          animating={this.state.laodingComponent}
+          animating={this.state.loading}
           style={{ flex: 1 }}
         />
       );
     } else {
-      if (this.state.addresses.length > 0) {
+      if (this.props.filterEmitter.addresses.length > 0) {
         return (
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, padding: 10 }}>
             <FlatList
-              keyExtractor={(item) => item.id}
-              data={this.state.address}
+              keyExtractor={(item) => item.addressId.toString()}
+              data={this.props.filterEmitter.addresses}
               renderItem={({ item }) => (
                 <TouchableOpacity onPress={() => console.log(item)}>
                   <CardResult
@@ -99,18 +104,29 @@ class AddressList extends Component {
 class CardResult extends Component {
   constructor(props) {
     super(props);
-    this.state =
-      this.props.locationsEmitter.states.find((x) => {
-        x.uf.toLowerCase() === data.uf.toLowerCase();
-      }) || null;
-    this.city =
-      state != null
-        ? this.props.locationsEmitter
-            .getCitiesByStateId(state.stateId)
-            .find((x) =>
-              x.name.toLowerCase().includes(data.localidade.toLowerCase())
-            )
-        : null;
+    this.state = {
+      stateUf: null,
+      cityName: null,
+    };
+  }
+
+  componentDidMount() {
+    let st, ct;
+    if (this.props.address.stateId) {
+      st = this.props.locationsEmitter.states.find((x) => {
+        return x.stateId === this.props.address.stateId;
+      });
+    }
+    if (this.props.address.stateId && this.props.address.cityId) {
+      ct = this.props.locationsEmitter.getCitiesByStateId().find((x) => {
+        return x.cityId === this.props.address.cityId;
+      });
+    }
+    this.setState({
+      ...this.state,
+      stateName: st?.uf || null,
+      cityName: ct?.name || null,
+    });
   }
 
   render() {
@@ -123,10 +139,11 @@ class CardResult extends Component {
         <View style={{ flex: 4, justifyContent: "center" }}>
           <Text style={style.cardResultName}>{this.props.address.name}</Text>
           <Text style={{ fontSize: 20 }}>
-            {`${this.state ? state.uf + " - " : ""}
-            ${this.city ? city.name : ""}`}
+            {`${this.state.stateUf ? this.state.stateUf + " - " : ""}
+            ${this.state.cityName ? this.state.cityName : ""}`}
           </Text>
-          <Text>{`${this.props.address.neighbothood}-${this.props.address.street}-${this.props.address.number}`}</Text>
+          <Text>{`${this.props.address.neighborhood}`}</Text>
+          <Text>{`${this.props.address.street}-${this.props.address.number}`}</Text>
         </View>
       </View>
     );
