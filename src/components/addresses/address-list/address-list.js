@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faMapMarker } from "@fortawesome/free-solid-svg-icons";
+import { faMapMarker, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { loadUserAddresses } from "../../../services/address-service";
 import Toast from "react-native-root-toast";
 
@@ -105,30 +105,22 @@ class CardResult extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      stateUf: null,
-      cityName: null,
+      locationLabel: "",
     };
   }
 
-  componentDidMount() {
-    let st, ct;
-    if (this.props.address.stateId) {
-      st = this.props.locationsEmitter.states.find((x) => {
-        return x.stateId === this.props.address.stateId;
+  setLabel() {
+    if (this.props.address?.state?.uf && this.props.address?.city?.name) {
+      this.setState({
+        ...this.state,
+        locationLabel: `${this.props.address.state.uf} - ${this.props.address.city.name}`,
       });
     }
-    if (this.props.address.stateId && this.props.address.cityId) {
-      ct = this.props.locationsEmitter.getCitiesByStateId().find((x) => {
-        return x.cityId === this.props.address.cityId;
-      });
-    }
-    this.setState({
-      ...this.state,
-      stateName: st?.uf || null,
-      cityName: ct?.name || null,
-    });
   }
 
+  componentDidMount() {
+    this.setLabel();
+  }
   render() {
     return (
       <View style={style.cardResultContainer}>
@@ -136,14 +128,17 @@ class CardResult extends Component {
           <FontAwesomeIcon icon={faMapMarker} size={40} style={{ flex: 1 }} />
         </View>
 
-        <View style={{ flex: 4, justifyContent: "center" }}>
+        <View style={{ flex: 3, justifyContent: "center" }}>
           <Text style={style.cardResultName}>{this.props.address.name}</Text>
-          <Text style={{ fontSize: 20 }}>
-            {`${this.state.stateUf ? this.state.stateUf + " - " : ""}
-            ${this.state.cityName ? this.state.cityName : ""}`}
-          </Text>
+          <Text style={{ fontSize: 20 }}>{this.state.locationLabel}</Text>
           <Text>{`${this.props.address.neighborhood}`}</Text>
           <Text>{`${this.props.address.street}-${this.props.address.number}`}</Text>
+        </View>
+
+        <View style={{ flex: 1 }}>
+          <TouchableOpacity onPress={() => console.log(item)}>
+            <FontAwesomeIcon icon={faTrash} size={20} style={{ flex: 1 }} />
+          </TouchableOpacity>
         </View>
       </View>
     );
