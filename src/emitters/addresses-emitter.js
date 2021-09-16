@@ -43,7 +43,7 @@ export default class AddressEmitter {
       this._emit();
     }
   }
-
+  
   setFilter(filter) {
     this.filter = filter;
     this._emit();

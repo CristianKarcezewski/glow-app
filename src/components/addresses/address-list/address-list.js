@@ -10,6 +10,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMapMarker, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { loadUserAddresses } from "../../../services/address-service";
+import { removeAddress} from "../../../services/address-service";
 import Toast from "react-native-root-toast";
 
 class AddressList extends Component {
@@ -55,6 +56,7 @@ class AddressList extends Component {
     this.setState({ ...this.state, addresses: addresses });
   }
 
+
   render() {
     if (this.state.loading) {
       return (
@@ -73,10 +75,11 @@ class AddressList extends Component {
               keyExtractor={(item) => item.addressId.toString()}
               data={this.props.filterEmitter.addresses}
               renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => console.log(item)}>
+                <TouchableOpacity onPress={() => this._handleAddressUpdate(this.props.address)}>
                   <CardResult
                     address={item}
                     locationsEmitter={this.props.locationsEmitter}
+                    loginEmitter={this.props.loginEmitter}
                   />
                 </TouchableOpacity>
               )}
@@ -120,7 +123,39 @@ class CardResult extends Component {
 
   componentDidMount() {
     this.setLabel();
+  }  
+  
+  _handleAddressRemove(id) {
+    if (id) {
+      this.setState({ ...this.state, loading: true });
+
+      removeAddress(Platform.OS, this.props.loginEmitter.token, id)
+      .then(({ status, data }) => {
+        if (status === 200) {
+          this.setState({ ...this.state, loading: false });
+         let i = this.props.filterEmitter.addresses.findIndex((ad) =>{
+            ad.addressId === id
+          })
+          if (i) {
+            this.props.filterEmitter.addresses.splice(i, 1)
+          }        
+        } else {
+          this.setState({ ...this.state, loading: false });
+          Toast.show("Erro ao deletar o endereço", {
+            duration: Toast.durations.LONG,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        this.setState({ ...this.state, loading: false });
+        Toast.show("Falha ao deletar o endereço", {
+          duration: Toast.durations.LONG,
+        });
+      });     
+    }      
   }
+
   render() {
     return (
       <View style={style.cardResultContainer}>
@@ -138,7 +173,7 @@ class CardResult extends Component {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <TouchableOpacity onPress={() => console.log(item)}>
+          <TouchableOpacity onPress={() => this._handleAddressRemove(this.props.address.addressId)}>
             <FontAwesomeIcon
               icon={faTrash}
               color={"#db382f"}
