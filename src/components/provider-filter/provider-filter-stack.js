@@ -36,6 +36,7 @@ class ProviderFilterStack extends Component {
             />
           )}
         </this.stack.Screen>
+
         <this.stack.Screen
           name="select-state"
           options={{
