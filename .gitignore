@@ -1,4 +1,4 @@
+node_modules
+/.expo
+/.vscode
 /node_modules
-/.expo/web
-/.expo.packager-info.json
-.expo/packager-info.json

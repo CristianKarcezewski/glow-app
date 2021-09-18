@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, State  } from "react";
 import {
   StyleSheet,
   Text,
@@ -11,6 +11,7 @@ import {
 import Toast from "react-native-root-toast";
 import { findViacepLocation } from "../../../services/viacep-service";
 import { registerAddress } from "../../../services/address-service";
+
 
 class ManualAddress extends Component {
   componentKey = "ManualAddress";
@@ -209,6 +210,7 @@ class ManualAddress extends Component {
     this.props.filterEmitter.unsubscribe(this.componentKey);
   }
 
+ 
   render() {
     if (this.state.loading) {
       return (
@@ -220,6 +222,7 @@ class ManualAddress extends Component {
         />
       );
     } else {
+     
       return (
         <ScrollView>
           <View
@@ -342,7 +345,8 @@ class ManualAddress extends Component {
             </TouchableOpacity>
           </View>
         </ScrollView>
-      );
+      ); 
+     
     }
   }
 }
