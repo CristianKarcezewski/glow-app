@@ -34,7 +34,6 @@ export default class LocationsEmitter {
               if (flag) {
                 index = index + 1;
               }
-              console.log(flag, index);
             }
           });
         }

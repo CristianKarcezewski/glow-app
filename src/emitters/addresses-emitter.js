@@ -40,10 +40,10 @@ export default class AddressEmitter {
   setAddresses(addr) {
     if (addr?.length > 0) {
       addr.forEach((x) => this.addresses.push(x));
-      this._emit();
     }
+    this._emit();
   }
-  
+
   setFilter(filter) {
     this.filter = filter;
     this._emit();

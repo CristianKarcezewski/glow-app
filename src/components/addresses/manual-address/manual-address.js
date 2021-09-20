@@ -11,7 +11,7 @@ import {
 import Toast from "react-native-root-toast";
 import { findViacepLocation } from "../../../services/viacep-service";
 import {
-  registerAddress,
+  registerUserAddress,
   updateAddress,
 } from "../../../services/address-service";
 
@@ -34,6 +34,8 @@ class ManualAddress extends Component {
   }
 
   saveAddress() {
+    // TODO: Validar campos
+
     if (this.props.address) {
       this._handleAddressUpdate();
     } else {
@@ -48,14 +50,15 @@ class ManualAddress extends Component {
       addressId: this.props.address.addressId,
       name: this.state.name,
       postalCode: this.state.postalCode,
-      stateId: this.state.stateId,
-      cityId: this.state.cityId,
+      stateId: this.props.filterEmitter.filter.stateId,
+      cityId: this.props.filterEmitter.filter.cityId,
       neighborhood: this.state.neighborhood,
       street: this.state.street,
       number: parseInt(this.state.number.replace(/\D/g, "")),
       complement: this.state.complement,
       referencePoint: this.state.referencePoint,
     };
+    console.log(address);
     updateAddress(
       Platform.OS,
       this.props.loginEmitter.userData.authorization,
@@ -64,7 +67,10 @@ class ManualAddress extends Component {
       .then(({ status, data }) => {
         if (status === 200) {
           this.setState({ ...this.state, loading: false });
-          this.props.filterEmitter.setAddresses([data]);
+          let index = this.props.filterEmitter.addresses.findIndex(
+            (addr) => addr.addressId === data.addressId
+          );
+          this.props.filterEmitter.addresses[index] = data;
           this.props.navigation.goBack();
         } else {
           this.setState({ ...this.state, loading: false });
@@ -96,7 +102,7 @@ class ManualAddress extends Component {
       referencePoint: this.state.referencePoint,
     };
 
-    registerAddress(
+    registerUserAddress(
       Platform.OS,
       this.props.loginEmitter.userData.authorization,
       address
@@ -255,11 +261,17 @@ class ManualAddress extends Component {
   }
 
   componentDidMount() {
+    this.props.filterEmitter.setFilter({
+      ...this.props.filterEmitter.filter,
+      stateId: this.props?.address?.stateId || null,
+      cityId: this.props?.address?.cityId || null,
+    });
+
     this.props.filterEmitter.subscribe(
       this.componentKey,
       this._changeFilter.bind(this)
     );
-     
+
     if (this.props.address) {
       this.setState({
         ...this.state,
@@ -273,13 +285,7 @@ class ManualAddress extends Component {
         complement: this.props.address.complement,
         referencePoint: this.props.address.referencePoint,
       });
-      this.props.filterEmitter.setFilter({
-        ...this.props.filterEmitter.filter,
-        stateId: this.props.address.stateId,
-        cityId: this.props.address.cityId,
-      });
     }
-    console.log(this.state);
   }
 
   componentWillUnmount() {

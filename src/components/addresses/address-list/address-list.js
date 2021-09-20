@@ -9,8 +9,10 @@ import {
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMapMarker, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { loadUserAddresses } from "../../../services/address-service";
-import { removeAddress } from "../../../services/address-service";
+import {
+  loadUserAddresses,
+  removeUserAddress,
+} from "../../../services/address-service";
 import Toast from "react-native-root-toast";
 
 class AddressList extends Component {
@@ -19,18 +21,19 @@ class AddressList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      addresses: [],
       loading: false,
     };
   }
 
   _handleLoadUserAddresses() {
-    this.setState({ ...this.state, loading: true });    
+    this.setState({ ...this.state, loading: true });
 
     loadUserAddresses(
       Platform.OS,
       this.props.loginEmitter.userData.authorization
     )
-      .then(({ status, data }) => {       
+      .then(({ status, data }) => {
         if (status === 200) {
           this.props.filterEmitter.setAddresses(data);
           this.setState({ ...this.state, loading: false });
@@ -50,15 +53,30 @@ class AddressList extends Component {
       });
   }
 
-  componentDidMount() {
-    if (this.props.filterEmitter.addresses.length == 0) {
-      this._handleLoadUserAddresses();
-    }
+  setAddresses() {
+    this.setState({
+      ...this.state,
+      addresses: this.props.filterEmitter.addresses,
+    });
   }
 
   _handleAddressUpdate(address) {
     this.props.updateAddress(address);
     this.props.navigation.navigate("inform-address");
+  }
+
+  componentDidMount() {
+    this.props.filterEmitter.subscribe(
+      this.addressesListKey,
+      this.setAddresses.bind(this)
+    );
+    if (this.props.filterEmitter.addresses.length == 0) {
+      this._handleLoadUserAddresses();
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.filterEmitter.unsubscribe(this.addressesListKey);
   }
 
   render() {
@@ -72,7 +90,7 @@ class AddressList extends Component {
         />
       );
     } else {
-      if (this.props.filterEmitter.addresses.length > 0) {
+      if (this.state.addresses.length > 0) {
         return (
           <View style={{ flex: 1, padding: 10 }}>
             <FlatList
@@ -86,6 +104,7 @@ class AddressList extends Component {
                     address={item}
                     locationsEmitter={this.props.locationsEmitter}
                     loginEmitter={this.props.loginEmitter}
+                    filterEmitter={this.props.filterEmitter}
                   />
                 </TouchableOpacity>
               )}
@@ -135,16 +154,19 @@ class CardResult extends Component {
     if (id) {
       this.setState({ ...this.state, loading: true });
 
-      removeAddress(Platform.OS, this.props.loginEmitter.token, id)
+      removeUserAddress(
+        Platform.OS,
+        this.props.loginEmitter.userData.authorization,
+        id
+      )
         .then(({ status, data }) => {
           if (status === 200) {
+            let i = this.props.filterEmitter.addresses.findIndex(
+              (addr) => addr.addressId === id
+            );
+            this.props.filterEmitter.addresses.splice(i, 1);
             this.setState({ ...this.state, loading: false });
-            let i = this.props.filterEmitter.addresses.findIndex((ad) => {
-              ad.addressId === id;
-            });
-            if (i) {
-              this.props.filterEmitter.addresses.splice(i, 1);
-            }
+            this.props.filterEmitter.setAddresses();
           } else {
             this.setState({ ...this.state, loading: false });
             Toast.show("Erro ao deletar o endereço", {

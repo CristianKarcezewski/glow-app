@@ -1,8 +1,8 @@
 import {
   USER_ADDRESSES,
-  REGISTER_ADDRESS,
-  REMOVE_ADDRESS,
+  REGISTER_USER_ADDRESS,
   UPDATE_ADDRESS,
+  REMOVE_USER_ADDRESS,
 } from "./urls";
 
 export const loadUserAddresses = async (platform, authorization) => {
@@ -24,9 +24,9 @@ export const loadUserAddresses = async (platform, authorization) => {
   }
 };
 
-export const registerAddress = async (platform, authorization, address) => {
+export const registerUserAddress = async (platform, authorization, address) => {
   try {
-    let response = await fetch( REGISTER_ADDRESS, {
+    let response = await fetch(REGISTER_USER_ADDRESS, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -44,7 +44,7 @@ export const registerAddress = async (platform, authorization, address) => {
   }
 };
 
-export const updateAddress = async (platform, authorization, address ) => {
+export const updateAddress = async (platform, authorization, address) => {
   try {
     let response = await fetch(UPDATE_ADDRESS, {
       method: "PUT",
@@ -64,9 +64,9 @@ export const updateAddress = async (platform, authorization, address ) => {
   }
 };
 
-export const removeAddress = async (platform, authorization, addressId) => {
+export const removeUserAddress = async (platform, authorization, addressId) => {
   try {
-    let response = await fetch(`${REMOVE_ADDRESS}/${addressId}`, {
+    let response = await fetch(`${REMOVE_USER_ADDRESS}/${addressId}`, {
       method: "DELETE",
       headers: {
         Accept: "application/json",

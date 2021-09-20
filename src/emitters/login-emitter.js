@@ -12,7 +12,7 @@ export default class LoginEmitter {
 
   async readUserData() {
     await SecureStore.getItemAsync(this.tokenKey).then((data) => {
-      if (data != null) {      
+      if (data != null) {
         this.userData = JSON.parse(data);
         this.userLoggedIn = true;
         this.emit();
@@ -59,7 +59,7 @@ export default class LoginEmitter {
 
   login(data) {
     this.saveUserData(data);
-    this.userdata=data;
+    this.userdata = data;
     this.userLoggedIn = true;
     this.emit();
   }

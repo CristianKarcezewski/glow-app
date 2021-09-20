@@ -10,20 +10,33 @@ import AddressEmitter from "../emitters/addresses-emitter";
 class Main extends Component {
   constructor() {
     super();
-    this.loginEmitter = new LoginEmitter();
-    this.searchFilterEmitter = new SearchFilterEmitter();
-    this.addressesFilterEmitter = new AddressEmitter();
-    this.locationsEmitter = new LocationsEmitter();
+    this.state = {
+      loginEmitter: new LoginEmitter(),
+      searchFilterEmitter: new SearchFilterEmitter(),
+      addressesFilterEmitter: new AddressEmitter(),
+      locationsEmitter: new LocationsEmitter(),
+    };
+  }
+
+  _cleanMemory() {
+    this.setState({
+      ...this.state,
+      loginEmitter: new LoginEmitter(),
+      searchFilterEmitter: new SearchFilterEmitter(),
+      addressesFilterEmitter: new AddressEmitter(),
+      locationsEmitter: new LocationsEmitter(),
+    });
   }
 
   render() {
     return (
       <NavigationContainer theme={GlowTheme}>
         <DrawerNavigator
-          loginEmitter={this.loginEmitter}
-          searchFilterEmitter={this.searchFilterEmitter}
-          addressesFilterEmitter={this.addressesFilterEmitter}
-          locationsEmitter={this.locationsEmitter}
+          loginEmitter={this.state.loginEmitter}
+          searchFilterEmitter={this.state.searchFilterEmitter}
+          addressesFilterEmitter={this.state.addressesFilterEmitter}
+          locationsEmitter={this.state.locationsEmitter}
+          cleanMemory={this._cleanMemory.bind(this)}
         />
       </NavigationContainer>
     );

@@ -20,6 +20,11 @@ class DrawerNavigator extends Component {
     this.drawer = createDrawerNavigator();
   }
 
+  _clean() {
+    this.props.loginEmitter.logout();
+    this.props.cleanMemory();
+  }
+
   render() {
     return (
       <this.drawer.Navigator
@@ -33,13 +38,7 @@ class DrawerNavigator extends Component {
           return (
             <DrawerContentScrollView {...props}>
               <DrawerItemList {...props} />
-              <DrawerItem
-                label="Sair"
-                onPress={() => {
-                  this.props.loginEmitter.logout();
-                  props.navigation.goBack();
-                }}
-              />
+              <DrawerItem label="Sair" onPress={() => this._clean()} />
             </DrawerContentScrollView>
           );
         }}
