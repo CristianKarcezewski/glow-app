@@ -5,26 +5,26 @@ export default class LoginEmitter {
 
   constructor() {
     this.subscribes = [];
-    this.readToken();
-    this.token = null;
+    this.readUserData();
+    this.userData = null;
     this.userLoggedIn = false;
   }
 
-  async readToken() {
-    await SecureStore.getItemAsync(this.tokenKey).then((token) => {
-      if (token != null) {
-        this.token = token;
+  async readUserData() {
+    await SecureStore.getItemAsync(this.tokenKey).then((data) => {
+      if (data != null) {
+        this.userData = JSON.parse(data);
         this.userLoggedIn = true;
         this.emit();
       }
     });
   }
 
-  async saveToken(value) {
-    await SecureStore.setItemAsync(this.tokenKey, value);
+  async saveUserData(data) {
+    await SecureStore.setItemAsync(this.tokenKey, JSON.stringify(data));
   }
 
-  async removeToken() {
+  async removeUserData() {
     await SecureStore.deleteItemAsync(this.tokenKey);
   }
 
@@ -57,14 +57,14 @@ export default class LoginEmitter {
     });
   }
 
-  login(value) {
-    this.saveToken(value);
+  login(data) {
+    this.saveUserData(data);
     this.userLoggedIn = true;
     this.emit();
   }
 
   logout() {
-    this.removeToken();
+    this.removeUserData();
     this.userLoggedIn = false;
     this.emit();
   }
