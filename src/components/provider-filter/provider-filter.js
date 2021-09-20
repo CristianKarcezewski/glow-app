@@ -23,23 +23,10 @@ class ProviderFilter extends Component {
   }
 
   _changeFilter(filter) {
-    this.setState({ ...this.state, loading: true });
-    let st, ct;
-    if (filter.stateId) {
-      st = this.props.locationsEmitter.states.find((x) => {
-        return x.stateId === filter.stateId;
-      });
-    }
-    if (filter.stateId && filter.cityId) {
-      ct = this.props.locationsEmitter.cities.find((x) => {
-        return x.cityId === filter.cityId;
-      });
-    }
     this.setState({
       ...this.state,
-      stateName: st?.name || null,
-      cityName: ct?.name || null,
-      loading: false,
+      stateName: filter?.state?.name || null,
+      cityName: filter?.city?.name || null,
     });
   }
 

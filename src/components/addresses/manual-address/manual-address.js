@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  Platform,
 } from "react-native";
 import Toast from "react-native-root-toast";
-import { findViacepLocation } from "../../../services/viacep-service";
+import { findViacepLocation } from "../../../services/location-service";
 import {
   registerUserAddress,
   updateAddress,
@@ -24,7 +25,7 @@ class ManualAddress extends Component {
       postalCode: null,
       stateName: null,
       cityName: null,
-      neighborhood: null,
+      district: null,
       street: null,
       number: null,
       complement: null,
@@ -50,15 +51,14 @@ class ManualAddress extends Component {
       addressId: this.props.address.addressId,
       name: this.state.name,
       postalCode: this.state.postalCode,
-      stateId: this.props.filterEmitter.filter.stateId,
+      stateUf: this.props.filterEmitter.filter.stateUf,
       cityId: this.props.filterEmitter.filter.cityId,
-      neighborhood: this.state.neighborhood,
+      district: this.state.district,
       street: this.state.street,
       number: parseInt(this.state.number.replace(/\D/g, "")),
       complement: this.state.complement,
       referencePoint: this.state.referencePoint,
     };
-    console.log(address);
     updateAddress(
       Platform.OS,
       this.props.loginEmitter.userData.authorization,
@@ -93,9 +93,9 @@ class ManualAddress extends Component {
     let address = {
       name: this.state.name,
       postalCode: this.state.postalCode,
-      stateId: this.props.filterEmitter.filter.stateId,
+      stateUf: this.props.filterEmitter.filter.stateUf,
       cityId: this.props.filterEmitter.filter.cityId,
-      neighborhood: this.state.neighborhood,
+      district: this.state.district,
       street: this.state.street,
       number: parseInt(this.state.number.replace(/\D/g, "")),
       complement: this.state.complement,
@@ -108,6 +108,7 @@ class ManualAddress extends Component {
       address
     )
       .then(({ status, data }) => {
+        console.log(data);
         if (status === 200) {
           this.setState({ ...this.state, loading: false });
           this.props.filterEmitter.setAddresses([data]);
@@ -130,17 +131,14 @@ class ManualAddress extends Component {
 
   _handleViacep(postalCode) {
     this.setState({ ...this.state, loading: true });
-    findViacepLocation(postalCode)
+    findViacepLocation(
+      Platform.OS,
+      this.props.loginEmitter.userData.authorization,
+      postalCode
+    )
       .then(({ status, data }) => {
         if (status === 200) {
-          this._bindViacepLocation(data);
-          this.setState({
-            ...this.state,
-            loading: false,
-            postalCode: data.cep,
-            neighborhood: data.bairro,
-            street: data.logradouro,
-          });
+          this.setForm(data);
         } else {
           this.setState({ ...this.state, loading: false });
         }
@@ -152,26 +150,6 @@ class ManualAddress extends Component {
           duration: Toast.durations.LONG,
         });
       });
-  }
-
-  _bindViacepLocation(data) {
-    let st, ct;
-    if (data?.uf) {
-      st = this.props.locationsEmitter.states.find((x) => {
-        return x.uf.toLowerCase() === data.uf.toLowerCase();
-      });
-    }
-    if (st?.stateId && data?.localidade) {
-      ct = this.props.locationsEmitter.getCitiesByStateId().find((x) => {
-        return x.name.toLowerCase().includes(data.localidade.toLowerCase());
-      });
-    }
-
-    this.props.filterEmitter.setFilter({
-      ...this.props.locationsEmitter.filter,
-      stateId: st?.stateId || null,
-      cityId: ct?.cityId || null,
-    });
   }
 
   _handleLoadStates() {
@@ -197,12 +175,12 @@ class ManualAddress extends Component {
       });
   }
 
-  _handleLoadCities(stateId) {
+  _handleLoadCities(stateUf) {
     this.setState({
       ...this.state,
       loading: true,
     });
-    loadCities(Platform.OS, stateId)
+    loadCities(Platform.OS, stateUf)
       .then(({ status, data }) => {
         if (status === 200) {
           this.props.locationsEmitter.setCities(data);
@@ -227,7 +205,7 @@ class ManualAddress extends Component {
       });
   }
 
-  autocompleteForm(value) {
+  autocompleteByViacep(value) {
     var st = value.replace(/\D/g, "");
     if (st.length == 8) {
       this._handleViacep(st);
@@ -239,13 +217,13 @@ class ManualAddress extends Component {
   _changeFilter() {
     this.setState({ ...this.state, loading: true });
     let st, ct;
-    if (this.props.filterEmitter.filter.stateId) {
+    if (this.props.filterEmitter.filter.stateUf) {
       st = this.props.locationsEmitter.states.find((x) => {
-        return x.stateId === this.props.filterEmitter.filter.stateId;
+        return x.stateUf === this.props.filterEmitter.filter.stateUf;
       });
     }
     if (
-      this.props.filterEmitter.filter.stateId &&
+      this.props.filterEmitter.filter.stateUf &&
       this.props.filterEmitter.filter.cityId
     ) {
       ct = this.props.locationsEmitter.cities.find((x) => {
@@ -260,32 +238,37 @@ class ManualAddress extends Component {
     });
   }
 
+  setForm(address) {
+    if (address) {
+      this.props.filterEmitter.setFilter({
+        ...this.props.filterEmitter.filter,
+        stateUf: address?.stateUf || null,
+        cityId: address?.cityId || null,
+      });
+
+      this.setState({
+        ...this.state,
+        name: address?.name || null,
+        postalCode: address?.postalCode || null,
+        stateName: address?.state?.name || null,
+        cityName: address?.city?.name || null,
+        district: address?.district || null,
+        street: address?.street || null,
+        number: address?.number ? address.number.toString() : null,
+        complement: address?.complement || null,
+        referencePoint: address?.referencePoint || null,
+        loading: false,
+      });
+    }
+  }
+
   componentDidMount() {
-    this.props.filterEmitter.setFilter({
-      ...this.props.filterEmitter.filter,
-      stateId: this.props?.address?.stateId || null,
-      cityId: this.props?.address?.cityId || null,
-    });
+    this.setForm(this.props.address);
 
     this.props.filterEmitter.subscribe(
       this.componentKey,
       this._changeFilter.bind(this)
     );
-
-    if (this.props.address) {
-      this.setState({
-        ...this.state,
-        name: this.props.address.name,
-        postalCode: this.props.address.postalCode,
-        stateName: this.props.address.state.name,
-        cityName: this.props.address.city.name,
-        neighborhood: this.props.address.neighborhood,
-        street: this.props.address.street,
-        number: this.props.address.number.toString(),
-        complement: this.props.address.complement,
-        referencePoint: this.props.address.referencePoint,
-      });
-    }
   }
 
   componentWillUnmount() {
@@ -328,7 +311,7 @@ class ManualAddress extends Component {
               style={style.formField}
               maxLength={10}
               placeholder="CEP"
-              onChangeText={(value) => this.autocompleteForm(value)}
+              onChangeText={(value) => this.autocompleteByViacep(value)}
               value={this.state.postalCode}
             />
 
@@ -359,9 +342,9 @@ class ManualAddress extends Component {
               maxLength={50}
               placeholder="Bairro"
               onChangeText={(value) =>
-                this.setState({ ...this.state, neighborhood: value })
+                this.setState({ ...this.state, district: value })
               }
-              value={this.state.neighborhood}
+              value={this.state.district}
             />
 
             <TextInput

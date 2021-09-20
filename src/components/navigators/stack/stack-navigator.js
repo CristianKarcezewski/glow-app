@@ -156,8 +156,6 @@ class StackNavigator extends Component {
               />
             )}
           </this.stack.Screen>
-
-
         </this.stack.Navigator>
       );
     }

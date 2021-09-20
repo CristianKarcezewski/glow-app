@@ -5,10 +5,11 @@ export default class SearchFilterEmitter {
       skip: 0,
       take: 10,
       favorites: false,
-      stateId: null,
-      cityId: null,
+      state: null,
+      city: null,
       search: null,
     };
+    this.defaultFilter = this.filter;
   }
 
   subscribe(key, handler) {
@@ -43,5 +44,9 @@ export default class SearchFilterEmitter {
   setFilter(filter) {
     this.filter = filter;
     this._emit();
+  }
+
+  reset() {
+    this.filter = this.defaultFilter;
   }
 }

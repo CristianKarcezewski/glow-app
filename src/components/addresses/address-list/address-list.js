@@ -194,7 +194,7 @@ class CardResult extends Component {
         <View style={{ flex: 3, justifyContent: "center" }}>
           <Text style={style.cardResultName}>{this.props.address.name}</Text>
           <Text style={{ fontSize: 20 }}>{this.state.locationLabel}</Text>
-          <Text>{`${this.props.address.neighborhood}`}</Text>
+          <Text>{`${this.props.address.district}`}</Text>
           <Text>{`${this.props.address.street}-${this.props.address.number}`}</Text>
         </View>
 
@@ -228,7 +228,7 @@ const style = StyleSheet.create({
     borderColor: "#db382f",
     borderWidth: 1,
     borderRadius: 20,
-    height: 100,
+    minHeight: 100,
   },
   cardResultImage: {
     flex: 1,

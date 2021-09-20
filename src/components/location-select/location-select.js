@@ -45,12 +45,12 @@ class LocationSelect extends Component {
       });
   }
 
-  _handleLoadCities(stateId) {
+  _handleLoadCities(stateUf) {
     this.setState({
       ...this.state,
       loading: true,
     });
-    loadCities(Platform.OS, stateId)
+    loadCities(Platform.OS, stateUf)
       .then(({ status, data }) => {
         if (status === 200) {
           this.props.locationsEmitter.setCities(data);
@@ -89,8 +89,8 @@ class LocationSelect extends Component {
     } else {
       let ct;
       if (this.cities.length == 0) {
-        this.cities = this.props.locationsEmitter.getCitiesByStateId(
-          this.props.filterEmitter.filter.stateId
+        this.cities = this.props.locationsEmitter.getCitiesByStateUf(
+          this.props.filterEmitter.filter.stateUf
         );
       }
       if (this.state.search) {
@@ -109,13 +109,13 @@ class LocationSelect extends Component {
       if (this.props.state) {
         this.props.filterEmitter.setFilter({
           ...this.props.filterEmitter.filter,
-          stateId: item.stateId,
-          cityId: null,
+          state: item,
+          city: null,
         });
       } else {
         this.props.filterEmitter.setFilter({
           ...this.props.filterEmitter.filter,
-          cityId: item.cityId,
+          city: item,
         });
       }
     }
@@ -126,11 +126,11 @@ class LocationSelect extends Component {
     if (this.props.locationsEmitter.states.length == 0) {
       this._handleLoadStates();
     }
-    this.cities = this.props.locationsEmitter.getCitiesByStateId(
-      this.props.filterEmitter.filter.stateId
+    this.cities = this.props.locationsEmitter.getCitiesByStateUf(
+      this.props.filterEmitter.filter.state.uf
     );
-    if (this.props.filterEmitter.filter.stateId && this.cities.length == 0) {
-      this._handleLoadCities(this.props.filterEmitter.filter.stateId);
+    if (this.props.filterEmitter.filter.state.uf && this.cities.length == 0) {
+      this._handleLoadCities(this.props.filterEmitter.filter.state.uf);
     }
   }
 
@@ -173,7 +173,7 @@ class LocationSelect extends Component {
           </View>
           <View style={{ flex: 8, padding: 20 }}>
             <FlatList
-              keyExtractor={(item) => item.name}
+              keyExtractor={(item, index) => index.toString()}
               data={this._filterData()}
               renderItem={({ item }) => (
                 <TouchableOpacity

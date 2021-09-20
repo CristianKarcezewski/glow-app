@@ -3,9 +3,10 @@ export default class AddressEmitter {
     this.subscribes = new Array();
     this.addresses = new Array();
     this.filter = {
-      stateId: null,
+      stateUf: null,
       cityId: null,
     };
+    this.defaultFilter = this.filter;
   }
 
   subscribe(key, handler) {
@@ -47,5 +48,9 @@ export default class AddressEmitter {
   setFilter(filter) {
     this.filter = filter;
     this._emit();
+  }
+
+  reset() {
+    this.filter = this.defaultFilter;
   }
 }

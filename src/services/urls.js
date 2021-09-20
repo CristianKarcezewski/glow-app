@@ -3,15 +3,15 @@
 
 const API = "http://192.168.15.6:8080";
 // const API = "http://192.168.0.21:8080";
-export const VIACEP = `https://viacep.com.br/ws`;
 
 //users
 export const LOGIN_API = `${API}/users/login`;
 export const USER_REGISTER_API = `${API}/users`;
 
 //locations
-export const STATES_API = `${API}/states`;
-export const CITIES_API = `${API}/cities`;
+export const VIACEP = `${API}/locations/viacep`;
+export const STATES_API = `${API}/locations/states`;
+export const CITIES_API = `${API}/locations`;
 
 //addresses
 export const GET_ADDRESS = `${API}/addresses`;

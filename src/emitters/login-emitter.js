@@ -52,7 +52,7 @@ export default class LoginEmitter {
   }
 
   emit() {
-    this.subscribes.map((sub) => {
+    this.subscribes.forEach((sub) => {
       sub.handler(this.userLoggedIn);
     });
   }
@@ -68,5 +68,10 @@ export default class LoginEmitter {
     this.removeUserData();
     this.userLoggedIn = false;
     this.emit();
+  }
+
+  reset() {
+    this.userData = null;
+    this.userLoggedIn = false;
   }
 }

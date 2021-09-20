@@ -42,12 +42,12 @@ export default class LocationsEmitter {
   }
 
   _loadCity(st, index) {
-    return SecureStore.getItemAsync(`${this.citiesKey}-${st.stateId}-${index}`);
+    return SecureStore.getItemAsync(`${this.citiesKey}-${st.stateUf}-${index}`);
   }
 
-  getCitiesByStateId(stateId) {
-    if (stateId) {
-      return this.cities.filter((c) => c.stateId === stateId) || [];
+  getCitiesByStateUf(stateUf) {
+    if (stateUf) {
+      return this.cities.filter((c) => c.stateUf === stateUf) || [];
     }
     return [];
   }
@@ -95,10 +95,15 @@ export default class LocationsEmitter {
     ct.forEach((ct, index) => {
       this.cities.push(ct);
       // SecureStore.setItemAsync(
-      //   `${this.citiesKey}-${ct.stateId}-${index}`,
+      //   `${this.citiesKey}-${ct.stateUf}-${index}`,
       //   JSON.stringify(ct)
       // );
     });
     this._emit();
+  }
+
+  reset() {
+    this.states = new Array();
+    this.cities = new Array();
   }
 }

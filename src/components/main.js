@@ -19,13 +19,10 @@ class Main extends Component {
   }
 
   _cleanMemory() {
-    this.setState({
-      ...this.state,
-      loginEmitter: new LoginEmitter(),
-      searchFilterEmitter: new SearchFilterEmitter(),
-      addressesFilterEmitter: new AddressEmitter(),
-      locationsEmitter: new LocationsEmitter(),
-    });
+    this.state.loginEmitter.reset();
+    this.state.searchFilterEmitter.reset();
+    this.state.addressesFilterEmitter.reset();
+    this.state.locationsEmitter.reset();
   }
 
   render() {
