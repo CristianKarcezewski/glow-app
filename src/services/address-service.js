@@ -1,4 +1,9 @@
-import { USER_ADDRESSES, REGISTER_ADDRESS, REMOVE_ADDRESS } from "./urls";
+import {
+  USER_ADDRESSES,
+  REGISTER_ADDRESS,
+  REMOVE_ADDRESS,
+  UPDATE_ADDRESS,
+} from "./urls";
 
 export const loadUserAddresses = async (platform, authorization) => {
   try {
@@ -21,8 +26,28 @@ export const loadUserAddresses = async (platform, authorization) => {
 
 export const registerAddress = async (platform, authorization, address) => {
   try {
-    let response = await fetch(REGISTER_ADDRESS, {
+    let response = await fetch( REGISTER_ADDRESS, {
       method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        platform,
+        authorization,
+      },
+      body: JSON.stringify(address),
+    });
+
+    let json = await response.json();
+    return { status: response.status, data: json };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateAddress = async (platform, authorization, address ) => {
+  try {
+    let response = await fetch(UPDATE_ADDRESS, {
+      method: "PUT",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
