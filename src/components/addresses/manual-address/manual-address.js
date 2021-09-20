@@ -259,19 +259,19 @@ class ManualAddress extends Component {
       this.componentKey,
       this._changeFilter.bind(this)
     );
-
+     
     if (this.props.address) {
       this.setState({
         ...this.state,
-        name: this.props.address?.name,
-        postalCode: this.props.address?.postalCode,
-        stateName: this.props.address?.state.name,
-        cityName: this.props.address?.city.name,
-        neighborhood: this.props.address?.neighborhood,
-        street: this.props.address?.street,
-        number: this.props.address?.number.toString(),
-        complement: this.props.address?.complement,
-        referencePoint: this.props.address?.referencePoint,
+        name: this.props.address.name,
+        postalCode: this.props.address.postalCode,
+        stateName: this.props.address.state.name,
+        cityName: this.props.address.city.name,
+        neighborhood: this.props.address.neighborhood,
+        street: this.props.address.street,
+        number: this.props.address.number.toString(),
+        complement: this.props.address.complement,
+        referencePoint: this.props.address.referencePoint,
       });
       this.props.filterEmitter.setFilter({
         ...this.props.filterEmitter.filter,
@@ -279,6 +279,7 @@ class ManualAddress extends Component {
         cityId: this.props.address.cityId,
       });
     }
+    console.log(this.state);
   }
 
   componentWillUnmount() {

@@ -24,13 +24,13 @@ class AddressList extends Component {
   }
 
   _handleLoadUserAddresses() {
-    this.setState({ ...this.state, loading: true });
+    this.setState({ ...this.state, loading: true });    
+
     loadUserAddresses(
       Platform.OS,
       this.props.loginEmitter.userData.authorization
     )
-      .then(({ status, data }) => {
-        console.log(data);
+      .then(({ status, data }) => {       
         if (status === 200) {
           this.props.filterEmitter.setAddresses(data);
           this.setState({ ...this.state, loading: false });
