@@ -25,9 +25,12 @@ class AddressList extends Component {
 
   _handleLoadUserAddresses() {
     this.setState({ ...this.state, loading: true });
-    loadUserAddresses(Platform.OS, this.props.loginEmitter.token)
+    loadUserAddresses(
+      Platform.OS,
+      this.props.loginEmitter.userData.authorization
+    )
       .then(({ status, data }) => {
-        console.log(data)
+        console.log(data);
         if (status === 200) {
           this.props.filterEmitter.setAddresses(data);
           this.setState({ ...this.state, loading: false });
@@ -54,7 +57,7 @@ class AddressList extends Component {
   }
 
   _handleAddressUpdate(address) {
-    this.props.updateAddress(address);   
+    this.props.updateAddress(address);
     this.props.navigation.navigate("inform-address");
   }
 
@@ -77,7 +80,7 @@ class AddressList extends Component {
               data={this.props.filterEmitter.addresses}
               renderItem={({ item }) => (
                 <TouchableOpacity
-                  onPress={() => this._handleAddressUpdate(item)}                 
+                  onPress={() => this._handleAddressUpdate(item)}
                 >
                   <CardResult
                     address={item}

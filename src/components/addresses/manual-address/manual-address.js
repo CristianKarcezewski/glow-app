@@ -10,7 +10,10 @@ import {
 } from "react-native";
 import Toast from "react-native-root-toast";
 import { findViacepLocation } from "../../../services/viacep-service";
-import { registerAddress, updateAddress } from "../../../services/address-service";
+import {
+  registerAddress,
+  updateAddress,
+} from "../../../services/address-service";
 
 class ManualAddress extends Component {
   componentKey = "ManualAddress";
@@ -27,21 +30,20 @@ class ManualAddress extends Component {
       complement: null,
       referencePoint: null,
       loading: false,
-    };   
+    };
   }
 
-  saveAddress(){
-    if (this.props.address){
-      this._handleAddressUpdate()
-    }else{
-      this._handleAddressRegister()
+  saveAddress() {
+    if (this.props.address) {
+      this._handleAddressUpdate();
+    } else {
+      this._handleAddressRegister();
     }
-
   }
 
   _handleAddressUpdate() {
-    //this.setState({ ...this.state, loading: true });
-    
+    this.setState({ ...this.state, loading: true });
+
     let address = {
       addressId: this.props.address.addressId,
       name: this.state.name,
@@ -54,27 +56,30 @@ class ManualAddress extends Component {
       complement: this.state.complement,
       referencePoint: this.state.referencePoint,
     };
-       console.log(address); 
-    // updateAddress(Platform.OS, this.props.loginEmitter.token, address)
-    //   .then(({ status, data }) => {
-    //     if (status === 200) {
-    //       this.setState({ ...this.state, loading: false });
-    //       this.props.filterEmitter.setAddresses([data]);
-    //       this.props.navigation.goBack();
-    //     } else {
-    //       this.setState({ ...this.state, loading: false });
-    //       Toast.show("Erro ao atualizar endereço", {
-    //         duration: Toast.durations.LONG,
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log("error", err);
-    //     this.setState({ ...this.state, loading: false });
-    //     Toast.show("Erro ao carregar endereço", {
-    //       duration: Toast.durations.LONG,
-    //     });
-    //   });
+    updateAddress(
+      Platform.OS,
+      this.props.loginEmitter.userData.authorization,
+      address
+    )
+      .then(({ status, data }) => {
+        if (status === 200) {
+          this.setState({ ...this.state, loading: false });
+          this.props.filterEmitter.setAddresses([data]);
+          this.props.navigation.goBack();
+        } else {
+          this.setState({ ...this.state, loading: false });
+          Toast.show("Erro ao atualizar endereço", {
+            duration: Toast.durations.LONG,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        this.setState({ ...this.state, loading: false });
+        Toast.show("Erro ao carregar endereço", {
+          duration: Toast.durations.LONG,
+        });
+      });
   }
 
   _handleAddressRegister() {
@@ -91,7 +96,11 @@ class ManualAddress extends Component {
       referencePoint: this.state.referencePoint,
     };
 
-    registerAddress(Platform.OS, this.props.loginEmitter.token, address)
+    registerAddress(
+      Platform.OS,
+      this.props.loginEmitter.userData.authorization,
+      address
+    )
       .then(({ status, data }) => {
         if (status === 200) {
           this.setState({ ...this.state, loading: false });
@@ -245,11 +254,11 @@ class ManualAddress extends Component {
     });
   }
 
-  componentDidMount() {   
+  componentDidMount() {
     this.props.filterEmitter.subscribe(
       this.componentKey,
       this._changeFilter.bind(this)
-    )
+    );
 
     if (this.props.address) {
       this.setState({
@@ -258,16 +267,19 @@ class ManualAddress extends Component {
         postalCode: this.props.address?.postalCode,
         stateName: this.props.address?.state.name,
         cityName: this.props.address?.city.name,
-        neighborhood:  this.props.address?.neighborhood,
+        neighborhood: this.props.address?.neighborhood,
         street: this.props.address?.street,
         number: this.props.address?.number.toString(),
         complement: this.props.address?.complement,
-        referencePoint: this.props.address?.referencePoint,  
-      });  
-      this.props.filterEmitter.setFilter({...this.props.filterEmitter.filter,stateId:this.props.address.stateId, cityId:this.props.address.cityId})    
-    }   
-    
-  }  
+        referencePoint: this.props.address?.referencePoint,
+      });
+      this.props.filterEmitter.setFilter({
+        ...this.props.filterEmitter.filter,
+        stateId: this.props.address.stateId,
+        cityId: this.props.address.cityId,
+      });
+    }
+  }
 
   componentWillUnmount() {
     this.props.filterEmitter.unsubscribe(this.componentKey);
@@ -391,7 +403,7 @@ class ManualAddress extends Component {
               onPress={() => this.saveAddress()}
             >
               <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
-               {this.props.address? "Atualizar" : "Salvar"}
+                {this.props.address ? "Atualizar" : "Salvar"}
               </Text>
             </TouchableOpacity>
 
