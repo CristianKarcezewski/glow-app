@@ -8,13 +8,19 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 class ProviderDetails extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      loading:false
+    }
+  }
   render() {
-    if (this.state.laodingComponent) {
+    if (this.state.loading) {
       return (
         <ActivityIndicator
           size={"large"}
           color={"#db382f"}
-          animating={this.state.laodingComponent}
+          animating={this.state.loading}
           style={{ flex: 1 }}
         />
       );

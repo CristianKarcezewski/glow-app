@@ -129,7 +129,7 @@ class UserRegister extends Component {
         <ActivityIndicator
           size={"large"}
           color={"#db382f"}
-          animating={this.state.laoding}
+          animating={this.state.loading}
           style={{ flex: 1 }}
         />
       );

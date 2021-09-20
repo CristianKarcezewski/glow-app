@@ -12,12 +12,12 @@ class UserAddressStack extends Component {
     super(props);
     this.stack = createNativeStackNavigator();
     this.state = {
-      address: null,
+      address:null,
     };
   }
 
-  editAddress(address) {
-    this.setState(...this.state, address);
+  editAddress(address) {       
+    this.setState({...this.state, address});    
   }
 
   render() {
@@ -56,7 +56,7 @@ class UserAddressStack extends Component {
               loginEmitter={this.props.loginEmitter}
               filterEmitter={this.props.addressesFilterEmitter}
               locationsEmitter={this.props.locationsEmitter}
-              luluzinha={this.editAddress.bind(this)}
+              updateAddress={this.editAddress.bind(this)}
             />
           )}
         </this.stack.Screen>
@@ -75,6 +75,7 @@ class UserAddressStack extends Component {
               locationsEmitter={this.props.locationsEmitter}
               filterEmitter={this.props.addressesFilterEmitter}
               address={this.state.address}
+              updateAddress={this.editAddress.bind(this)}
             />
           )}
         </this.stack.Screen>
