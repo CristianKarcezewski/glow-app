@@ -7,6 +7,7 @@ const API = "http://192.168.15.6:8080";
 //users
 export const LOGIN_API = `${API}/users/login`;
 export const USER_REGISTER_API = `${API}/users`;
+export const GET_USER_BY_ID = `${API}/users`;
 
 //locations
 export const VIACEP = `${API}/locations/viacep`;

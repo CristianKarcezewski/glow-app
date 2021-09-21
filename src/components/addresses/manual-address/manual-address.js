@@ -51,8 +51,8 @@ class ManualAddress extends Component {
       addressId: this.props.address.addressId,
       name: this.state.name,
       postalCode: this.state.postalCode,
-      stateUf: this.props.filterEmitter.filter.stateUf,
-      cityId: this.props.filterEmitter.filter.cityId,
+      stateUf: this.props.filterEmitter.filter.state.uf,
+      cityId: this.props.filterEmitter.filter.city.cityId,
       district: this.state.district,
       street: this.state.street,
       number: parseInt(this.state.number.replace(/\D/g, "")),
@@ -93,8 +93,8 @@ class ManualAddress extends Component {
     let address = {
       name: this.state.name,
       postalCode: this.state.postalCode,
-      stateUf: this.props.filterEmitter.filter.stateUf,
-      cityId: this.props.filterEmitter.filter.cityId,
+      stateUf: this.props.filterEmitter.filter.state.uf,
+      cityId: this.props.filterEmitter.filter.city.cityId,
       district: this.state.district,
       street: this.state.street,
       number: parseInt(this.state.number.replace(/\D/g, "")),
@@ -108,7 +108,6 @@ class ManualAddress extends Component {
       address
     )
       .then(({ status, data }) => {
-        console.log(data);
         if (status === 200) {
           this.setState({ ...this.state, loading: false });
           this.props.filterEmitter.setAddresses([data]);
@@ -215,40 +214,23 @@ class ManualAddress extends Component {
   }
 
   _changeFilter() {
-    this.setState({ ...this.state, loading: true });
-    let st, ct;
-    if (this.props.filterEmitter.filter.stateUf) {
-      st = this.props.locationsEmitter.states.find((x) => {
-        return x.stateUf === this.props.filterEmitter.filter.stateUf;
-      });
-    }
-    if (
-      this.props.filterEmitter.filter.stateUf &&
-      this.props.filterEmitter.filter.cityId
-    ) {
-      ct = this.props.locationsEmitter.cities.find((x) => {
-        return x.cityId === this.props.filterEmitter.filter.cityId;
-      });
-    }
-    this.setState({
-      ...this.state,
-      stateName: st?.name || null,
-      cityName: ct?.name || null,
-      loading: false,
-    });
+    // this.setState({ ...this.state, loading: true });
+    // this.setState({
+    //   ...this.state,
+    //   stateName: this.props.filterEmitter.filter.state.name || null,
+    //   cityName: this.props.filterEmitter.filter.city.name || null,
+    //   loading: false,
+    // });
   }
 
   setForm(address) {
     if (address) {
-      this.props.filterEmitter.setFilter({
-        ...this.props.filterEmitter.filter,
-        stateUf: address?.stateUf || null,
-        cityId: address?.cityId || null,
-      });
+      this.props.filterEmitter.filter.state = address.state;
+      this.props.filterEmitter.filter.city = address.city;
 
       this.setState({
         ...this.state,
-        name: address?.name || null,
+        name: address?.name || this.state.name || null,
         postalCode: address?.postalCode || null,
         stateName: address?.state?.name || null,
         cityName: address?.city?.name || null,
