@@ -6,6 +6,7 @@ import SearchFilterEmitter from "../emitters/search-filter-emitter";
 import GlowTheme from "../shared/theme";
 import DrawerNavigator from "./navigators/drawer";
 import AddressEmitter from "../emitters/addresses-emitter";
+import ProviderEmitter from "../emitters/providers-emitter";
 
 class Main extends Component {
   constructor() {
@@ -15,6 +16,7 @@ class Main extends Component {
       searchFilterEmitter: new SearchFilterEmitter(),
       addressesFilterEmitter: new AddressEmitter(),
       locationsEmitter: new LocationsEmitter(),
+      providerEmitter: new ProviderEmitter
     };
   }
 
@@ -23,6 +25,7 @@ class Main extends Component {
     this.state.searchFilterEmitter.reset();
     this.state.addressesFilterEmitter.reset();
     this.state.locationsEmitter.reset();
+    this.state.providerEmitter.reset();
   }
 
   render() {
@@ -33,6 +36,7 @@ class Main extends Component {
           searchFilterEmitter={this.state.searchFilterEmitter}
           addressesFilterEmitter={this.state.addressesFilterEmitter}
           locationsEmitter={this.state.locationsEmitter}
+          providerEmitter={this.state.providerEmitter}
           cleanMemory={this._cleanMemory.bind(this)}
         />
       </NavigationContainer>

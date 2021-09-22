@@ -20,6 +20,7 @@ class ProviderFilter extends Component {
       favorites: false,
       loading: false,
     };
+    
   }
 
   _changeFilter(filter) {
@@ -90,6 +91,16 @@ class ProviderFilter extends Component {
               />
               <Text style={style.checkboxText}>Meus favoritos</Text>
             </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={style.locationButton}
+            onPress={() => this.props.navigation.navigate("select-provider")}
+          >
+            <Text style={{ fontSize: 20, paddingLeft: 20 }}>
+              {this.state.stateName
+                ? this.state.stateName
+                : "Selecionar Profissional"}
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity

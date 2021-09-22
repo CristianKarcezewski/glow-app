@@ -9,59 +9,27 @@ import {
   Platform,
   ActivityIndicator,
 } from "react-native";
-import { loadStates, loadCities } from "../../services/location-service";
+import { getAllProvider } from "../../services/provider-service";
 import Toast from "react-native-root-toast";
 
-class LocationSelect extends Component {
+class ProviderSelect extends Component {
   constructor(props) {
     super(props);
-    this.cities = [];
     this.state = {
-      search: null,
+      filter: null,
       loading: false,
     };
   }
-
-  _handleLoadStates() {
-    this.setState({ ...this.state, loading: true });
-    loadStates(Platform.OS)
+  _handleLoadProviders() {
+    this.setState({ ...this.state, loading: true })    
+    getAllProvider(Platform.OS)
       .then(({ status, data }) => {
         if (status === 200) {
-          this.props.locationsEmitter.setStates(data);
+          this.props.setProviders(data);
           this.setState({ ...this.state, loading: false });
         } else {
           this.setState({ ...this.state, loading: false });
-          Toast.show("Não foi possível carregar estados.", {
-            duration: Toast.durations.LONG,
-          });
-        }
-      })
-      .catch((err) => {
-        console.log("error", err);
-        this.setState({ ...this.state, loading: false });
-        Toast.show("Sem conexão com internet.", {
-          duration: Toast.durations.LONG,
-        });
-      });
-  }
-
-  _handleLoadCities(stateUf) {
-    this.setState({
-      ...this.state,
-      loading: true,
-    });
-    loadCities(Platform.OS, stateUf)
-      .then(({ status, data }) => {
-        if (status === 200) {
-          this.props.locationsEmitter.setCities(data);
-          this.cities = data;
-          this.setState({
-            ...this.state,
-            loading: false,
-          });
-        } else {
-          this.setState({ ...this.state, loading: false });
-          Toast.show("Não foi possível carregar cidades.", {
+          Toast.show("Não foi possível carregar os profissionais.", {
             duration: Toast.durations.LONG,
           });
         }
@@ -76,32 +44,9 @@ class LocationSelect extends Component {
   }
 
   _filterData() {
-    if (this.props.state) {
-      let st;
-      if (this.state.search) {
-        st = this.props.locationsEmitter.states.filter((x) =>
-          x.name.toLowerCase().includes(this.state.search.toLowerCase())
-        );
-        return st;
-      } else {
-        return this.props.locationsEmitter.states;
-      }
-    } else {
-      let ct;
-      if (this.cities.length == 0) {
-        this.cities = this.props.locationsEmitter.getCitiesByStateUf(
-          this.props.filterEmitter.filter.stateUf
-        );
-      }
-      if (this.state.search) {
-        ct = this.cities.filter((x) =>
-          x.name.toLowerCase().includes(this.state.search.toLowerCase())
-        );
-        return ct;
-      } else {
-        return this.cities;
-      }
-    }
+    return this.props.providersList?.filter((pr) =>
+      pr.name.toLowerCase().includes(this.state.filter.toLowerCase())
+    ) || [];
   }
 
   _selectData(item) {
@@ -110,27 +55,15 @@ class LocationSelect extends Component {
         this.props.filterEmitter.setFilter({
           ...this.props.filterEmitter.filter,
           state: item,
-          city: null,
-        });
-      } else {
-        this.props.filterEmitter.setFilter({
-          ...this.props.filterEmitter.filter,
-          city: item,
         });
       }
     }
     this.props.navigation.goBack();
   }
 
-  componentDidMount() {
-    if (this.props.locationsEmitter.states.length == 0) {
-      this._handleLoadStates();
-    }
-    this.cities = this.props.locationsEmitter.getCitiesByStateUf(
-      this.props.filterEmitter.filter.state.uf
-    );
-    if (this.props.filterEmitter.filter.state && this.cities.length == 0) {
-      this._handleLoadCities(this.props.filterEmitter.filter.state.uf);
+  componentDidMount() {   
+    if (this.props.providersList?.length == 0) {
+      this._handleLoadProviders();
     }
   }
 
@@ -223,4 +156,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default LocationSelect;
+export default ProviderSelect;

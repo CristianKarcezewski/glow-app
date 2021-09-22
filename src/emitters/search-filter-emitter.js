@@ -5,6 +5,7 @@ export default class SearchFilterEmitter {
       skip: 0,
       take: 10,
       favorites: false,
+      providers: null,
       state: null,
       city: null,
       search: null,

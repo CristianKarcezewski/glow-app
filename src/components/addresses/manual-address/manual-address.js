@@ -36,11 +36,39 @@ class ManualAddress extends Component {
 
   saveAddress() {
     // TODO: Validar campos
+    let flag = true;
 
-    if (this.props.address) {
-      this._handleAddressUpdate();
-    } else {
-      this._handleAddressRegister();
+    if (flag && (this.state.name == null || this.state.name === "")) {
+      Toast.show("Informe um nome para o endereço");
+      flag = false;
+    }
+    if (flag && (this.state.stateName == null || this.state.stateName === "")) {
+      Toast.show("Informe um estado");
+      flag = false;
+    }
+    if (flag && (this.state.cityName == null || this.state.cityName === "")) {
+      Toast.show("Informe uma cidade");
+      flag = false;
+    }
+    if (flag && (this.state.district == null || this.state.district === "")) {
+      Toast.show("Informe um bairro");
+      flag = false;
+    }
+    if (flag && (this.state.street == null || this.state.street === "")) {
+      Toast.show("Informe a rua");
+      flag = false;
+    }
+    if (flag && (this.state.number == null || this.state.number === "")) {
+      Toast.show("Informe um número");
+      flag = false;
+    }
+
+    if (flag) {
+      if (this.props.address) {
+        this._handleAddressUpdate();
+      } else {
+        this._handleAddressRegister();
+      }
     }
   }
 

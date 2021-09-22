@@ -150,7 +150,7 @@ class StackNavigator extends Component {
             {(props) => (
               <ProviderFilterStack
                 {...props}
-                locationsEmitter={this.props.locationsEmitter}
+                locationsEmitter={this.props.locationsEmitter}                
                 searchFilterEmitter={this.props.searchFilterEmitter}
                 toggleHeader={this.setHeader.bind(this)}
               />
