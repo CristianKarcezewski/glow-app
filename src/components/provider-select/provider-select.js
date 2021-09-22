@@ -16,17 +16,18 @@ class ProviderSelect extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      filter: null,
+      search: null,
       loading: false,
+      providersList: [],
     };
   }
+
   _handleLoadProviders() {
-    this.setState({ ...this.state, loading: true })    
+    this.setState({ ...this.state, loading: true });
     getAllProvider(Platform.OS)
       .then(({ status, data }) => {
-        if (status === 200) {
-          this.props.setProviders(data);
-          this.setState({ ...this.state, loading: false });
+        if (status === 200 && data) {
+          this.setState({ ...this.state, loading: false, providersList: data });
         } else {
           this.setState({ ...this.state, loading: false });
           Toast.show("Não foi possível carregar os profissionais.", {
@@ -44,25 +45,27 @@ class ProviderSelect extends Component {
   }
 
   _filterData() {
-    return this.props.providersList?.filter((pr) =>
-      pr.name.toLowerCase().includes(this.state.filter.toLowerCase())
-    ) || [];
+    if (this.state.search) {
+      return this.state.providersList.filter((x) =>
+        x.name.toLowerCase().includes(this.state.search.toLowerCase())
+      );
+    } else {
+      return this.state.providersList;
+    }
   }
 
   _selectData(item) {
     if (item) {
-      if (this.props.state) {
-        this.props.filterEmitter.setFilter({
-          ...this.props.filterEmitter.filter,
-          state: item,
-        });
-      }
+      this.props.filterEmitter.setFilter({
+        ...this.props.filterEmitter.filter,
+        providerType: item,
+      });
     }
     this.props.navigation.goBack();
   }
 
-  componentDidMount() {   
-    if (this.props.providersList?.length == 0) {
+  componentDidMount() {
+    if (this.state.providersList.length == 0) {
       this._handleLoadProviders();
     }
   }

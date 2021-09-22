@@ -33,8 +33,8 @@ export default class AddressEmitter {
   }
 
   _emit() {
-    this.subscribes.map((sub) => {
-      sub.handler();
+    this.subscribes.forEach((sub) => {
+      sub.handler(this.filter);
     });
   }
 

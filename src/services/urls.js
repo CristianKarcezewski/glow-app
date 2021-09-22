@@ -1,8 +1,8 @@
 // running frontend & backend in localhost
 // must use 'http' and local IP address
 
-//const API = "http://192.168.15.6:8080";
-const API = "http://192.168.0.21:8080";
+const API = "http://192.168.15.6:8080";
+// const API = "http://192.168.0.21:8080";
 
 //users
 export const LOGIN_API = `${API}/users/login`;

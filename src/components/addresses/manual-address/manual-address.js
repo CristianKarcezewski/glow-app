@@ -35,7 +35,6 @@ class ManualAddress extends Component {
   }
 
   saveAddress() {
-    // TODO: Validar campos
     let flag = true;
 
     if (flag && (this.state.name == null || this.state.name === "")) {
@@ -167,7 +166,7 @@ class ManualAddress extends Component {
         if (status === 200) {
           this.setForm(data);
         } else {
-          this.setState({ ...this.state, loading: false });
+          this.setState({ ...this.state, loading: false, postalCode });
         }
       })
       .catch((err) => {
@@ -241,27 +240,20 @@ class ManualAddress extends Component {
     }
   }
 
-  _changeFilter() {
-    // this.setState({ ...this.state, loading: true });
-    // this.setState({
-    //   ...this.state,
-    //   stateName: this.props.filterEmitter.filter.state.name || null,
-    //   cityName: this.props.filterEmitter.filter.city.name || null,
-    //   loading: false,
-    // });
+  _changeFilter(filter) {
+    this.setState({
+      ...this.state,
+      stateName: filter.state ? filter.state.name : null,
+      cityName: filter.city ? filter.city.name : null,
+    });
   }
 
   setForm(address) {
     if (address) {
-      this.props.filterEmitter.filter.state = address.state;
-      this.props.filterEmitter.filter.city = address.city;
-
       this.setState({
         ...this.state,
         name: address?.name || this.state.name || null,
         postalCode: address?.postalCode || null,
-        stateName: address?.state?.name || null,
-        cityName: address?.city?.name || null,
         district: address?.district || null,
         street: address?.street || null,
         number: address?.number ? address.number.toString() : null,
@@ -269,11 +261,17 @@ class ManualAddress extends Component {
         referencePoint: address?.referencePoint || null,
         loading: false,
       });
+
+      this.props.filterEmitter.setFilter({
+        ...this.props.filterEmitter.filter,
+        state: address.state,
+        city: address.city,
+      });
     }
   }
 
   componentDidMount() {
-    this.setForm(this.props.address);
+    this.setForm(this.props.address || null);
 
     this.props.filterEmitter.subscribe(
       this.componentKey,

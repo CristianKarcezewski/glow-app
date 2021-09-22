@@ -13,21 +13,20 @@ class ProviderFilter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      professionTypes: ["Todos", "Funileiro", "Diarista", "Eletrecista"],
-      selectedProfessionalType: 0,
+      loading: false,
+      favorites: false,
+      providerTypeName: null,
       stateName: null,
       cityName: null,
-      favorites: false,
-      loading: false,
     };
-    
   }
 
   _changeFilter(filter) {
     this.setState({
       ...this.state,
-      stateName: filter?.state?.name || null,
-      cityName: filter?.city?.name || null,
+      stateName: filter.state ? filter.state.name : null,
+      cityName: filter.city ? filter.city.name : null,
+      providerTypeName: filter.providerType ? filter.providerType.name : null,
     });
   }
 
@@ -92,14 +91,13 @@ class ProviderFilter extends Component {
               <Text style={style.checkboxText}>Meus favoritos</Text>
             </View>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={style.locationButton}
             onPress={() => this.props.navigation.navigate("select-provider")}
           >
             <Text style={{ fontSize: 20, paddingLeft: 20 }}>
-              {this.state.stateName
-                ? this.state.stateName
-                : "Selecionar Profissional"}
+              {this.state?.providerTypeName || "Selecionar Profissional"}
             </Text>
           </TouchableOpacity>
 
@@ -108,9 +106,7 @@ class ProviderFilter extends Component {
             onPress={() => this.props.navigation.navigate("select-state")}
           >
             <Text style={{ fontSize: 20, paddingLeft: 20 }}>
-              {this.state.stateName
-                ? this.state.stateName
-                : "Selecionar estado"}
+              {this.state?.stateName || "Selecionar estado"}
             </Text>
           </TouchableOpacity>
 
@@ -119,7 +115,7 @@ class ProviderFilter extends Component {
             onPress={() => this.props.navigation.navigate("select-city")}
           >
             <Text style={{ fontSize: 20, paddingLeft: 20 }}>
-              {this.state.cityName ? this.state.cityName : "Selecionar cidade"}
+              {this.state?.cityName || "Selecionar cidade"}
             </Text>
           </TouchableOpacity>
 

@@ -8,15 +8,6 @@ class ProviderFilterStack extends Component {
   constructor(props) {
     super(props);
     this.stack = createNativeStackNavigator();
-    this.state = {
-      providersList: [],
-    };
-  }
-
-  setProviders(providers) {
-    if (providers.length > 0) {
-      this.setState({ ...this.state, providersList: providers });
-    }
   }
 
   render() {
@@ -90,8 +81,6 @@ class ProviderFilterStack extends Component {
             <ProviderSelect
               {...props}
               filterEmitter={this.props.searchFilterEmitter}
-              providersList={this.state.providersList}
-              setProviders={this.setProviders.bind(this)}
             />
           )}
         </this.stack.Screen>

@@ -15,7 +15,6 @@ import Toast from "react-native-root-toast";
 class LocationSelect extends Component {
   constructor(props) {
     super(props);
-    this.cities = [];
     this.state = {
       search: null,
       loading: false,
@@ -26,7 +25,7 @@ class LocationSelect extends Component {
     this.setState({ ...this.state, loading: true });
     loadStates(Platform.OS)
       .then(({ status, data }) => {
-        if (status === 200) {
+        if (status === 200 && data) {
           this.props.locationsEmitter.setStates(data);
           this.setState({ ...this.state, loading: false });
         } else {
@@ -52,9 +51,8 @@ class LocationSelect extends Component {
     });
     loadCities(Platform.OS, stateUf)
       .then(({ status, data }) => {
-        if (status === 200) {
+        if (status === 200 && data) {
           this.props.locationsEmitter.setCities(data);
-          this.cities = data;
           this.setState({
             ...this.state,
             loading: false,
@@ -77,29 +75,22 @@ class LocationSelect extends Component {
 
   _filterData() {
     if (this.props.state) {
-      let st;
       if (this.state.search) {
-        st = this.props.locationsEmitter.states.filter((x) =>
-          x.name.toLowerCase().includes(this.state.search.toLowerCase())
+        return (
+          this.props.locationsEmitter.states.filter((x) =>
+            x.name.toLowerCase().includes(this.state.search.toLowerCase())
+          ) || []
         );
-        return st;
       } else {
         return this.props.locationsEmitter.states;
       }
     } else {
-      let ct;
-      if (this.cities.length == 0) {
-        this.cities = this.props.locationsEmitter.getCitiesByStateUf(
-          this.props.filterEmitter.filter.stateUf
-        );
-      }
       if (this.state.search) {
-        ct = this.cities.filter((x) =>
+        return this.props.locationsEmitter.cities.filter((x) =>
           x.name.toLowerCase().includes(this.state.search.toLowerCase())
         );
-        return ct;
       } else {
-        return this.cities;
+        return this.props.locationsEmitter.cities;
       }
     }
   }
@@ -123,14 +114,14 @@ class LocationSelect extends Component {
   }
 
   componentDidMount() {
-    if (this.props.locationsEmitter.states.length == 0) {
-      this._handleLoadStates();
-    }
-    this.cities = this.props.locationsEmitter.getCitiesByStateUf(
-      this.props.filterEmitter.filter.state.uf
-    );
-    if (this.props.filterEmitter.filter.state && this.cities.length == 0) {
-      this._handleLoadCities(this.props.filterEmitter.filter.state.uf);
+    if (this.props.state) {
+      if (this.props.locationsEmitter.states.length == 0) {
+        this._handleLoadStates();
+      }
+    } else {
+      if (this.props.filterEmitter.filter.state.uf) {
+        this._handleLoadCities(this.props.filterEmitter.filter.state.uf);
+      }
     }
   }
 
