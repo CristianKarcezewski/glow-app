@@ -6,6 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMapMarker, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -150,6 +151,21 @@ class CardResult extends Component {
     this.setLabel();
   }
 
+  validateRemoveAddress(id) {
+    Alert.alert(
+      "Remover endereço",
+      "Tem certeza que deseja remover este endereço?",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        { text: "OK", onPress: () => this._handleAddressRemove(id) },
+      ],
+      { cancelable: false }
+    );
+  }
+
   _handleAddressRemove(id) {
     if (id) {
       this.setState({ ...this.state, loading: true });
@@ -203,7 +219,7 @@ class CardResult extends Component {
         >
           <TouchableOpacity
             onPress={() =>
-              this._handleAddressRemove(this.props.address.addressId)
+              this.validateRemoveAddress(this.props.address.addressId)
             }
           >
             <FontAwesomeIcon

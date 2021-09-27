@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import ProviderFilter from "./provider-filter";
-import ProviderTypeSelect from "../provider-type-select";
-import LocationSelect from "../location-select/location-select";
+import { TouchableOpacity } from "react-native";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import ProviderRegister from "../provider-register";
+import ProviderTypeSelect from "../../../provider-type-select";
+import LocationSelect from "../../../location-select";
 
-class ProviderFilterStack extends Component {
+class ProviderRegisterStack extends Component {
   constructor(props) {
     super(props);
     this.stack = createNativeStackNavigator();
@@ -12,37 +15,39 @@ class ProviderFilterStack extends Component {
 
   _setProvider(providerType) {
     if (providerType) {
-      this.props.searchFilterEmitter.setFilter({
-        ...this.props.searchFilterEmitter.filter,
-        providerType: providerType,
+      this.props.registerEmitter.setProviderForm({
+        ...this.props.registerEmitter.providerForm,
+        providerType,
       });
     }
   }
 
   render() {
     return (
-      <this.stack.Navigator
-        initialRouteName="provider-filter"
-        screenListeners={({ route }) => {
-          if (route.name === "provider-filter") {
-            this.props.toggleHeader(true);
-          } else {
-            this.props.toggleHeader(false);
-          }
-        }}
-      >
+      <this.stack.Navigator initialRouteName="provider-register">
         <this.stack.Screen
-          name="provider-filter"
-          options={{
-            title: "Filtrar Profissionais",
-            headerShown: false,
-          }}
+          name="provider-register"
+          options={({ navigation }) => ({
+            title: "Cadastro de Profissional",
+            headerShown: true,
+            headerLeft: () => (
+              <TouchableOpacity
+                style={{ marginHorizontal: 10 }}
+                onPress={() => navigation.goBack()}
+              >
+                <FontAwesomeIcon
+                  icon={faArrowLeft}
+                  size={20}
+                  style={{ flex: 1 }}
+                />
+              </TouchableOpacity>
+            ),
+          })}
         >
           {(props) => (
-            <ProviderFilter
+            <ProviderRegister
               {...props}
-              locationsEmitter={this.props.locationsEmitter}
-              searchFilterEmitter={this.props.searchFilterEmitter}
+              registerEmitter={this.props.registerEmitter}
             />
           )}
         </this.stack.Screen>
@@ -73,7 +78,7 @@ class ProviderFilterStack extends Component {
             <LocationSelect
               {...props}
               locationsEmitter={this.props.locationsEmitter}
-              filterEmitter={this.props.searchFilterEmitter}
+              filterEmitter={this.props.addressesFilterEmitter}
               state={true}
             />
           )}
@@ -90,7 +95,7 @@ class ProviderFilterStack extends Component {
             <LocationSelect
               {...props}
               locationsEmitter={this.props.locationsEmitter}
-              filterEmitter={this.props.searchFilterEmitter}
+              filterEmitter={this.props.addressesFilterEmitter}
             />
           )}
         </this.stack.Screen>
@@ -99,4 +104,4 @@ class ProviderFilterStack extends Component {
   }
 }
 
-export default ProviderFilterStack;
+export default ProviderRegisterStack;
