@@ -2,7 +2,7 @@ import { GET_USER_BY_ID } from "./urls";
 
 export const getUserById = async (platform, authorization, userId) => {
   try {
-    let response = await fetch(`${GET_USER_BY_ID}/${userId}`, {
+    let response = await fetch(GET_USER_BY_ID, {
       method: "GET",
       headers: {
         Accept: "application/json",

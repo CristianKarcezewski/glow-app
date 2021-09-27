@@ -1,7 +1,12 @@
+import Constants from "expo-constants";
+const { manifest } = Constants;
+
+const API = `http://${manifest.debuggerHost.split(":").shift()}:8080`;
+
 // running frontend & backend in localhost
 // must use 'http' and local IP address
 
-const API = "http://192.168.15.6:8080";
+// const API = "http://192.168.15.6:8080";
 // const API = "http://192.168.0.21:8080";
 
 //users

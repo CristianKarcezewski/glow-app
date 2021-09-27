@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { getUserById } from "../../../services/user-service";
+import Toast from "react-native-root-toast";
 
 class UserData extends Component {
   constructor(props) {
@@ -20,20 +21,20 @@ class UserData extends Component {
     };
   }
 
+  componentDidMount() {
+    this.props.showHeader(true);
+  }
+
   fetchUser() {
     this.setState({ ...this.state, loading: true });
 
-    getUserById(
-      Platform.OS,
-      this.props.loginEmitter.userData.authorization,
-      this.props.loginEmitter.userData.id
-    )
+    getUserById(Platform.OS, this.props.loginEmitter.userData.authorization)
       .then(({ status, data }) => {
         if (status === 200) {
           this.setState({ ...this.state, loading: false, user: data });
         } else {
           this.setState({ ...this.state, loading: false });
-          Toast.show("Erro ao carregar endereços", {
+          Toast.show("Erro ao carregar dados da sua conta", {
             duration: Toast.durations.LONG,
           });
         }
@@ -41,7 +42,7 @@ class UserData extends Component {
       .catch((err) => {
         console.log("error", err);
         this.setState({ ...this.state, loading: false });
-        Toast.show("Erro ao carregar endereços", {
+        Toast.show("Erro ao carregar dados da sua conta", {
           duration: Toast.durations.LONG,
         });
       });
@@ -62,7 +63,7 @@ class UserData extends Component {
         />
       );
     } else {
-      <Text>{this.state.user.name}</Text>;
+      return <Text>{"userData"}</Text>;
     }
   }
 }
