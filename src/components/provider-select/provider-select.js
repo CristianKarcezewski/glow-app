@@ -54,13 +54,10 @@ class ProviderSelect extends Component {
     }
   }
 
-  _selectData(item) {
-    if (item) {
-      this.props.filterEmitter.setFilter({
-        ...this.props.filterEmitter.filter,
-        providerType: item,
-      });
-    }
+  _selectData(item) {    
+    if (item) {          
+      this.props.setProvider(item)
+    }   
     this.props.navigation.goBack();
   }
 

@@ -5,22 +5,49 @@ import {
   TextInput,
   View,
   TouchableHighlight,
+  TouchableOpacity,
 } from "react-native";
 
+
 class ProviderRegister extends Component {
+  componentKey = "ProviderRegisterKey";
   constructor(props) {
     super(props);
+    this.state = {
+      providerTypeName: null,
+    };
   }
 
+  _changeFilter(filter) {
+    this.setState({
+      ...this.state,
+      providerTypeName: filter.providerType ? filter.providerType.name : null,
+    });
+  }
+
+  componentDidMount() {
+    //this.props.searchFilterEmitter.subscribe(
+    //  this.componentKey,
+     this._changeFilter.bind(this)
+    //);
+ }
+
+  // componentWillUnmount() {
+  //   this.props.searchFilterEmitter.unsubscribe(this.componentKey);
+  // }
+  
   render() {
     return (
       <View style={styles.cardPrimaryConteiner}>
-        <View style={styles.cardSelectorConteiner}>
-          <TextInput
-            style={styles.cardSelectTextBox}
-            placeholder="Atividade Realizada"
-          />
-        </View>
+        <TouchableOpacity
+          style={styles.locationButton}
+          onPress={() => this.props.navigation.navigate("select-provider")}
+        >
+          <Text style={{ fontSize: 20, paddingLeft: 20 }}>
+            {this.state?.providerTypeName || "Atividade Realizada"}
+          </Text>
+        </TouchableOpacity>
+
         <View
           style={({ backgroundColor: "#fff" }, styles.cardDescritionConteiner)}
         >
@@ -131,6 +158,15 @@ const styles = StyleSheet.create({
     height: "27%",
     alignItems: "center",
     justifyContent: "center",
+  },
+  locationButton: {
+    //width: "100%",
+    borderColor: "black",
+    borderWidth: 1,
+    margin: 5,
+    padding: 5,
+    borderRadius: 15,
+    fontSize: 20,
   },
 });
 

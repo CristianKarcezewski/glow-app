@@ -8,16 +8,18 @@ import {
 } from "@react-navigation/drawer";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import ProviderRegister from "../../provider/provider-register";
 import Schedule from "../../schedule";
 import ServicePacks from "../../service-packs";
 import UserTabs from "../../user/user-tabs";
 import StackNavigator from "../stack";
+import ProviderRegisterStack from "../../provider/provider-filter-stack";
+
+
 
 class DrawerNavigator extends Component {
   constructor(props) {
     super(props);
-    this.drawer = createDrawerNavigator();
+    this.drawer = createDrawerNavigator();  
   }
 
   _clean({ navigation }) {
@@ -77,8 +79,8 @@ class DrawerNavigator extends Component {
         </this.drawer.Screen>
 
         <this.drawer.Screen
-          name="provider-register"
-          component={ProviderRegister}
+          name="ProviderRegisterStack"
+          component={ProviderRegisterStack}
           options={({ navigation }) => ({
             headerShown: true,
             title: "Torne-se um prestador",

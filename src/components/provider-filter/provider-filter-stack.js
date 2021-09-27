@@ -10,6 +10,15 @@ class ProviderFilterStack extends Component {
     this.stack = createNativeStackNavigator();
   }
 
+  _setProvider(providerType) {
+    if ( providerType){
+      this.props.filterEmitter.setFilter({
+          ...this.props.filterEmitter.filter,
+          providerType: providerType
+        });
+    }
+  }
+
   render() {
     return (
       <this.stack.Navigator
@@ -71,9 +80,9 @@ class ProviderFilterStack extends Component {
           )}
         </this.stack.Screen>
         <this.stack.Screen
-          name="select-provider"
+          name="select-provider-type"
           options={{
-            title: "Selecionar profissional",
+            title: "Selecionar tipo de profissinal",
             headerShown: true,
           }}
         >
@@ -81,6 +90,7 @@ class ProviderFilterStack extends Component {
             <ProviderSelect
               {...props}
               filterEmitter={this.props.searchFilterEmitter}
+              setProvider={this._setProvider.bind(this)}
             />
           )}
         </this.stack.Screen>
