@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ProviderSelect from "../../provider-select"
-import ProviderRegister from "../../provider/provider-filter-stack/provider-register";
+import ProviderRegister from "./provider-register";
 
 class ProviderRegisterStack extends Component {
   constructor(props) {
@@ -18,14 +18,7 @@ class ProviderRegisterStack extends Component {
   render() {
     return (
       <this.stack.Navigator
-        initialRouteName="provider-register"
-        screenListeners={({ route }) => {
-          if (route.name === "provider-register") {
-            this.props.toggleHeader(true);
-          } else {
-            this.props.toggleHeader(false);
-          }
-        }}
+        initialRouteName="provider-register"       
       >
         <this.stack.Screen
           name="provider-register"

@@ -12,12 +12,16 @@ class UserAddressStack extends Component {
     super(props);
     this.stack = createNativeStackNavigator();
     this.state = {
-      address:null,
+      address: null,
     };
   }
 
-  editAddress(address) {       
-    this.setState({...this.state, address});    
+  editAddress(address) {
+    this.setState({ ...this.state, address });
+  }
+
+  componentDidMount() {
+    this.props.showHeader(false);
   }
 
   render() {

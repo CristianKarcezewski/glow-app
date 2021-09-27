@@ -243,15 +243,23 @@ class ManualAddress extends Component {
   _changeFilter(filter) {
     this.setState({
       ...this.state,
+      name: filter?.name || this.state.name || null,
+      postalCode: filter?.postalCode || null,
+      district: filter?.district || null,
+      street: filter?.street || null,
+      number: filter?.number ? filter.number.toString() : null,
+      complement: filter?.complement || null,
+      referencePoint: filter?.referencePoint || null,
       stateName: filter.state ? filter.state.name : null,
       cityName: filter.city ? filter.city.name : null,
+      loading: false,
     });
   }
 
   setForm(address) {
     if (address) {
-      this.setState({
-        ...this.state,
+      this.props.filterEmitter.setFilter({
+        ...this.props.filterEmitter.filter,
         name: address?.name || this.state.name || null,
         postalCode: address?.postalCode || null,
         district: address?.district || null,
@@ -259,24 +267,19 @@ class ManualAddress extends Component {
         number: address?.number ? address.number.toString() : null,
         complement: address?.complement || null,
         referencePoint: address?.referencePoint || null,
-        loading: false,
-      });
-
-      this.props.filterEmitter.setFilter({
-        ...this.props.filterEmitter.filter,
-        state: address.state,
-        city: address.city,
+        state: address.state || null,
+        city: address.city || null,
       });
     }
   }
 
   componentDidMount() {
-    this.setForm(this.props.address || null);
-
     this.props.filterEmitter.subscribe(
       this.componentKey,
       this._changeFilter.bind(this)
     );
+
+    this.setForm(this.props.address || null);
   }
 
   componentWillUnmount() {

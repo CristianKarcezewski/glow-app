@@ -12,7 +12,7 @@ import Schedule from "../../schedule";
 import ServicePacks from "../../service-packs";
 import UserTabs from "../../user/user-tabs";
 import StackNavigator from "../stack";
-import ProviderRegisterStack from "../../provider/provider-filter-stack";
+import ProviderRegisterStack from "../../provider/provider-register-stack";
 
 
 

@@ -41,7 +41,9 @@ class ProviderRegister extends Component {
       <View style={styles.cardPrimaryConteiner}>
         <TouchableOpacity
           style={styles.locationButton}
-          onPress={() => this.props.navigation.navigate("select-provider")}
+          onPress={() =>
+            this.props.navigation.navigate("select-provider-type")
+          }
         >
           <Text style={{ fontSize: 20, paddingLeft: 20 }}>
             {this.state?.providerTypeName || "Atividade Realizada"}

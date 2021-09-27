@@ -3,6 +3,13 @@ export default class AddressEmitter {
     this.subscribes = new Array();
     this.addresses = new Array();
     this.filter = {
+      name: null,
+      postalCode: null,
+      district: null,
+      street: null,
+      number: null,
+      complement: null,
+      referencePoint: null,
       state: null,
       city: null,
     };
