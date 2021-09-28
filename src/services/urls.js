@@ -13,6 +13,7 @@ const API = `http://${manifest.debuggerHost.split(":").shift()}:8080`;
 export const LOGIN_API = `${API}/users/login`;
 export const USER_REGISTER_API = `${API}/users`;
 export const GET_USER_BY_ID = `${API}/users`;
+export const UPDATE_USER = `${API}/users`;
 
 //locations
 export const VIACEP = `${API}/locations/viacep`;

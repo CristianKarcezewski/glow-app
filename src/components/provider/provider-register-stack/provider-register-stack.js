@@ -7,11 +7,14 @@ class ProviderRegisterStack extends Component {
   constructor(props) {
     super(props);
     this.stack = createNativeStackNavigator();
+    this.state={
+      providerType: null
+    }
   }
 
   _setProvider(providerType) {
     if (providerType) {
-      console.log(providerType);
+      this.setState({...this.state, providerType})
     }
   }
 
@@ -27,7 +30,10 @@ class ProviderRegisterStack extends Component {
             headerShown: false,
           }}
         >
-          {(props) => <ProviderRegister {...props} />}
+          {(props) => <ProviderRegister {...props}
+          formProvider={this.state}
+          />}
+
         </this.stack.Screen>
        
         <this.stack.Screen
