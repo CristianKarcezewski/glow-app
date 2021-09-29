@@ -10,13 +10,30 @@ class ProviderFilterStack extends Component {
     this.stack = createNativeStackNavigator();
   }
 
-  _setProvider(providerType) {
+  setProvider(providerType) {
     if (providerType) {
       this.props.searchFilterEmitter.setFilter({
         ...this.props.searchFilterEmitter.filter,
         providerType: providerType,
       });
     }
+  }
+
+  setLocationState(item) {
+    if (this.props.searchFilterEmitter.filter?.state?.uf != item?.uf) {
+      this.props.searchFilterEmitter.setFilter({
+        ...this.props.searchFilterEmitter.filter,
+        state: item,
+        city: null,
+      });
+    }
+  }
+
+  setLocationCity(item) {
+    this.props.searchFilterEmitter.setFilter({
+      ...this.props.searchFilterEmitter.filter,
+      city: item,
+    });
   }
 
   render() {
@@ -41,7 +58,6 @@ class ProviderFilterStack extends Component {
           {(props) => (
             <ProviderFilter
               {...props}
-              locationsEmitter={this.props.locationsEmitter}
               searchFilterEmitter={this.props.searchFilterEmitter}
             />
           )}
@@ -57,7 +73,7 @@ class ProviderFilterStack extends Component {
           {(props) => (
             <ProviderTypeSelect
               {...props}
-              setProvider={this._setProvider.bind(this)}
+              setProvider={this.setProvider.bind(this)}
             />
           )}
         </this.stack.Screen>
@@ -72,9 +88,7 @@ class ProviderFilterStack extends Component {
           {(props) => (
             <LocationSelect
               {...props}
-              locationsEmitter={this.props.locationsEmitter}
-              filterEmitter={this.props.searchFilterEmitter}
-              state={true}
+              onSelectData={this.setLocationState.bind(this)}
             />
           )}
         </this.stack.Screen>
@@ -89,8 +103,8 @@ class ProviderFilterStack extends Component {
           {(props) => (
             <LocationSelect
               {...props}
-              locationsEmitter={this.props.locationsEmitter}
-              filterEmitter={this.props.searchFilterEmitter}
+              onSelectData={this.setLocationCity.bind(this)}
+              state={this.props.searchFilterEmitter.filter.state}
             />
           )}
         </this.stack.Screen>

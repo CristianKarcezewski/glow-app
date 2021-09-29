@@ -178,59 +178,6 @@ class ManualAddress extends Component {
       });
   }
 
-  _handleLoadStates() {
-    this.setState({ ...this.state, loading: true });
-    loadStates(Platform.OS)
-      .then(({ status, data }) => {
-        if (status === 200) {
-          this.props.locationsEmitter.setStates(data);
-          this.setState({ ...this.state, loading: false });
-        } else {
-          this.setState({ ...this.state, loading: false });
-          Toast.show("Não foi possível carregar estados.", {
-            duration: Toast.durations.LONG,
-          });
-        }
-      })
-      .catch((err) => {
-        console.log("error", err);
-        this.setState({ ...this.state, loading: false });
-        Toast.show("Sem conexão com internet.", {
-          duration: Toast.durations.LONG,
-        });
-      });
-  }
-
-  _handleLoadCities(stateUf) {
-    this.setState({
-      ...this.state,
-      loading: true,
-    });
-    loadCities(Platform.OS, stateUf)
-      .then(({ status, data }) => {
-        if (status === 200) {
-          this.props.locationsEmitter.setCities(data);
-          this.cities = data;
-          this.setState({
-            ...this.state,
-            loading: false,
-          });
-        } else {
-          this.setState({ ...this.state, loading: false });
-          Toast.show("Não foi possível carregar cidades.", {
-            duration: Toast.durations.LONG,
-          });
-        }
-      })
-      .catch((err) => {
-        console.log("error", err);
-        this.setState({ ...this.state, loading: false });
-        Toast.show("Sem conexão com internet.", {
-          duration: Toast.durations.LONG,
-        });
-      });
-  }
-
   autocompleteByViacep(value) {
     var st = value.replace(/\D/g, "");
     if (st.length == 8) {

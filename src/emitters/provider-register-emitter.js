@@ -2,6 +2,7 @@ class ProviderRegisterEmitter {
   constructor() {
     this.subscribes = new Array();
     this.providerForm = {
+      commercialName: null,
       providerType: null,
       description: null,
       state: null,
@@ -22,7 +23,7 @@ class ProviderRegisterEmitter {
     } else {
       this.subscribes.push({ key: key, handler });
     }
-    handler(this.addresses);
+    handler(this.providerForm);
   }
 
   unsubscribe(key) {

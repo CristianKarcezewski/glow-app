@@ -54,7 +54,7 @@ class DrawerNavigator extends Component {
               loginEmitter={this.props.loginEmitter}
               searchFilterEmitter={this.props.searchFilterEmitter}
               addressesFilterEmitter={this.props.addressesFilterEmitter}
-              locationsEmitter={this.props.locationsEmitter}
+              // locationsEmitter={this.props.locationsEmitter}
             />
           )}
         </this.drawer.Screen>
@@ -70,7 +70,7 @@ class DrawerNavigator extends Component {
             <UserTabs
               {...props}
               loginEmitter={this.props.loginEmitter}
-              locationsEmitter={this.props.locationsEmitter}
+              // locationsEmitter={this.props.locationsEmitter}
               addressesFilterEmitter={this.props.addressesFilterEmitter}
             />
           )}
@@ -78,12 +78,18 @@ class DrawerNavigator extends Component {
 
         <this.drawer.Screen
           name="provider-register-tabs"
-          component={ProviderregisterTabs}
           options={({ navigation }) => ({
             headerShown: false,
             title: "Torne-se um prestador",
           })}
-        />
+        >
+          {(props) => (
+            <ProviderregisterTabs
+              {...props}
+              loginEmitter={this.props.loginEmitter}
+            />
+          )}
+        </this.drawer.Screen>
 
         <this.drawer.Screen
           name="schedule"

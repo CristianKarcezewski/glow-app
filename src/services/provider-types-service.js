@@ -1,16 +1,14 @@
-import { PROVIDER_REGISTER } from "./urls";
+import { GET_PROVIDER_TYPES } from "./urls";
 
-export const registerProvider = async (platform, authorization, provider) => {
+export const getProviderTypes = async (platform) => {
   try {
-    let response = await fetch(PROVIDER_REGISTER, {
-      method: "POST",
+    let response = await fetch(GET_PROVIDER_TYPES, {
+      method: "GET",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         platform,
-        authorization,
       },
-      body: JSON.stringify(provider),
     });
 
     let json = await response.json();

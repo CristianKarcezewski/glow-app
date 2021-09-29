@@ -3,12 +3,10 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAddressCard, faComments } from "@fortawesome/free-solid-svg-icons";
 import ProviderRegisterStack from "./provider-register-stack";
-import ProviderRegisterEmitter from "../../../emitters/provider-register-emitter";
 
 class ProviderRegisterTabs extends Component {
   constructor(props) {
     super(props);
-    this.providerRegisterEmitter = new ProviderRegisterEmitter();
     this.tabs = createBottomTabNavigator();
   }
 
@@ -46,7 +44,7 @@ class ProviderRegisterTabs extends Component {
           {(props) => (
             <ProviderRegisterStack
               {...props}
-              registerEmitter={this.providerRegisterEmitter}
+              loginEmitter={this.props.loginEmitter}
             />
           )}
         </this.tabs.Screen>

@@ -28,8 +28,7 @@ export const REGISTER_USER_ADDRESS = `${API}/addresses/user`;
 export const REMOVE_USER_ADDRESS = `${API}/addresses/user`;
 
 //provider
-export const PROVIDER_REGISTER = `${API}/provider/register`;
+export const PROVIDER_REGISTER = `${API}/companies`;
 
-//provider-type
-export const PROVIDER_GET_ALL = `${API}/provider-types`;
-export const PROVIDER_GET_BY_ID = `${API}/provider-types`;
+//provider-types
+export const GET_PROVIDER_TYPES = `${API}/provider-types`;

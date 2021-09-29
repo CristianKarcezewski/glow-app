@@ -13,9 +13,12 @@ import { loadStates, loadCities } from "../../services/location-service";
 import Toast from "react-native-root-toast";
 
 class LocationSelect extends Component {
+  locationComponentKey = "locationComponentKey";
+
   constructor(props) {
     super(props);
     this.state = {
+      data: [],
       search: null,
       loading: false,
     };
@@ -26,8 +29,7 @@ class LocationSelect extends Component {
     loadStates(Platform.OS)
       .then(({ status, data }) => {
         if (status === 200 && data) {
-          this.props.locationsEmitter.setStates(data);
-          this.setState({ ...this.state, loading: false });
+          this.setState({ ...this.state, loading: false, data });
         } else {
           this.setState({ ...this.state, loading: false });
           Toast.show("Não foi possível carregar estados.", {
@@ -36,7 +38,6 @@ class LocationSelect extends Component {
         }
       })
       .catch((err) => {
-        console.log("error", err);
         this.setState({ ...this.state, loading: false });
         Toast.show("Sem conexão com internet.", {
           duration: Toast.durations.LONG,
@@ -52,10 +53,10 @@ class LocationSelect extends Component {
     loadCities(Platform.OS, stateUf)
       .then(({ status, data }) => {
         if (status === 200 && data) {
-          this.props.locationsEmitter.setCities(data);
           this.setState({
             ...this.state,
             loading: false,
+            data,
           });
         } else {
           this.setState({ ...this.state, loading: false });
@@ -77,51 +78,38 @@ class LocationSelect extends Component {
     if (this.props.state) {
       if (this.state.search) {
         return (
-          this.props.locationsEmitter.states.filter((x) =>
+          this.state.data.filter((x) =>
             x.name.toLowerCase().includes(this.state.search.toLowerCase())
           ) || []
         );
       } else {
-        return this.props.locationsEmitter.states;
+        return this.state.data;
       }
     } else {
       if (this.state.search) {
-        return this.props.locationsEmitter.cities.filter((x) =>
-          x.name.toLowerCase().includes(this.state.search.toLowerCase())
+        return (
+          this.state.data.filter((x) =>
+            x.name.toLowerCase().includes(this.state.search.toLowerCase())
+          ) || []
         );
       } else {
-        return this.props.locationsEmitter.cities;
+        return this.state.data;
       }
     }
   }
 
   _selectData(item) {
     if (item) {
-      if (this.props.state) {
-        this.props.filterEmitter.setFilter({
-          ...this.props.filterEmitter.filter,
-          state: item,
-          city: null,
-        });
-      } else {
-        this.props.filterEmitter.setFilter({
-          ...this.props.filterEmitter.filter,
-          city: item,
-        });
-      }
+      this.props.onSelectData(item);
     }
     this.props.navigation.goBack();
   }
 
   componentDidMount() {
-    if (this.props.state) {
-      if (this.props.locationsEmitter.states.length == 0) {
-        this._handleLoadStates();
-      }
+    if (this.props.state?.uf) {
+      this._handleLoadCities(this.props.state.uf);
     } else {
-      if (this.props.filterEmitter.filter.state.uf) {
-        this._handleLoadCities(this.props.filterEmitter.filter.state.uf);
-      }
+      this._handleLoadStates();
     }
   }
 

@@ -14,7 +14,7 @@ class Main extends Component {
       loginEmitter: new LoginEmitter(),
       searchFilterEmitter: new SearchFilterEmitter(),
       addressesFilterEmitter: new AddressEmitter(),
-      locationsEmitter: new LocationsEmitter(),
+      // locationsEmitter: new LocationsEmitter(),
     };
   }
 
@@ -22,7 +22,7 @@ class Main extends Component {
     this.state.loginEmitter.reset();
     this.state.searchFilterEmitter.reset();
     this.state.addressesFilterEmitter.reset();
-    this.state.locationsEmitter.reset();
+    // this.state.locationsEmitter.reset();
   }
 
   render() {
@@ -32,7 +32,7 @@ class Main extends Component {
           loginEmitter={this.state.loginEmitter}
           searchFilterEmitter={this.state.searchFilterEmitter}
           addressesFilterEmitter={this.state.addressesFilterEmitter}
-          locationsEmitter={this.state.locationsEmitter}
+          // locationsEmitter={this.state.locationsEmitter}
           cleanMemory={this._cleanMemory.bind(this)}
         />
       </NavigationContainer>

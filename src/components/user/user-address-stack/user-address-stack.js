@@ -20,6 +20,23 @@ class UserAddressStack extends Component {
     this.setState({ ...this.state, address });
   }
 
+  setLocationState(item) {
+    if (this.props.addressesFilterEmitter.filter?.state?.uf != item?.uf) {
+      this.props.addressesFilterEmitter.setFilter({
+        ...this.props.addressesFilterEmitter.filter,
+        state: item,
+        city: null,
+      });
+    }
+  }
+
+  setLocationCity(item) {
+    this.props.addressesFilterEmitter.setFilter({
+      ...this.props.addressesFilterEmitter.filter,
+      city: item,
+    });
+  }
+
   componentDidMount() {
     this.props.showHeader(false);
   }
@@ -59,7 +76,7 @@ class UserAddressStack extends Component {
               {...props}
               loginEmitter={this.props.loginEmitter}
               filterEmitter={this.props.addressesFilterEmitter}
-              locationsEmitter={this.props.locationsEmitter}
+              // locationsEmitter={this.props.locationsEmitter}
               updateAddress={this.editAddress.bind(this)}
             />
           )}
@@ -76,7 +93,7 @@ class UserAddressStack extends Component {
             <ManualAddress
               {...props}
               loginEmitter={this.props.loginEmitter}
-              locationsEmitter={this.props.locationsEmitter}
+              // locationsEmitter={this.props.locationsEmitter}
               filterEmitter={this.props.addressesFilterEmitter}
               address={this.state.address}
               updateAddress={this.editAddress.bind(this)}
@@ -94,9 +111,7 @@ class UserAddressStack extends Component {
           {(props) => (
             <LocationSelect
               {...props}
-              locationsEmitter={this.props.locationsEmitter}
-              filterEmitter={this.props.addressesFilterEmitter}
-              state={true}
+              onSelectData={this.setLocationState.bind(this)}
             />
           )}
         </this.stack.Screen>
@@ -111,8 +126,8 @@ class UserAddressStack extends Component {
           {(props) => (
             <LocationSelect
               {...props}
-              locationsEmitter={this.props.locationsEmitter}
-              filterEmitter={this.props.addressesFilterEmitter}
+              onSelectData={this.setLocationCity.bind(this)}
+              state={this.props.addressesFilterEmitter.filter.state}
             />
           )}
         </this.stack.Screen>

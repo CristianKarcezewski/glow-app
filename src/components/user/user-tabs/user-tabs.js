@@ -88,7 +88,7 @@ class UserTabs extends Component {
             <UserAddressStack
               {...props}
               loginEmitter={this.props.loginEmitter}
-              locationsEmitter={this.props.locationsEmitter}
+              // locationsEmitter={this.props.locationsEmitter}
               addressesFilterEmitter={this.props.addressesFilterEmitter}
               showHeader={this.showHeader.bind(this)}
             />

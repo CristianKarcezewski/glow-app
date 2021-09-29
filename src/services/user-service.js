@@ -21,7 +21,6 @@ export const getUserById = async (platform, authorization, userId) => {
 };
 
 export const updateUser = async (platform, authorization, user) => {
-   console.log("Update Teste", user);
   try {
     let response = await fetch(UPDATE_USER, {
       method: "PUT",

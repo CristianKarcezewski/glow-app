@@ -103,7 +103,7 @@ class AddressList extends Component {
                 >
                   <CardResult
                     address={item}
-                    locationsEmitter={this.props.locationsEmitter}
+                    // locationsEmitter={this.props.locationsEmitter}
                     loginEmitter={this.props.loginEmitter}
                     filterEmitter={this.props.filterEmitter}
                   />

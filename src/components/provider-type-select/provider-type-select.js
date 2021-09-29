@@ -9,7 +9,7 @@ import {
   Platform,
   ActivityIndicator,
 } from "react-native";
-import { getAllProvider } from "../../services/provider-service";
+import { getProviderTypes } from "../../services/provider-types-service";
 import Toast from "react-native-root-toast";
 
 class ProviderTypeSelect extends Component {
@@ -24,7 +24,7 @@ class ProviderTypeSelect extends Component {
 
   _handleLoadProviders() {
     this.setState({ ...this.state, loading: true });
-    getAllProvider(Platform.OS)
+    getProviderTypes(Platform.OS)
       .then(({ status, data }) => {
         if (status === 200 && data) {
           this.setState({
