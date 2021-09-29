@@ -8,18 +8,16 @@ import {
 } from "@react-navigation/drawer";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import StackNavigator from "../stack";
+import UserTabs from "../../user/user-tabs";
+import ProviderregisterTabs from "../../provider/provider-register-tabs";
 import Schedule from "../../schedule";
 import ServicePacks from "../../service-packs";
-import UserTabs from "../../user/user-tabs";
-import StackNavigator from "../stack";
-import ProviderRegisterStack from "../../provider/provider-register-stack";
-
-
 
 class DrawerNavigator extends Component {
   constructor(props) {
     super(props);
-    this.drawer = createDrawerNavigator();  
+    this.drawer = createDrawerNavigator();
   }
 
   _clean({ navigation }) {
@@ -79,25 +77,14 @@ class DrawerNavigator extends Component {
         </this.drawer.Screen>
 
         <this.drawer.Screen
-          name="ProviderRegisterStack"
-          component={ProviderRegisterStack}
+          name="provider-register-tabs"
+          component={ProviderregisterTabs}
           options={({ navigation }) => ({
-            headerShown: true,
+            headerShown: false,
             title: "Torne-se um prestador",
-            headerLeft: () => (
-              <TouchableOpacity
-                style={{ marginLeft: 20 }}
-                onPress={() => navigation.goBack()}
-              >
-                <FontAwesomeIcon
-                  icon={faArrowLeft}
-                  size={20}
-                  style={{ flex: 1 }}
-                />
-              </TouchableOpacity>
-            ),
           })}
         />
+
         <this.drawer.Screen
           name="schedule"
           component={Schedule}
@@ -118,6 +105,7 @@ class DrawerNavigator extends Component {
             ),
           })}
         />
+
         <this.drawer.Screen
           name="service-packs"
           component={ServicePacks}

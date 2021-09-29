@@ -9,34 +9,23 @@ import {
   Image,
   ActivityIndicator,
   Platform,
+  Alert,
 } from "react-native";
 import { getUserById, updateUser } from "../../../services/user-service";
 import Toast from "react-native-root-toast";
 import ImageIcon from "../../../assets/fotoPerfil.jpg";
 
-
-class UserData extends Component {   
+class UserData extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: false,
-      imageUser: null,
-      userId: "",
+      imageUrl: null,
       name: "",
       email: "",
-      password: "",
-      passwordCurrent: "",
-      confirmPassword: "",
       validName: true,
       validEmail: true,
-      validPassword: true,
-      validConfirmPassword: true,
-      loading: false,
     };
-  }
-
-  componentDidMount() {
-    this.props.showHeader(true);
   }
 
   fetchUser() {
@@ -45,8 +34,12 @@ class UserData extends Component {
     getUserById(Platform.OS, this.props.loginEmitter.userData.authorization)
       .then(({ status, data }) => {
         if (status === 200) {
-          this.setState({...this.state, loading: false, name:data.name, email:data.email, userId:data.userId, passwordCurrent:data.password});
-          console.log("Teste22222",this.state.passwordCurrent)
+          this.setState({
+            ...this.state,
+            loading: false,
+            name: data.name,
+            email: data.email,
+          });
         } else {
           this.setState({ ...this.state, loading: false });
           Toast.show("Erro ao carregar dados da sua conta", {
@@ -64,56 +57,40 @@ class UserData extends Component {
   }
 
   _handleUpdate() {
-    if (
-      this.state.validName &&
-      this.state.validEmail &&
-      this.state.validPassword &&
-      this.state.validConfirmPassword
-    ) {
+    if (this.state.validName && this.state.validEmail) {
       this.setState({ ...this.state, loading: true });
       let refreshUser = {
-        userId: this.state.userId,
-        name: this.state.name,
+        userName: this.state.name,
         email: this.state.email,
-        password: this.state.password,
-      };     
-      
-     updateUser( Platform.OS, this.props.loginEmitter.userData.authorization,
-      refreshUser
-    )    
-      .then(({ status, data }) => {
-        if (status === 200) {
+      };
+
+      updateUser(
+        Platform.OS,
+        this.props.loginEmitter.userData.authorization,
+        refreshUser
+      )
+        .then(({ status, data }) => {
+          if (status === 200) {
+            this.setState({
+              ...this.state,
+              loading: false,
+              name: data.name,
+              email: data.email,
+            });
+          } else {
+            this.setState({ ...this.state, loading: false });
+            Toast.show("Erro ao atualizar usário", {
+              duration: Toast.durations.LONG,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log("error", err);
           this.setState({ ...this.state, loading: false });
-          // let index = this.state.userId;
-          // this.props.filterEmitter.addresses[index] = data;
-          this.props.navigation.goBack();
-        } else {
-          this.setState({ ...this.state, loading: false });
-          Toast.show("Erro ao atualizar usário", {
+          Toast.show("Erro ao carregar usuário", {
             duration: Toast.durations.LONG,
           });
-        }
-      })
-      .catch((err) => {
-        console.log("error", err);
-        this.setState({ ...this.state, loading: false });
-        Toast.show("Erro ao carregar usuário", {
-          duration: Toast.durations.LONG,
         });
-      });  
-    }
-  }
-  
-
-  componentDidMount() {
-    this.fetchUser();
-  }
-
-  _handleName(value) {
-    if (value) {
-      this.setState({ ...this.state, name: value, validName: true });
-    } else {
-      this.setState({ ...this.state, name: value, validName: false });
     }
   }
 
@@ -155,6 +132,29 @@ class UserData extends Component {
       });
     }
   }
+  confirmUserUpdate() {
+    Alert.alert(
+      "Atualizar Usuário",
+      "Tem certeza que deseja atualizar os dados da sua conta?",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        { text: "OK", onPress: () => this._handleUpdate() },
+      ],
+      { cancelable: false }
+    );
+  }
+
+  componentWillUnmount() {
+    this.props.showHeader(false);
+  }
+
+  componentDidMount() {
+    this.props.showHeader(true);
+    this.fetchUser();
+  }
 
   render() {
     if (this.state.loading) {
@@ -172,7 +172,7 @@ class UserData extends Component {
           <TouchableOpacity style={style.imageContainer}>
             <Image
               style={style.imageLogo}
-              source={this.state.imageUser || ImageIcon}
+              source={this.state.imageUrl || ImageIcon}
             />
           </TouchableOpacity>
           <View style={style.container}>
@@ -184,7 +184,13 @@ class UserData extends Component {
               }
               maxLength={50}
               placeholder="Nome"
-              onChangeText={(value) => this._handleName(value)}
+              onChangeText={(value) =>
+                this.setState({
+                  ...this.state,
+                  name: value,
+                  validName: value.length > 0 ? true : false,
+                })
+              }
               value={this.state.name}
             />
             <TextInput
@@ -199,32 +205,9 @@ class UserData extends Component {
               onChangeText={(value) => this._handleEmail(value)}
               value={this.state.email}
             />
-
-            <TextInput
-              style={
-                this.state.validPassword
-                  ? style.validFormField
-                  : style.invalidFormField
-              }
-              secureTextEntry={true}
-              placeholder="Nova Senha"
-              onChangeText={(value) => this._handlePassword(value)}
-              value={this.state.password || this.state.passwordCurrent}
-            />
-            <TextInput
-              style={
-                this.state.validConfirmPassword
-                  ? style.validFormField
-                  : style.invalidFormField
-              }
-              secureTextEntry={true}
-              placeholder="Confirmar Senha"
-              onChangeText={(value) => this._handleCheckPassword(value)}
-              value={this.state.confirmPassword}
-            />
             <TouchableHighlight
               style={style.registerButton}
-              onPress={() => this._handleUpdate()}
+              onPress={() => this.confirmUserUpdate()}
             >
               <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
                 Atualizar
@@ -238,20 +221,20 @@ class UserData extends Component {
 }
 const style = StyleSheet.create({
   imageContainer: {
-    flex: 3,
+    flex: 2,
     alignItems: "center",
-    justifyContent: "center",   
+    justifyContent: "center",
     marginHorizontal: "30%",
     marginTop: 20,
     borderRadius: 15,
   },
   imageLogo: {
-    margin:5,
+    margin: 5,
     width: 160,
     height: 160,
   },
   container: {
-    flex: 8,
+    flex: 5,
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",

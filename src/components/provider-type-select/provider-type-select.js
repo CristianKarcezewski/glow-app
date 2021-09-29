@@ -12,13 +12,13 @@ import {
 import { getAllProvider } from "../../services/provider-service";
 import Toast from "react-native-root-toast";
 
-class ProviderSelect extends Component {
+class ProviderTypeSelect extends Component {
   constructor(props) {
     super(props);
     this.state = {
       search: null,
       loading: false,
-      providersList: [],
+      providerTypesList: [],
     };
   }
 
@@ -27,7 +27,11 @@ class ProviderSelect extends Component {
     getAllProvider(Platform.OS)
       .then(({ status, data }) => {
         if (status === 200 && data) {
-          this.setState({ ...this.state, loading: false, providersList: data });
+          this.setState({
+            ...this.state,
+            loading: false,
+            providerTypesList: data,
+          });
         } else {
           this.setState({ ...this.state, loading: false });
           Toast.show("Não foi possível carregar os profissionais.", {
@@ -46,23 +50,23 @@ class ProviderSelect extends Component {
 
   _filterData() {
     if (this.state.search) {
-      return this.state.providersList.filter((x) =>
+      return this.state.providerTypesList.filter((x) =>
         x.name.toLowerCase().includes(this.state.search.toLowerCase())
       );
     } else {
-      return this.state.providersList;
+      return this.state.providerTypesList;
     }
   }
 
-  _selectData(item) {    
-    if (item) {          
-      this.props.setProvider(item)
-    }   
+  _selectData(item) {
+    if (item) {
+      this.props.setProvider(item);
+    }
     this.props.navigation.goBack();
   }
 
   componentDidMount() {
-    if (this.state.providersList.length == 0) {
+    if (this.state.providerTypesList.length == 0) {
       this._handleLoadProviders();
     }
   }
@@ -156,4 +160,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default ProviderSelect;
+export default ProviderTypeSelect;

@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import ProviderDetails from "../provider-details";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faAddressCard,
   faComments,
   faPhotoVideo,
 } from "@fortawesome/free-solid-svg-icons";
+import ProviderDetails from "./provider-details";
 import Chat from "../chat";
 import Gallery from "../gallery";
 

@@ -93,8 +93,10 @@ class ProviderFilter extends Component {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={style.locationButton}
-            onPress={() => this.props.navigation.navigate("select-provider")}
+            style={style.selectButton}
+            onPress={() =>
+              this.props.navigation.navigate("select-provider-type")
+            }
           >
             <Text style={{ fontSize: 20, paddingLeft: 20 }}>
               {this.state?.providerTypeName || "Selecionar Profissional"}
@@ -102,7 +104,7 @@ class ProviderFilter extends Component {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={style.locationButton}
+            style={style.selectButton}
             onPress={() => this.props.navigation.navigate("select-state")}
           >
             <Text style={{ fontSize: 20, paddingLeft: 20 }}>
@@ -111,7 +113,7 @@ class ProviderFilter extends Component {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={style.locationButton}
+            style={style.selectButton}
             onPress={() => this.props.navigation.navigate("select-city")}
           >
             <Text style={{ fontSize: 20, paddingLeft: 20 }}>
@@ -127,6 +129,7 @@ class ProviderFilter extends Component {
               Aplicar
             </Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={style.buttons}
             onPress={() => this.props.navigation.goBack()}
@@ -164,7 +167,7 @@ const style = StyleSheet.create({
     alignItems: "center",
     elevation: 10,
   },
-  locationButton: {
+  selectButton: {
     width: "80%",
     borderColor: "black",
     borderWidth: 1,
