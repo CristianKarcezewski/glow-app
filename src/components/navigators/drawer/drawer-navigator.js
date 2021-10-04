@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import StackNavigator from "../stack";
 import UserTabs from "../../user/user-tabs";
-import ProviderregisterTabs from "../../provider/provider-register-tabs";
+import ProviderRegisterTabs from "../../provider/provider-register-tabs";
 import Schedule from "../../schedule";
 import ServicePacks from "../../service-packs";
 
@@ -84,7 +84,7 @@ class DrawerNavigator extends Component {
           })}
         >
           {(props) => (
-            <ProviderregisterTabs
+            <ProviderRegisterTabs
               {...props}
               loginEmitter={this.props.loginEmitter}
             />

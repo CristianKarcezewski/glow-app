@@ -8,7 +8,10 @@ import {
   Alert,
 } from "react-native";
 import Toast from "react-native-root-toast";
-import { registerProvider } from "../../../../services/provider-service";
+import {
+  registerProvider,
+  getCompanyByUser,
+} from "../../../../services/provider-service";
 
 class ProviderRegister extends Component {
   componentKey = "ProviderRegisterKey";
@@ -21,6 +24,41 @@ class ProviderRegister extends Component {
       stateName: null,
       cityName: null,
     };
+  }
+
+  fetchCompany() {
+    this.setState({ ...this.state, loading: true });
+    console.log("Get Company");
+    getCompanyByUser(
+      Platform.OS,
+      this.props.loginEmitter.userData.authorization
+    )
+      .then(({ status, data }) => {
+        if (status === 200) {
+          console.log(data);
+          if (data) {
+            this.props.registerEmitter.setProviderForm({
+              ...this.props.registerEmitter.providerForm,
+              commercialName: data.companyName,
+              providerType: data.providerType,
+              description: data.description,
+              edit: true,
+            });
+          }
+        } else {
+          this.setState({ ...this.state, loading: false });
+          Toast.show("Erro ao carregar dados da sua conta", {
+            duration: Toast.durations.LONG,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        this.setState({ ...this.state, loading: false });
+        Toast.show("Não foi possível conectar ao servidor", {
+          duration: Toast.durations.LONG,
+        });
+      });
   }
 
   _changeFilter(providerForm) {
@@ -114,12 +152,36 @@ class ProviderRegister extends Component {
       { cancelable: false }
     );
   }
-
+  stateButton() {
+    return (
+      <TouchableOpacity
+        style={styles.selectButton}
+        onPress={() => this.props.navigation.navigate("select-state")}
+      >
+        <Text style={{ fontSize: 20, paddingLeft: 20 }}>
+          {this.state?.stateName || "Estado onde atende"}
+        </Text>
+      </TouchableOpacity>
+    );
+  }
+  cityButton() {
+    return (
+      <TouchableOpacity
+        style={styles.selectButton}
+        onPress={() => this.props.navigation.navigate("select-city")}
+      >
+        <Text style={{ fontSize: 20, paddingLeft: 20 }}>
+          {this.state?.cityName || "Cidade onde atende"}
+        </Text>
+      </TouchableOpacity>
+    );
+  }
   componentDidMount() {
     this.props.registerEmitter.subscribe(
       this.componentKey,
       this._changeFilter.bind(this)
     );
+   this.fetchCompany();
   }
 
   componentWillUnmount() {
@@ -170,31 +232,16 @@ class ProviderRegister extends Component {
             value={this.state.description}
           />
         </View>
-
-        <TouchableOpacity
-          style={styles.selectButton}
-          onPress={() => this.props.navigation.navigate("select-state")}
-        >
-          <Text style={{ fontSize: 20, paddingLeft: 20 }}>
-            {this.state?.stateName || "Estado onde atende"}
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.selectButton}
-          onPress={() => this.props.navigation.navigate("select-city")}
-        >
-          <Text style={{ fontSize: 20, paddingLeft: 20 }}>
-            {this.state?.cityName || "Cidade onde atende"}
-          </Text>
-        </TouchableOpacity>
-
+        {this.props.registerEmitter.providerForm.edit ? null : this.stateButton()}
+        {this.props.registerEmitter.providerForm.edit ? null : this.cityButton()}
         <TouchableOpacity
           style={{ ...styles.buttons, backgroundColor: "#db382f" }}
           onPress={() => this.saveProvider()}
         >
           <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
-            Cadastrar
+            {this.props.registerEmitter.providerForm.edit
+              ? "Atualizar"
+              : "Cadastrar"}
           </Text>
         </TouchableOpacity>
 

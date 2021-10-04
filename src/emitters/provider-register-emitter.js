@@ -8,6 +8,7 @@ class ProviderRegisterEmitter {
       state: null,
       city: null,
       dailyWork: new Array(),
+      edit: false,
     };
   }
 
