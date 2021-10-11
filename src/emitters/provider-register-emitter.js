@@ -2,14 +2,16 @@ class ProviderRegisterEmitter {
   constructor() {
     this.subscribes = new Array();
     this.providerForm = {
+      companyId: null,
       commercialName: null,
       providerType: null,
       description: null,
       state: null,
       city: null,
       dailyWork: new Array(),
-      edit: false,
     };
+
+    this.initialState = this.providerForm;
   }
 
   subscribe(key, handler) {
@@ -46,6 +48,9 @@ class ProviderRegisterEmitter {
       this.providerForm = form;
     }
     this._emit();
+  }
+  reset() {    
+    this.providerForm = this.initialState;    
   }
 }
 

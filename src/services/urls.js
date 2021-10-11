@@ -30,6 +30,7 @@ export const REMOVE_USER_ADDRESS = `${API}/addresses/user`;
 //provider
 export const PROVIDER_REGISTER = `${API}/companies`;
 export const GET_COMPANY_BY_USER = `${API}/companies/user`;
+export const UPDATE_PROVIDER = `${API}/companies`;
 
 //provider-types
 export const GET_PROVIDER_TYPES = `${API}/provider-types`;

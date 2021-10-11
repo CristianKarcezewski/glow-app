@@ -6,28 +6,26 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import ProviderRegister from "../provider-register";
 import ProviderTypeSelect from "../../../provider-type-select";
 import LocationSelect from "../../../location-select";
-import ProviderRegisterEmitter from "../../../../emitters/provider-register-emitter";
 
 class ProviderRegisterStack extends Component {
   constructor(props) {
     super(props);
-    this.stack = createNativeStackNavigator();
-    this.providerRegisterEmitter = new ProviderRegisterEmitter();
+    this.stack = createNativeStackNavigator();    
   }
 
   setProvider(providerType) {
     if (providerType) {
-      this.providerRegisterEmitter.setProviderForm({
-        ...this.providerRegisterEmitter.providerForm,
+      this.props.registerEmitter.setProviderForm({
+        ...this.props.registerEmitter.providerForm,
         providerType,
       });
     }
   }
 
   setLocationState(item) {
-    if (this.providerRegisterEmitter.providerForm.state?.uf != item?.uf) {
-      this.providerRegisterEmitter.setProviderForm({
-        ...this.providerRegisterEmitter.providerForm,
+    if (this.props.registerEmitter.providerForm.state?.uf != item?.uf) {
+      this.props.registerEmitter.setProviderForm({
+        ...this.props.registerEmitter.providerForm,
         state: item,
         city: null,
       });
@@ -35,8 +33,8 @@ class ProviderRegisterStack extends Component {
   }
 
   setLocationCity(item) {
-    this.providerRegisterEmitter.setProviderForm({
-      ...this.providerRegisterEmitter.providerForm,
+    this.props.registerEmitter.setProviderForm({
+      ...this.props.registerEmitter.providerForm,
       city: item,
     });
   }
@@ -67,7 +65,7 @@ class ProviderRegisterStack extends Component {
             <ProviderRegister
               {...props}
               loginEmitter={this.props.loginEmitter}
-              registerEmitter={this.providerRegisterEmitter}
+              registerEmitter={this.props.registerEmitter}
             />
           )}
         </this.stack.Screen>
@@ -113,7 +111,7 @@ class ProviderRegisterStack extends Component {
             <LocationSelect
               {...props}
               onSelectData={this.setLocationCity.bind(this)}
-              state={this.providerRegisterEmitter.providerForm.state}
+              state={this.props.registerEmitter.providerForm.state}
             />
           )}
         </this.stack.Screen>

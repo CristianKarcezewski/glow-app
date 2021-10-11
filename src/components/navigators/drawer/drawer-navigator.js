@@ -21,6 +21,7 @@ class DrawerNavigator extends Component {
   }
 
   _clean({ navigation }) {
+    console.log("CLEAR")
     this.props.loginEmitter.logout();
     this.props.cleanMemory();
     navigation.closeDrawer();
@@ -87,6 +88,7 @@ class DrawerNavigator extends Component {
             <ProviderRegisterTabs
               {...props}
               loginEmitter={this.props.loginEmitter}
+              providerRegisterEmitter={this.props.providerRegisterEmitter}
             />
           )}
         </this.drawer.Screen>

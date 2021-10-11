@@ -58,10 +58,10 @@ export default class LoginEmitter {
   }
 
   login(data) {
-    this.saveUserData(data);
     this.userdata = data;
     this.userLoggedIn = true;
     this.emit();
+    this.saveUserData(data);
   }
 
   logout() {

@@ -11,6 +11,7 @@ import Toast from "react-native-root-toast";
 import {
   registerProvider,
   getCompanyByUser,
+  updateProvider,
 } from "../../../../services/provider-service";
 
 class ProviderRegister extends Component {
@@ -19,7 +20,7 @@ class ProviderRegister extends Component {
     super(props);
     this.state = {
       commercialName: null,
-      providerTypeName: null,
+      providerType: null,
       description: null,
       stateName: null,
       cityName: null,
@@ -28,22 +29,14 @@ class ProviderRegister extends Component {
 
   fetchCompany() {
     this.setState({ ...this.state, loading: true });
-    console.log("Get Company");
     getCompanyByUser(
       Platform.OS,
       this.props.loginEmitter.userData.authorization
     )
       .then(({ status, data }) => {
         if (status === 200) {
-          console.log(data);
           if (data) {
-            this.props.registerEmitter.setProviderForm({
-              ...this.props.registerEmitter.providerForm,
-              commercialName: data.companyName,
-              providerType: data.providerType,
-              description: data.description,
-              edit: true,
-            });
+            this.setForm(data);
           }
         } else {
           this.setState({ ...this.state, loading: false });
@@ -67,9 +60,7 @@ class ProviderRegister extends Component {
       commercialName:
         providerForm.commercialName || this.state.commercialName || null,
       description: providerForm.description || this.state.description || null,
-      providerTypeName: providerForm?.providerType
-        ? providerForm.providerType.name
-        : null,
+      providerType: providerForm.providerType || null,
       stateName: providerForm.state?.name || null,
       cityName: providerForm.city?.name || null,
     });
@@ -87,32 +78,82 @@ class ProviderRegister extends Component {
     }
     if (
       flag &&
-      (this.state.providerTypeName == null ||
-        this.state.providerTypeName === "")
+      (this.state.providerType.name == null ||
+        this.state.providerType.name === "")
     ) {
       Toast.show("Selecione um ramo de atividade");
       flag = false;
     }
-    if (flag && (this.state.stateName == null || this.state.stateName === "")) {
-      Toast.show("Informe uma cidade");
+    if (
+      !this.props.registerEmitter.providerForm.companyId &&
+      flag &&
+      (this.state.stateName == null || this.state.stateName === "")
+    ) {
+      Toast.show("Informe uma estado");
       flag = false;
     }
-    if (flag && (this.state.cityName == null || this.state.cityName === "")) {
+    if (
+      !this.props.registerEmitter.providerForm.companyId &&
+      flag &&
+      (this.state.stateName == null || this.state.cityName === "")
+    ) {
       Toast.show("Informe uma cidade");
       flag = false;
     }
 
     if (flag) {
-      this.handleProviderRegister();
+      if (this.props.registerEmitter.providerForm.companyId) {
+        this.handleProviderUpdate();
+      } else {
+        this.handleProviderRegister();
+      }
     }
+  }
+
+  handleProviderUpdate() {
+    this.setState({ ...this.state, loading: true });
+
+    let provider = {
+      companyId: this.props.registerEmitter.providerForm.companyId,
+      companyName: this.state.commercialName,
+      providerTypeId: this.state.providerType.providerTypeId,
+      description: this.state.description,
+    };
+
+    updateProvider(
+      Platform.OS,
+      this.props.loginEmitter.userData.authorization,
+      provider
+    )
+      .then(({ status, data }) => {
+        if (status === 200) {
+          if (data) {
+            Toast.show("Informações Atualizadas!", {
+              duration: Toast.durations.LONG,
+            });
+            this.setForm(data);
+          }
+        } else {
+          this.setState({ ...this.state, loading: false });
+          Toast.show("Erro ao atualizar fornecedor", {
+            duration: Toast.durations.LONG,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        this.setState({ ...this.state, loading: false });
+        Toast.show("Erro de conexão com cadastro de fornecedor", {
+          duration: Toast.durations.LONG,
+        });
+      });
   }
 
   handleProviderRegister() {
     this.setState({ ...this.state, loading: true });
     let provider = {
       companyName: this.state.commercialName,
-      providerTypeId:
-        this.props.registerEmitter.providerForm.providerType.providerTypeId,
+      providerTypeId: this.state.providerType.providerTypeId,
       description: this.state.description,
       stateUf: this.props.registerEmitter.providerForm.state.uf,
       cityId: this.props.registerEmitter.providerForm.city.cityId,
@@ -127,10 +168,13 @@ class ProviderRegister extends Component {
         if (status === 200) {
           this.setState({ ...this.state, loading: false });
           this.props.loginEmitter.userData.userGroupId = 2;
+          if (data) {
+            this.setForm(data);
+          }
           this.successfullRegistered();
         } else {
           this.setState({ ...this.state, loading: false });
-          Toast.show("Erro validar requisição", {
+          Toast.show("Erro ao cadastrar prestador", {
             duration: Toast.durations.LONG,
           });
         }
@@ -144,6 +188,16 @@ class ProviderRegister extends Component {
       });
   }
 
+  setForm(data) {
+    this.props.registerEmitter.setProviderForm({
+      ...this.props.registerEmitter.providerForm,
+      commercialName: data.companyName,
+      providerType: data.providerType,
+      description: data.description,
+      companyId: data.companyId,
+    });
+  }
+
   successfullRegistered() {
     Alert.alert(
       "Novo prestador",
@@ -152,6 +206,7 @@ class ProviderRegister extends Component {
       { cancelable: false }
     );
   }
+
   stateButton() {
     return (
       <TouchableOpacity
@@ -176,12 +231,12 @@ class ProviderRegister extends Component {
       </TouchableOpacity>
     );
   }
-  componentDidMount() {
+  componentDidMount() {   
     this.props.registerEmitter.subscribe(
       this.componentKey,
       this._changeFilter.bind(this)
     );
-   this.fetchCompany();
+     this.fetchCompany();
   }
 
   componentWillUnmount() {
@@ -213,7 +268,7 @@ class ProviderRegister extends Component {
           onPress={() => this.props.navigation.navigate("select-provider-type")}
         >
           <Text style={{ fontSize: 20, paddingLeft: 20 }}>
-            {this.state?.providerTypeName || "Atividade Realizada"}
+            {this.state.providerType?.name || "Atividade Realizada"}
           </Text>
         </TouchableOpacity>
 
@@ -232,14 +287,18 @@ class ProviderRegister extends Component {
             value={this.state.description}
           />
         </View>
-        {this.props.registerEmitter.providerForm.edit ? null : this.stateButton()}
-        {this.props.registerEmitter.providerForm.edit ? null : this.cityButton()}
+        {this.props.registerEmitter.providerForm.companyId
+          ? null
+          : this.stateButton()}
+        {this.props.registerEmitter.providerForm.companyId
+          ? null
+          : this.cityButton()}
         <TouchableOpacity
           style={{ ...styles.buttons, backgroundColor: "#db382f" }}
           onPress={() => this.saveProvider()}
         >
           <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
-            {this.props.registerEmitter.providerForm.edit
+            {this.props.registerEmitter.providerForm.companyId
               ? "Atualizar"
               : "Cadastrar"}
           </Text>

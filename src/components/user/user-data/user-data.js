@@ -30,7 +30,6 @@ class UserData extends Component {
 
   fetchUser() {
     this.setState({ ...this.state, loading: true });
-
     getUserById(Platform.OS, this.props.loginEmitter.userData.authorization)
       .then(({ status, data }) => {
         if (status === 200) {
@@ -151,9 +150,9 @@ class UserData extends Component {
     this.props.showHeader(false);
   }
 
-  componentDidMount() {
+  componentDidMount() {   
     this.props.showHeader(true);
-    this.fetchUser();
+     this.fetchUser();
   }
 
   render() {
