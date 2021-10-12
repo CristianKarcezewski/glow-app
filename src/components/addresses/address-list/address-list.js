@@ -29,7 +29,6 @@ class AddressList extends Component {
 
   _handleLoadUserAddresses() {
     this.setState({ ...this.state, loading: true });
-console.log(this.props.loginEmitter.userData)
     loadUserAddresses(
       Platform.OS,
       this.props.loginEmitter.userData.authorization

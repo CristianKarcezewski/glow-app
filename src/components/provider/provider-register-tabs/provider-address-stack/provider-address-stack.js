@@ -17,24 +17,24 @@ class ProviderAddressStack extends Component {
   }
 
   editAddress(address) {
-   // this.setState({ ...this.state, address });
+   this.setState({ ...this.state, address });
   }
 
   setLocationState(item) {
-    // if (this.props.addressesFilterEmitter.filter?.state?.uf != item?.uf) {
-    //   this.props.addressesFilterEmitter.setFilter({
-    //     ...this.props.addressesFilterEmitter.filter,
-    //     state: item,
-    //     city: null,
-    //   });
-    // }
+    if (this.props.addressesFilterEmitter.filter?.state?.uf != item?.uf) {
+      this.props.addressesFilterEmitter.setFilter({
+        ...this.props.addressesFilterEmitter.filter,
+        state: item,
+        city: null,
+      });
+    }
   }
 
   setLocationCity(item) {
-    // this.props.addressesFilterEmitter.setFilter({
-    //   ...this.props.addressesFilterEmitter.filter,
-    //   city: item,
-    // });
+    this.props.addressesFilterEmitter.setFilter({
+      ...this.props.addressesFilterEmitter.filter,
+      city: item,
+    });
   }
 
   componentDidMount() {
@@ -72,18 +72,18 @@ class ProviderAddressStack extends Component {
           })}
         >
           {(props) => (
-            // <AddressesList
-            //   {...props}
-            //   loginEmitter={this.props.loginEmitter}
-            //   filterEmitter={this.props.addressesFilterEmitter}
-            //   // locationsEmitter={this.props.locationsEmitter}
-            //   updateAddress={this.editAddress.bind(this)}
-            // />
-            <Text>OIIIII</Text>
+            <AddressesList
+              {...props}
+              loginEmitter={this.props.loginEmitter}
+              filterEmitter={this.props.addressesFilterEmitter}
+              // locationsEmitter={this.props.locationsEmitter}
+              updateAddress={this.editAddress.bind(this)}
+            />
+          
           )}
         </this.stack.Screen>
 
-        {/* <this.stack.Screen
+         <this.stack.Screen
           name="inform-address"
           options={{
             title: "Adicionar endereço",
@@ -131,7 +131,7 @@ class ProviderAddressStack extends Component {
               state={this.props.addressesFilterEmitter.filter.state}
             />
           )}
-        </this.stack.Screen> */}
+        </this.stack.Screen>
       </this.stack.Navigator>
     );
   }
