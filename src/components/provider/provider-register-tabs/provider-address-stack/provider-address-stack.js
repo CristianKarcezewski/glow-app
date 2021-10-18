@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { TouchableOpacity, StyleSheet, Text } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LocationSelect from "../../../location-select";
-import AddressesList from "../../../addresses/address-list";
+import AddressListProvider from "../../../addresses/address-list-provider";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faPlus, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import ManualAddress from "../../../addresses/manual-address"
+import ManualAddressProvider from "../../../addresses/manual-address-provider";
 
 class ProviderAddressStack extends Component {
   constructor(props) {
@@ -17,13 +17,13 @@ class ProviderAddressStack extends Component {
   }
 
   editAddress(address) {
-   this.setState({ ...this.state, address });
+    this.setState({ ...this.state, address });
   }
 
   setLocationState(item) {
-    if (this.props.addressesFilterEmitter.filter?.state?.uf != item?.uf) {
-      this.props.addressesFilterEmitter.setFilter({
-        ...this.props.addressesFilterEmitter.filter,
+    if (this.props.addressesProviderFilterEmitter.filter?.state?.uf != item?.uf) {
+      this.props.addressesProviderFilterEmitter.setFilter({
+        ...this.props.addressesProviderFilterEmitter.filter,
         state: item,
         city: null,
       });
@@ -31,8 +31,8 @@ class ProviderAddressStack extends Component {
   }
 
   setLocationCity(item) {
-    this.props.addressesFilterEmitter.setFilter({
-      ...this.props.addressesFilterEmitter.filter,
+    this.props.addressesProviderFilterEmitter.setFilter({
+      ...this.props.addressesProviderFilterEmitter.filter,
       city: item,
     });
   }
@@ -72,18 +72,17 @@ class ProviderAddressStack extends Component {
           })}
         >
           {(props) => (
-            <AddressesList
+            <AddressListProvider
               {...props}
               loginEmitter={this.props.loginEmitter}
-              filterEmitter={this.props.addressesFilterEmitter}
+              filterEmitter={this.props.addressesProviderFilterEmitter}
               // locationsEmitter={this.props.locationsEmitter}
               updateAddress={this.editAddress.bind(this)}
             />
-          
           )}
         </this.stack.Screen>
 
-         <this.stack.Screen
+        <this.stack.Screen
           name="inform-address"
           options={{
             title: "Adicionar endereço",
@@ -91,11 +90,11 @@ class ProviderAddressStack extends Component {
           }}
         >
           {(props) => (
-            <ManualAddress
+            <ManualAddressProvider
               {...props}
               loginEmitter={this.props.loginEmitter}
               // locationsEmitter={this.props.locationsEmitter}
-              filterEmitter={this.props.addressesFilterEmitter}
+              filterEmitter={this.props.addressesProviderFilterEmitter}
               address={this.state.address}
               updateAddress={this.editAddress.bind(this)}
             />
@@ -128,7 +127,7 @@ class ProviderAddressStack extends Component {
             <LocationSelect
               {...props}
               onSelectData={this.setLocationCity.bind(this)}
-              state={this.props.addressesFilterEmitter.filter.state}
+              state={this.props.addressesProviderFilterEmitter.filter.state}
             />
           )}
         </this.stack.Screen>

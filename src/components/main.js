@@ -6,6 +6,7 @@ import SearchFilterEmitter from "../emitters/search-filter-emitter";
 import GlowTheme from "../shared/theme";
 import DrawerNavigator from "./navigators/drawer";
 import AddressEmitter from "../emitters/addresses-emitter";
+import AddressProviderEmitter from "../emitters/addresses-provider-emitter";
 import ProviderRegisterEmitter from "../emitters/provider-register-emitter";
 
 class Main extends Component {
@@ -15,6 +16,7 @@ class Main extends Component {
       loginEmitter: new LoginEmitter(),
       searchFilterEmitter: new SearchFilterEmitter(),
       addressesFilterEmitter: new AddressEmitter(),
+      addressesProviderFilterEmitter: new AddressProviderEmitter(),
       providerRegisterEmitter: new ProviderRegisterEmitter(),
       // locationsEmitter: new LocationsEmitter(),
     };
@@ -25,6 +27,7 @@ class Main extends Component {
     this.state.searchFilterEmitter.reset();
     this.state.addressesFilterEmitter.reset();
     this.state.providerRegisterEmitter.reset();
+    this.state.addressesProviderFilterEmitter.reset();
     // this.state.locationsEmitter.reset();
   }
 
@@ -35,6 +38,7 @@ class Main extends Component {
           loginEmitter={this.state.loginEmitter}
           searchFilterEmitter={this.state.searchFilterEmitter}
           addressesFilterEmitter={this.state.addressesFilterEmitter}
+          addressesProviderFilterEmitter={this.state.addressesProviderFilterEmitter}
           providerRegisterEmitter={this.state.providerRegisterEmitter}
           // locationsEmitter={this.state.locationsEmitter}
           cleanMemory={this._cleanMemory.bind(this)}

@@ -22,12 +22,13 @@ export const CITIES_API = `${API}/locations`;
 
 //addresses
 export const GET_ADDRESS_USER = `${API}/addresses/user`;
-export const GET_ADDRESS_COMPANY = `${API}/addresses/companies`;
+export const GET_ADDRESS_COMPANY = `${API}/addresses/company`;
 export const UPDATE_ADDRESS = `${API}/addresses`;
 //export const USER_ADDRESSES = `${API}/addresses/user`;
 export const REGISTER_USER_ADDRESS = `${API}/addresses/user`;
-export const REGISTER_COMPANY_ADDRESS = `${API}/addresses/companies`;
-export const REMOVE_ADDRESS = `${API}/addresses/user`;
+export const REGISTER_COMPANY_ADDRESS = `${API}/addresses/company`;
+export const REMOVE_USER_ADDRESS = `${API}/addresses/user`;
+export const REMOVE_COMPANY_ADDRESS = `${API}/addresses/company`;
 
 //provider
 export const PROVIDER_REGISTER = `${API}/companies`;

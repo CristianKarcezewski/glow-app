@@ -11,13 +11,13 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMapMarker, faTrash } from "@fortawesome/free-solid-svg-icons";
 import {
-  loadUserAddresses,
-  removeUserAddress,
+  loadCompanyAddresses,
+  removeCompanyAddress,
 } from "../../../services/address-service";
 import Toast from "react-native-root-toast";
 
-class AddressList extends Component {
-  addressesListKey = "addressesListKey";
+class AddressListProvider extends Component {
+  addressesListKey = "addressesListProviderKey";
 
   constructor(props) {
     super(props);
@@ -27,15 +27,14 @@ class AddressList extends Component {
     };
   }
 
-  _handleLoadUserAddresses() {
+  _handleLoadCompanyAddresses() {
     this.setState({ ...this.state, loading: true });
-    loadUserAddresses(
+    loadCompanyAddresses(
       Platform.OS,
       this.props.loginEmitter.userData.authorization
     )
       .then(({ status, data }) => {
-        if (status === 200) {
-          console.log("Teste Usuario", data);
+        if (status === 200) {         
           this.props.filterEmitter.setAddresses(data);
           this.setState({ ...this.state, loading: false });
         } else {
@@ -72,7 +71,7 @@ class AddressList extends Component {
       this.setAddresses.bind(this)
     );
     if (this.props.filterEmitter.addresses.length == 0) {
-      this._handleLoadUserAddresses();
+      this._handleLoadCompanyAddresses();
     }
   }
 
@@ -170,7 +169,7 @@ class CardResult extends Component {
     if (id) {
       this.setState({ ...this.state, loading: true });
 
-      removeUserAddress(
+      removeCompanyAddress(
         Platform.OS,
         this.props.loginEmitter.userData.authorization,
         id
@@ -263,4 +262,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default AddressList;
+export default AddressListProvider;

@@ -3,8 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAddressCard, faComments } from "@fortawesome/free-solid-svg-icons";
 import ProviderRegisterStack from "./provider-register-stack";
-import ProviderAddressStack from "./provider-address-stack"
-
+import ProviderAddressStack from "./provider-address-stack";
 
 class ProviderRegisterTabs extends Component {
   constructor(props) {
@@ -64,13 +63,14 @@ class ProviderRegisterTabs extends Component {
             <ProviderAddressStack
               {...props}
               loginEmitter={this.props.loginEmitter}
+              addressesProviderFilterEmitter={
+                this.props.addressesProviderFilterEmitter
+              }
               // locationsEmitter={this.props.locationsEmitter}
-              addressesFilterEmitter={this.props.addressesFilterEmitter}
               showHeader={this.showHeader.bind(this)}
             />
           )}
         </this.tabs.Screen>
-        
       </this.tabs.Navigator>
     );
   }
