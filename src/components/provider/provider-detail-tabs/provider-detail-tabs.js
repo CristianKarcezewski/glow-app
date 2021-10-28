@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ProviderDetails from "./provider-details";
 import Chat from "../chat";
-import Gallery from "../gallery";
+import ProviderGalleryStack from "./provider-gallery-stack";
 
 class ProviderDetailTabs extends Component {
   constructor(props) {
@@ -40,7 +40,7 @@ class ProviderDetailTabs extends Component {
                 />
               );
             }
-            if (route.name === "galery") {
+            if (route.name === "provider-gallery-stack") {
               return (
                 <FontAwesomeIcon
                   icon={faPhotoVideo}
@@ -61,12 +61,17 @@ class ProviderDetailTabs extends Component {
           {(props) => <Chat {...props} />}
         </this.tabs.Screen>
 
-        <this.tabs.Screen name="galery" options={{ title: "Galeria" }}>
-          {(props) => <Gallery {...props} />}
+        <this.tabs.Screen 
+        name="provider-gallery-stack"
+         options={{ title: "Galeria" }}
+         >
+          {(props) => (
+          <ProviderGalleryStack 
+            {...props}
+            />)}
         </this.tabs.Screen>
       </this.tabs.Navigator>
     );
   }
 }
-
 export default ProviderDetailTabs;
