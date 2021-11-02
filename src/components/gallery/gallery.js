@@ -8,11 +8,7 @@ export default class Gallery extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <Post image={require("../../assets/casa.png")} />
-        <ActionButton
-          buttonColor={commonStyles.colors.today}
-          onPress={() => this.props.navigation.navigate("addPhoto")}
-        />
+        <Post image={require("../../assets/casa.png")} />       
       </View>
     );
   }

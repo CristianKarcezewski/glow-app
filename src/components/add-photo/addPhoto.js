@@ -1,92 +1,136 @@
-import React, { Component } from 'react'
-import {  
-    View,
-    Text, 
-    StyleSheet, 
-    Image,
-     Dimensions,
-     Platform,
-    ScrollView,
-    TouchableOpacity,
-    Alert
-} from 'react-native'
-import ImagePicker from 'react-native-image-picker'
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import React, { useState, useEffect, useRef } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Modal,
+  Image,
+} from "react-native";
+import { Camera } from "expo-camera";
+import { FontAwesome } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
+export default function AddPhoto() {
+  const camRef = useRef(null);
+  const [hasPermission, setHasPermission] = useState(null);
+  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [capturedPhoto, setCapturedPhoto] = useState(null);
+  const [open, setOpen] = useState(false);
 
-class AddPhoto extends Component {
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      setHasPermission(status === "granted");
+    })();
+  }, []);
 
-    state = {
-        image: null,
-    }
+  if (hasPermission === null) {
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return <Text>Acesso negado a Camera</Text>;
+  }
 
-    ImagePicker = () => {
-        ImagePicker.showImagePicker({
-            title: 'Escolha a Imagem',
-            maxHeight: 600,
-            maxWidth:800
-        }, res => {
-            if (!res.didCancel){
-                this.setState({
-                    image:{uri: res.uri, base64: res.data}})
-            }  
-        })
+  async function takePicture() {
+    if (camRef) {
+      const data = await camRef.current.takePictureAsync();
+      setCapturedPhoto(data.uri);
+      setOpen(true);
+      console.log(data);
     }
-    save = async () => {
-        Alert.alert('Imagem adicionada!')
-    }
-    
-    render () {
-        return (
-            <ScrollView>
-                <View style={styles.container}>
-                    <Text style={styles.title}>Compartilhe uma imagem</Text>
-                    <View style={styles.imageContainer}>
-                        <Image source={this.state.image} style={styles.image} />
-                    </View>
-                    <TouchableOpacity onPress={this.pickImage} style={styles.buttom}>
-                        <Text style={styles.buttomText}>Escolha a foto</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity omPres={this.save} style={styles.button}>
-                        <Text style={styles.buttomText}>Salvar</Text>
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
-        )
-    }
+  }
+  async function savePicture(){
+console.log("Chamar função ")
+  }
+  return (
+    <SafeAreaView style={styles.container}>
+      <Camera style={styles.camera} type={type} ref={camRef}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.buttonTrocar}
+            onPress={() => {
+              setType(
+                type === Camera.Constants.Type.back
+                  ? Camera.Constants.Type.front
+                  : Camera.Constants.Type.back
+              );
+            }}
+          >
+            <Text style={styles.text}> Trocar </Text>
+          </TouchableOpacity>
+        </View>
+      </Camera>
+
+      <TouchableOpacity style={styles.buttonCamera} onPress={takePicture}>
+        <FontAwesome name="camera" size={23} color="#FFF" />
+      </TouchableOpacity>
+
+      {capturedPhoto && (
+        <Modal animationType="slide" transparent={false} visible={open}>
+          <View style={styles.modal}>
+            <View style={{ margin: 10, flexDirection: "row" }}>
+              <TouchableOpacity
+                style={{ margin: 10 }}
+                onPress={() => setOpen(false)}
+              >
+                <FontAwesome name="window-close" size={50} color="#FF0000" />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{ margin: 10 }}
+                onPress={() => savePicture}
+              >
+                <FontAwesome name="upload" size={50} color="#121212" />
+              </TouchableOpacity>
+            </View>
+            <Image
+              style={{ width: "100%", height: 450, borderRadius: 20 }}
+              source={{ uri: capturedPhoto }}
+            />
+          </View>
+        </Modal>
+      )}
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        alignItems: 'center',
-    },
-    title: {
-        fontSize: 20,
-        marginTop:Platform.OS === 'ios' ? 30: 10,
-        fontWeight: 'bold'
-    },
-    imageContainer: {
-        width: '90%',
-        height: Dimensions.get('window').width * 3/4,
-        backgroundColor: '#EEE',
-        marginTop: 10,
-    },
-    image: {
-        width: Dimensions.get('window').width,
-        height:Dimensions.get('window').width * 3/4,
-        resizeMode: 'center'
-    },
-    buttom:{
-        marginTop: 30,
-        padding: 10,
-        backgroundColor: '#4286f4'
-    },
-    buttomText: {
-        fontSize: 20,
-        color: '#FFF'
-    },
-   
-})
-
-export default AddPhoto
+  container: {
+    flex: 1,
+  },
+  camera: {
+    flex: 1,
+  },
+  buttonContainer: {
+    flex: 1,
+    backgroundColor: "transparent",
+    flexDirection: "row",
+    margin: 20,
+  },
+  buttonCamera: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#121212',
+    margin:20,
+    borderRadius:10,
+    height:50,
+  },
+  buttonTrocar: {
+    fontSize: 20,
+    marginBottom: 13,
+    color: '#FFF',
+  },
+  
+  text: {
+    fontSize: 18,
+    marginBottom: 13,
+    color: "white",
+  },
+  modal: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 20,
+  },
+});

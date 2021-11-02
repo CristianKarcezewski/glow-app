@@ -13,6 +13,7 @@ import UserTabs from "../../user/user-tabs";
 import ProviderRegisterTabs from "../../provider/provider-register-tabs";
 import Schedule from "../../schedule";
 import ServicePacks from "../../service-packs";
+import ProviderGalleryStack from "../provider-gallery-stack";
 
 class DrawerNavigator extends Component {
   constructor(props) {
@@ -89,7 +90,28 @@ class DrawerNavigator extends Component {
               {...props}
               loginEmitter={this.props.loginEmitter}
               providerRegisterEmitter={this.props.providerRegisterEmitter}
-              addressesProviderFilterEmitter={this.props.addressesProviderFilterEmitter}
+              addressesProviderFilterEmitter={
+                this.props.addressesProviderFilterEmitter
+              }
+            />
+          )}
+        </this.drawer.Screen>
+
+        <this.drawer.Screen
+          name="provider-gallery-stack"
+          options={({ navigation }) => ({
+            headerShown: false,
+            title: "Galeria",
+          })}
+        >
+          {(props) => (
+            <ProviderGalleryStack
+              {...props}
+              //loginEmitter={this.props.loginEmitter}
+              //providerRegisterEmitter={this.props.providerRegisterEmitter}
+              //addressesProviderFilterEmitter={
+                //this.props.addressesProviderFilterEmitter
+             // }
             />
           )}
         </this.drawer.Screen>
