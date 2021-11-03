@@ -5,6 +5,7 @@ import commonStyles from "../../shared/commonStyles";
 import Post from "./post";
 
 export default class Gallery extends Component {
+  
   render() {
     return (
       <View style={{ flex: 1 }}>

@@ -11,7 +11,7 @@ import { Camera } from "expo-camera";
 import { FontAwesome } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function AddPhoto() {
+export default function AddPhotoCamera() {
   const camRef = useRef(null);
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
