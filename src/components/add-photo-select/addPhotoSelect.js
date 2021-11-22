@@ -21,14 +21,7 @@ export default class AddPhoto extends Component {
 
   render() {
     return (
-      // <Modal
-      //   onRequestClose={this.props.onCancel}
-      //   visible={this.props.isVisible}
-      //   animationType="slide"
-      //   transparent={true}
-      // >
-
-      // </Modal>
+     
       <View>
         <TouchableWithoutFeedback onPress={this.props.onCancel}>
           <View style={styles.background}></View>

@@ -6,7 +6,7 @@ import { TouchableOpacity, StyleSheet } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft, faPlus } from "@fortawesome/free-solid-svg-icons";
 import AddPhotoCamera from "../../add-photo-camera";
-
+import AddPhotoGallery from "../../add-photo-gallery";
 
 class ProviderGalleryStack extends Component {
   constructor(props) {
@@ -14,33 +14,7 @@ class ProviderGalleryStack extends Component {
     this.stack = createNativeStackNavigator();
   }
 
-  getDatePicker = () => {
-    let datePicker = (
-      <DateTimePicker
-        value={this.state.date}
-        onChange={(_, date) => this.setState({ date, showDatePicker: false })}
-        mode="date"
-      />
-    );
-
-    const dateString = moment(this.state.date).format(
-      "ddd, D [de] MMMM [de] YYYY"
-    );
-    if (Platform.OS === "android") {
-      datePicker = (
-        <View>
-          <TouchableOpacity
-            onPress={() => this.setState({ showDatePicker: true })}
-          >
-            <Text style={styles.date}>{dateString}</Text>
-          </TouchableOpacity>
-          {this.state.showDatePicker && datePicker}
-        </View>
-      );
-    }
-    return datePicker;
-  };
-
+  
   render() {
     return (
       <this.stack.Navigator initialRouteName="provider-gallery-stack">
@@ -103,6 +77,20 @@ class ProviderGalleryStack extends Component {
         >
           {(props) => (
             <AddPhotoCamera
+              {...props}
+              //searchFilterEmitter={this.props.searchFilterEmitter}
+            />
+          )}
+        </this.stack.Screen>
+        <this.stack.Screen
+          name="add-photo-gallery"
+          options={{
+            title: "Adicionar Foto Galeria",
+            // headerShown: false,
+          }}
+        >
+          {(props) => (
+            <AddPhotoGallery
               {...props}
               //searchFilterEmitter={this.props.searchFilterEmitter}
             />

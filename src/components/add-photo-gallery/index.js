@@ -1,2 +1,3 @@
-import AddPhotoCamera from "./addPhotoCamera";
-export default AddPhotoCamera;
+import AddPhotoGallery from "./addPhotoGallery";
+export default AddPhotoGallery;
+;
