@@ -16,13 +16,13 @@ export default function AddPhotoGallery() {
         }
       }
     })();
+    pickImage();
   }, []);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [6, 5],
       quality: 1,
     });
 
@@ -41,16 +41,28 @@ export default function AddPhotoGallery() {
         justifyContent: "center",
       }}
     >
-      <Button        
-        title="Selecione uma imagem da Galeria"
-        onPress={pickImage}
-      />
+      {pickImage}
       {image && (
         <Image
           source={{ uri: image }}
-          style={{ width: "80%", height: "70%", marginTop: 50 }}
+          style={{ width: "90%", height: "80%", marginTop: 10 }}
         />
       )}
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          borderRadius: 20,
+          width: "50%",
+          maxHeight: 45,
+          padding: 5,
+          marginBottom: 10,
+          justifyContent: "space-around",
+        }}
+      >
+        <Button title="Excluir" onPress={pickImage} />
+        <Button title="Salvar" onPress={pickImage} />
+      </View>
     </View>
   );
 }

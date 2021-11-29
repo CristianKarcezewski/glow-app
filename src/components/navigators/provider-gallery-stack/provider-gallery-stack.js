@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Gallery from "../../gallery";
-import AddPhoto from "../../add-photo-select";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faArrowLeft, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faPlus,
+  faPhotoVideo,
+} from "@fortawesome/free-solid-svg-icons";
 import AddPhotoCamera from "../../add-photo-camera";
 import AddPhotoGallery from "../../add-photo-gallery";
 
@@ -14,14 +17,13 @@ class ProviderGalleryStack extends Component {
     this.stack = createNativeStackNavigator();
   }
 
-  
   render() {
     return (
       <this.stack.Navigator initialRouteName="provider-gallery-stack">
         <this.stack.Screen
           name="provider-gallery-stack"
           options={({ navigation }) => ({
-            title: "Galeria",
+            title: "Menu",
             headerShown: true,
             headerLeft: () => (
               <TouchableOpacity
@@ -38,63 +40,40 @@ class ProviderGalleryStack extends Component {
             headerRight: () => (
               <TouchableOpacity
                 style={styles.headerLoginButton}
-                onPress={() => navigation.navigate("add-photo")}
+                onPress={() => navigation.navigate("add-photo-camera")}
               >
                 <FontAwesomeIcon icon={faPlus} color={"#fff"} size={20} />
               </TouchableOpacity>
             ),
           })}
         >
-          {(props) => (
-            <Gallery
-              {...props}
-              // loginEmitter={this.props.loginEmitter}
-              // registerEmitter={this.props.registerEmitter}
-            />
-          )}
+          {(props) => <Gallery {...props} />}
         </this.stack.Screen>
-
-        <this.stack.Screen
-          name="add-photo"
-          options={{
-            title: "Adicionar Foto",
-            headerShown: false,
-          }}
-        >
-          {(props) => (
-            <AddPhoto
-              {...props}
-              //searchFilterEmitter={this.props.searchFilterEmitter}
-            />
-          )}
-        </this.stack.Screen>
+     
         <this.stack.Screen
           name="add-photo-camera"
-          options={{
-            title: "Adicionar Foto Camera",
-            // headerShown: false,
-          }}
+          options={({ navigation }) => ({
+            title: "Galeria",           
+            headerRight: () => (
+              <TouchableOpacity
+                style={styles.headerLoginButton}
+                onPress={() => navigation.navigate("add-photo-gallery")}
+              >
+                <FontAwesomeIcon icon={faPhotoVideo} color={"#fff"} size={20} />
+              </TouchableOpacity>
+            ),
+          })}
         >
-          {(props) => (
-            <AddPhotoCamera
-              {...props}
-              //searchFilterEmitter={this.props.searchFilterEmitter}
-            />
-          )}
+          {(props) => <AddPhotoCamera {...props} />}
         </this.stack.Screen>
         <this.stack.Screen
           name="add-photo-gallery"
           options={{
             title: "Adicionar Foto Galeria",
-            // headerShown: false,
+            headerShown: true,
           }}
         >
-          {(props) => (
-            <AddPhotoGallery
-              {...props}
-              //searchFilterEmitter={this.props.searchFilterEmitter}
-            />
-          )}
+          {(props) => <AddPhotoGallery {...props} />}
         </this.stack.Screen>
       </this.stack.Navigator>
     );
