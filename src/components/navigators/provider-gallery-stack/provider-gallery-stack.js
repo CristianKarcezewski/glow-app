@@ -19,9 +19,9 @@ class ProviderGalleryStack extends Component {
 
   render() {
     return (
-      <this.stack.Navigator initialRouteName="provider-gallery-stack">
+      <this.stack.Navigator initialRouteName="gallery">
         <this.stack.Screen
-          name="provider-gallery-stack"
+          name="gallery"
           options={({ navigation }) => ({
             title: "Menu",
             headerShown: true,
@@ -49,11 +49,11 @@ class ProviderGalleryStack extends Component {
         >
           {(props) => <Gallery {...props} />}
         </this.stack.Screen>
-     
+
         <this.stack.Screen
           name="add-photo-camera"
           options={({ navigation }) => ({
-            title: "Galeria",           
+            title: "Galeria",
             headerRight: () => (
               <TouchableOpacity
                 style={styles.headerLoginButton}
