@@ -70,17 +70,35 @@ export default class Gallery extends Component {
   };
    
   setModalVisible(visible, imageKey) {
-    this.setState({ modalImage: this.state.imagesList[imageKey] });
+    this.setState({ modalImage: this.state.imagesList[(imageKey-1)] });
     this.setState({ modalVisible: visible });
-  }
-
-  getImage() {
-    return this.state.modalImage;
-  }
+  } 
   
   render() {
     return (
       <SafeAreaView>
+        <View style={styles.container}>
+          <Modal
+            style={styles.modal}
+            animationType={"fade"}
+            transparent={true}
+            visible={this.state.modalVisible}
+            onRequestClose={() => {}}
+          >
+            <View style={styles.modal}>
+              <Text
+                style={styles.text}
+                onPress={() => {
+                  this.setModalVisible(false);
+                }}
+              >
+                Fechar
+              </Text>
+              <ImageElement imagsource={this.state.modalImage}></ImageElement>
+            </View>
+          </Modal>         
+        </View>
+
         <FlatList
           data={this.state.imagesList}
           keyExtractor={(item) => item.id}
@@ -90,54 +108,19 @@ export default class Gallery extends Component {
               key={item}
               onPress={() => {
                 this.setModalVisible(true, item.id);               
-
-                console.log(item.id);
               }}
             >
               <View style={styles.imagewrap}>
                 <ImageElement imagsource={item}></ImageElement>
               </View>
             </TouchableOpacity>
-          )}          
+          )}
         />
-        
       </SafeAreaView>
     );
 
-  };
-
- 
-
-  // class ModelImage extends Component {
-  //   render() {
-  //     return (
-  //       <View style={styles.container}>
-  //         <Modal
-  //           style={styles.modal}
-  //           animationType={"fade"}
-  //           transparent={true}
-  //           visible={this.state.modalVisible}
-  //           onRequestClose={() => {}}
-  //         >
-  //           <View style={styles.modal}>
-  //             <Text
-  //               style={styles.text}
-  //               onPress={() => {
-  //                 this.setModalVisible(false);
-  //               }}
-  //             >
-  //               Fechar
-  //             </Text>
-  //             <ImageElement imagsource={this.state.modalImage}></ImageElement>
-  //           </View>
-  //         </Modal>
-  //         {images}
-  //       </View>
-  //     );
-  //   }
-  // }
+  }; 
 }
-
 
 const styles = StyleSheet.create({
   container: {
