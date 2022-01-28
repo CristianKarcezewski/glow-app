@@ -9,6 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import UserAddressStack from "../user-address-stack";
 import UserData from "../user-data";
+import AddPhotoGallery from "../../../components"
 
 class UserTabs extends Component {
   constructor(props) {
@@ -94,6 +95,15 @@ class UserTabs extends Component {
             />
           )}
         </this.tabs.Screen>
+        {/* <this.stack.Screen
+          name="add-photo-gallery"
+          options={{
+            title: "Adicionar Foto Galeria",
+            headerShown: true,
+          }}
+        >
+          {(props) => <AddPhotoGallery {...props} />}
+        </this.stack.Screen> */}
       </this.tabs.Navigator>
     );
   }

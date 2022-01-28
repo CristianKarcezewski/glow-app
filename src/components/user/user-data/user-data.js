@@ -14,13 +14,14 @@ import {
 import { getUserById, updateUser } from "../../../services/user-service";
 import Toast from "react-native-root-toast";
 import ImageIcon from "../../../assets/fotoPerfil.jpg";
+import AddPhotoCamera from "../../add-photo-camera";
 
 class UserData extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: false,
-      imageUrl: null,
+      imageUrl: { uri: "https://i.pravatar.cc/150?img=32" },
       name: "",
       email: "",
       validName: true,
@@ -145,14 +146,19 @@ class UserData extends Component {
       { cancelable: false }
     );
   }
+  getImage() {
+    return (
+       console.log("oi")      
+    );
+  }
 
   componentWillUnmount() {
     this.props.showHeader(false);
   }
 
-  componentDidMount() {   
+  componentDidMount() {
     this.props.showHeader(true);
-     this.fetchUser();
+    this.fetchUser();
   }
 
   render() {
@@ -171,6 +177,7 @@ class UserData extends Component {
           <TouchableOpacity style={style.imageContainer}>
             <Image
               style={style.imageLogo}
+              onPress={() => this.getImage()}
               source={this.state.imageUrl || ImageIcon}
             />
           </TouchableOpacity>
@@ -231,6 +238,7 @@ const style = StyleSheet.create({
     margin: 5,
     width: 160,
     height: 160,
+    borderRadius: 100,
   },
   container: {
     flex: 5,

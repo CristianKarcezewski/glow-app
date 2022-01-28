@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faArrowLeft,
   faPlus,
-  faPhotoVideo,
+  faPhotoVideo,  
 } from "@fortawesome/free-solid-svg-icons";
 import AddPhotoCamera from "../../add-photo-camera";
 import AddPhotoGallery from "../../add-photo-gallery";
@@ -30,7 +30,7 @@ class ProviderGalleryStack extends Component {
                 style={{ marginHorizontal: 10 }}
                 onPress={() => navigation.goBack()}
               >
-                <FontAwesomeIcon
+                <FontAwesomeIcon                  
                   icon={faArrowLeft}
                   size={20}
                   style={{ flex: 1 }}
