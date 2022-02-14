@@ -77,9 +77,13 @@ export default function AddPhotoCamera() {
 
               <TouchableOpacity
                 style={{ margin: 10 }}
-                onPress={() => savePicture}
+                onPress={() => savePicture()}
               >
-                <FontAwesome name="upload" size={50} color="#121212" />
+                <FontAwesome
+                  name="chevron-circle-down"
+                  size={50}
+                  color="#121212"
+                />
               </TouchableOpacity>
             </View>
             <Image

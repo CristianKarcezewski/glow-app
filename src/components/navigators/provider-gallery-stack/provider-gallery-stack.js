@@ -6,15 +6,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faArrowLeft,
   faPlus,
-  faPhotoVideo,  
+  faPhotoVideo,
 } from "@fortawesome/free-solid-svg-icons";
 import AddPhotoCamera from "../../add-photo-camera";
 import AddPhotoGallery from "../../add-photo-gallery";
+import ProviderUploadImage from "../../provider/provider-upload-image";
 
 class ProviderGalleryStack extends Component {
   constructor(props) {
     super(props);
     this.stack = createNativeStackNavigator();
+    this.state = {
+      image: null,
+    };
+  }
+
+  updateImage(image) {
+    this.setState({ ...this.state, image });
   }
 
   render() {
@@ -30,7 +38,7 @@ class ProviderGalleryStack extends Component {
                 style={{ marginHorizontal: 10 }}
                 onPress={() => navigation.goBack()}
               >
-                <FontAwesomeIcon                  
+                <FontAwesomeIcon
                   icon={faArrowLeft}
                   size={20}
                   style={{ flex: 1 }}
@@ -40,7 +48,7 @@ class ProviderGalleryStack extends Component {
             headerRight: () => (
               <TouchableOpacity
                 style={styles.headerLoginButton}
-                onPress={() => navigation.navigate("add-photo-camera")}
+                onPress={() => navigation.navigate("provider-upload-image")}
               >
                 <FontAwesomeIcon icon={faPlus} color={"#fff"} size={20} />
               </TouchableOpacity>
@@ -51,25 +59,34 @@ class ProviderGalleryStack extends Component {
         </this.stack.Screen>
 
         <this.stack.Screen
-          name="add-photo-camera"
+          name="provider-upload-image"
           options={({ navigation }) => ({
-            title: "Galeria",
-            headerRight: () => (
-              <TouchableOpacity
-                style={styles.headerLoginButton}
-                onPress={() => navigation.navigate("add-photo-gallery")}
-              >
-                <FontAwesomeIcon icon={faPhotoVideo} color={"#fff"} size={20} />
-              </TouchableOpacity>
-            ),
+            title: "Adicionar Fotos",
+            headerShown: true,
           })}
+        >
+          {(props) => (
+            <ProviderUploadImage
+              {...props}
+              update_Image={this.updateImage.bind(this)}
+            />
+          )}
+        </this.stack.Screen>
+
+        <this.stack.Screen
+          name="add-photo-camera"
+          options={{
+            title: "Camera",
+            headerShown: true,
+          }}
         >
           {(props) => <AddPhotoCamera {...props} />}
         </this.stack.Screen>
+
         <this.stack.Screen
           name="add-photo-gallery"
           options={{
-            title: "Adicionar Foto Galeria",
+            title: "Fotos Galeria",
             headerShown: true,
           }}
         >
