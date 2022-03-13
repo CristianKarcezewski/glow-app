@@ -68,7 +68,7 @@ class ProviderGalleryStack extends Component {
           {(props) => (
             <ProviderUploadImage
               {...props}
-              update_Image={this.updateImage.bind(this)}
+              //update_Image={this.updateImage.bind(this)}
             />
           )}
         </this.stack.Screen>

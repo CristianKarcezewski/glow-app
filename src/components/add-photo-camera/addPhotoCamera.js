@@ -10,6 +10,11 @@ import {
 import { Camera } from "expo-camera";
 import { FontAwesome } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as Permissions from "expo-permissions";
+//import * as MediaLibrary from "expo-media-library";
+//import * as MediaLibrary from "expo-media-library";
+//import ProviderUploadImage from "../provider/provider-upload-image/providerUploadImage";
+
 
 export default function AddPhotoCamera() {
   const camRef = useRef(null);
@@ -21,6 +26,11 @@ export default function AddPhotoCamera() {
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
+      setHasPermission(status === "granted");
+    })();
+
+    (async () => {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       setHasPermission(status === "granted");
     })();
   }, []);
@@ -37,10 +47,19 @@ export default function AddPhotoCamera() {
       const data = await camRef.current.takePictureAsync();
       setCapturedPhoto(data.uri);
       setOpen(true);
-      console.log(data);
+      console.log(capturedPhoto);
+      console.log("data - "+ data);
     }
   }
-  async function savePicture() {}
+
+  async function savePicture() {
+    const assert = await MEDIA_LIBRARY.createAssetAsync(capturedPhoto).then(
+      () => {
+        alert("Salvo com sucesso!");
+      }
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Camera style={styles.camera} type={type} ref={camRef}>
