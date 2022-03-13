@@ -9,7 +9,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import UserAddressStack from "../user-address-stack";
 import UserData from "../user-data";
-import AddPhotoGallery from "../../../components"
 
 class UserTabs extends Component {
   constructor(props) {

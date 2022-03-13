@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faAddressCard, faComments } from "@fortawesome/free-solid-svg-icons";
+import { faAddressCard, faMapMarker } from "@fortawesome/free-solid-svg-icons";
 import ProviderRegisterStack from "./provider-register-stack";
 import ProviderAddressStack from "./provider-address-stack";
 
@@ -30,10 +30,10 @@ class ProviderRegisterTabs extends Component {
                 />
               );
             }
-            if (route.name === "daily-work") {
+            if (route.name === "provider-address-stack") {
               return (
                 <FontAwesomeIcon
-                  icon={faComments}
+                  icon={faMapMarker}
                   color={focused ? "#db382f" : "black"}
                   size={24}
                 />
@@ -56,7 +56,7 @@ class ProviderRegisterTabs extends Component {
         </this.tabs.Screen>
 
         <this.tabs.Screen
-          name="provider-addresses-stack"
+          name="provider-address-stack"
           options={{ title: "Seus endereços" }}
         >
           {(props) => (
