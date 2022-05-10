@@ -1,12 +1,12 @@
 import * as SecureStore from "expo-secure-store";
 
 export default class LoginEmitter {
-  tokenKey = "authorization";
+  tokenKey = "LoginEmmiterKey";
 
   constructor() {
     this.subscribes = [];
     this.readUserData();
-    this.userData = null;
+    this.authorization = null;
     this.userLoggedIn = false;
   }
 
@@ -20,8 +20,8 @@ export default class LoginEmitter {
     });
   }
 
-  async saveUserData(data) {
-    await SecureStore.setItemAsync(this.tokenKey, JSON.stringify(data));
+  async saveUserData(token) {
+    await SecureStore.setItemAsync(this.tokenKey, JSON.stringify(token));
   }
 
   async removeUserData() {
@@ -57,11 +57,11 @@ export default class LoginEmitter {
     });
   }
 
-  login(data) {
-    this.userdata = data;
+  login(token) {
+    this.authorization = token;
     this.userLoggedIn = true;
     this.emit();
-    this.saveUserData(data);
+    this.saveUserData(token);
   }
 
   logout() {
@@ -71,7 +71,7 @@ export default class LoginEmitter {
   }
 
   reset() {
-    this.userData = null;
+    this.authorization = null;
     this.userLoggedIn = false;
   }
 }

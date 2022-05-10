@@ -31,7 +31,7 @@ class UserData extends Component {
 
   fetchUser() {
     this.setState({ ...this.state, loading: true });
-    getUserById(Platform.OS, this.props.loginEmitter.userData.authorization)
+    getUserById(Platform.OS, this.props.loginEmitter.authorization)
       .then(({ status, data }) => {
         if (status === 200) {
           this.setState({
@@ -66,7 +66,7 @@ class UserData extends Component {
 
       updateUser(
         Platform.OS,
-        this.props.loginEmitter.userData.authorization,
+        this.props.loginEmitter.authorization,
         refreshUser
       )
         .then(({ status, data }) => {
@@ -147,9 +147,7 @@ class UserData extends Component {
     );
   }
   getImage() {
-    return (
-       console.log("oi")      
-    );
+    return console.log("oi");
   }
 
   componentWillUnmount() {
