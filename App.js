@@ -1,3 +1,4 @@
+import "react-native-gesture-handler";
 import React, { Component } from "react";
 import { StyleSheet, SafeAreaView, StatusBar } from "react-native";
 import Main from "./src/components";
