@@ -11,10 +11,7 @@ import {
 } from "react-native";
 import { login } from "../../../services/auth-service";
 import firebaseAuth from "../../../config/firebase-config";
-import {
-  signInWithEmailAndPassword,
-  signInWithCustomToken,
-} from "firebase/auth";
+import { signInWithCustomToken } from "firebase/auth";
 import Toast from "react-native-root-toast";
 
 class Login extends Component {

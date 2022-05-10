@@ -29,10 +29,7 @@ class ProviderRegister extends Component {
 
   fetchCompany() {
     this.setState({ ...this.state, loading: true });
-    getCompanyByUser(
-      Platform.OS,
-      this.props.loginEmitter.userData.authorization
-    )
+    getCompanyByUser(Platform.OS, this.props.loginEmitter.authorization)
       .then(({ status, data }) => {
         if (status === 200) {
           if (data) {
@@ -120,11 +117,7 @@ class ProviderRegister extends Component {
       description: this.state.description,
     };
 
-    updateProvider(
-      Platform.OS,
-      this.props.loginEmitter.userData.authorization,
-      provider
-    )
+    updateProvider(Platform.OS, this.props.loginEmitter.authorization, provider)
       .then(({ status, data }) => {
         if (status === 200) {
           if (data) {
@@ -161,7 +154,7 @@ class ProviderRegister extends Component {
 
     registerProvider(
       Platform.OS,
-      this.props.loginEmitter.userData.authorization,
+      this.props.loginEmitter.authorization,
       provider
     )
       .then(({ status, data }) => {
@@ -231,12 +224,12 @@ class ProviderRegister extends Component {
       </TouchableOpacity>
     );
   }
-  componentDidMount() {   
+  componentDidMount() {
     this.props.registerEmitter.subscribe(
       this.componentKey,
       this._changeFilter.bind(this)
     );
-     this.fetchCompany();
+    this.fetchCompany();
   }
 
   componentWillUnmount() {

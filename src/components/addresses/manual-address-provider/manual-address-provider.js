@@ -86,11 +86,7 @@ class ManualAddressProvider extends Component {
       complement: this.state.complement,
       referencePoint: this.state.referencePoint,
     };
-    updateAddress(
-      Platform.OS,
-      this.props.loginEmitter.userData.authorization,
-      address
-    )
+    updateAddress(Platform.OS, this.props.loginEmitter.authorization, address)
       .then(({ status, data }) => {
         if (status === 200) {
           this.setState({ ...this.state, loading: false });
@@ -131,7 +127,7 @@ class ManualAddressProvider extends Component {
 
     registerCompanyAddress(
       Platform.OS,
-      this.props.loginEmitter.userData.authorization,
+      this.props.loginEmitter.authorization,
       address
     )
       .then(({ status, data }) => {
@@ -159,7 +155,7 @@ class ManualAddressProvider extends Component {
     this.setState({ ...this.state, loading: true });
     findViacepLocation(
       Platform.OS,
-      this.props.loginEmitter.userData.authorization,
+      this.props.loginEmitter.authorization,
       postalCode
     )
       .then(({ status, data }) => {

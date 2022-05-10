@@ -29,10 +29,7 @@ class AddressList extends Component {
 
   _handleLoadUserAddresses() {
     this.setState({ ...this.state, loading: true });
-    loadUserAddresses(
-      Platform.OS,
-      this.props.loginEmitter.userData.authorization
-    )
+    loadUserAddresses(Platform.OS, this.props.loginEmitter.authorization)
       .then(({ status, data }) => {
         if (status === 200) {
           console.log("Teste Usuario", data);
@@ -170,11 +167,7 @@ class CardResult extends Component {
     if (id) {
       this.setState({ ...this.state, loading: true });
 
-      removeUserAddress(
-        Platform.OS,
-        this.props.loginEmitter.userData.authorization,
-        id
-      )
+      removeUserAddress(Platform.OS, this.props.loginEmitter.authorization, id)
         .then(({ status, data }) => {
           if (status === 200) {
             let i = this.props.filterEmitter.addresses.findIndex(
