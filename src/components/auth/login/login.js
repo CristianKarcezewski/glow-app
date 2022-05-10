@@ -11,7 +11,10 @@ import {
 } from "react-native";
 import { login } from "../../../services/auth-service";
 import firebaseAuth from "../../../config/firebase-config";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  signInWithCustomToken,
+} from "firebase/auth";
 import Toast from "react-native-root-toast";
 
 class Login extends Component {
@@ -39,42 +42,55 @@ class Login extends Component {
     ) {
       this.setState({ ...this.state, loading: true });
 
-      signInWithEmailAndPassword(
-        firebaseAuth,
-        this.state.email,
-        this.state.password
-      )
-        .then((userCredential) => {
-          // Signed in
-          userCredential.user
-            .getIdToken()
-            .then((idToken) => this.props.loginEmitter.login(idToken));
-          this.setState({ ...this.state, loading: false });
-          this.props.navigation.popToTop();
-        })
-        .catch((error) => {
-          console.log("error", error);
-          this.setState({ ...this.state, loading: false });
-        });
-
-      // login(Platform.OS, this.state.email, this.state.password)
-      //   .then(({ status, data }) => {
-      //     console.log(data);
-      //     if (status === 200) {
-      //       this.props.loginEmitter.login(data);
-      //       this.setState({ ...this.state, loading: false });
-      //       this.props.navigation.popToTop();
-      //     } else {
-      //       this.setState({ ...this.state, loading: false });
-      //       Toast.show("Usuário ou senha inválidos...", {
-      //         duration: Toast.durations.LONG,
-      //       });
-      //     }
+      // signInWithEmailAndPassword(
+      //   firebaseAuth,
+      //   this.state.email,
+      //   this.state.password
+      // )
+      //   .then((userCredential) => {
+      //     // Signed in
+      //     userCredential.user
+      //       .getIdToken()
+      //       .then((idToken) => this.props.loginEmitter.login(idToken));
+      //     this.setState({ ...this.state, loading: false });
+      //     this.props.navigation.popToTop();
       //   })
-      //   .catch((err) => {
-      //     console.log("error", err);
+      //   .catch((error) => {
+      //     console.log("error", error);
       //     this.setState({ ...this.state, loading: false });
       //   });
+
+      login(Platform.OS, this.state.email, this.state.password)
+        .then(({ status, data }) => {
+          if (status === 200) {
+            // this.props.loginEmitter.login(data.authorization);
+            // this.setState({ ...this.state, loading: false });
+            // this.props.navigation.popToTop();
+
+            signInWithCustomToken(firebaseAuth, data.authorization)
+              .then((userCredential) => {
+                // Signed in
+                userCredential.user
+                  .getIdToken()
+                  .then((idToken) => this.props.loginEmitter.login(idToken));
+                this.setState({ ...this.state, loading: false });
+                this.props.navigation.popToTop();
+              })
+              .catch((error) => {
+                console.log("error", error);
+                this.setState({ ...this.state, loading: false });
+              });
+          } else {
+            this.setState({ ...this.state, loading: false });
+            Toast.show("Usuário ou senha inválidos...", {
+              duration: Toast.durations.LONG,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log("error", err);
+          this.setState({ ...this.state, loading: false });
+        });
     } else {
       if (this.state.email != "" || this.state.password != "") {
         Toast.show("Dados inválidos", {
