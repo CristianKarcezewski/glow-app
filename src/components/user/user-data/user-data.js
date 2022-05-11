@@ -13,6 +13,8 @@ import {
 } from "react-native";
 import { getUserById, updateUser } from "../../../services/user-service";
 import Toast from "react-native-root-toast";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faUserAlt } from "@fortawesome/free-solid-svg-icons";
 import ImageIcon from "../../../assets/fotoPerfil.jpg";
 import AddPhotoCamera from "../../add-photo-camera";
 
@@ -21,7 +23,7 @@ class UserData extends Component {
     super(props);
     this.state = {
       loading: false,
-      imageUrl: { uri: "https://i.pravatar.cc/150?img=32" },
+      imageUrl: null,
       name: "",
       email: "",
       validName: true,
@@ -132,6 +134,7 @@ class UserData extends Component {
       });
     }
   }
+
   confirmUserUpdate() {
     Alert.alert(
       "Atualizar Usuário",
@@ -145,9 +148,6 @@ class UserData extends Component {
       ],
       { cancelable: false }
     );
-  }
-  getImage() {
-    return console.log("oi");
   }
 
   componentWillUnmount() {
@@ -173,11 +173,14 @@ class UserData extends Component {
       return (
         <View style={{ flex: 1, backgroundColor: "#fff" }}>
           <TouchableOpacity style={style.imageContainer}>
-            <Image
-              style={style.imageLogo}
-              onPress={() => this.getImage()}
-              source={this.state.imageUrl || ImageIcon}
-            />
+            {this.state.imageUrl ? (
+              <Image
+                style={style.imageLogo}
+                source={{ uri: this.state.imageUrl }}
+              />
+            ) : (
+              <FontAwesomeIcon size={80} icon={faUserAlt} />
+            )}
           </TouchableOpacity>
           <View style={style.container}>
             <TextInput

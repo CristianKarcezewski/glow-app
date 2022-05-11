@@ -32,7 +32,6 @@ class AddressList extends Component {
     loadUserAddresses(Platform.OS, this.props.loginEmitter.authorization)
       .then(({ status, data }) => {
         if (status === 200) {
-          console.log("Teste Usuario", data);
           this.props.filterEmitter.setAddresses(data);
           this.setState({ ...this.state, loading: false });
         } else {
