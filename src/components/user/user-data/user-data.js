@@ -24,6 +24,7 @@ class UserData extends Component {
     this.state = {
       loading: false,
       imageUrl: null,
+     // imageUrl: "https://i.pravatar.cc/150?img=32" ,
       name: "",
       email: "",
       validName: true,
@@ -176,7 +177,7 @@ class UserData extends Component {
             {this.state.imageUrl ? (
               <Image
                 style={style.imageLogo}
-                source={{ uri: this.state.imageUrl }}
+                source={{ uri: this.state.imageUrl }}                
               />
             ) : (
               <FontAwesomeIcon size={80} icon={faUserAlt} />

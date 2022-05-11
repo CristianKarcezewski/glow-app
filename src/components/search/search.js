@@ -3,13 +3,14 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
   FlatList,
   TouchableOpacity,
   TextInput,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
-  faUser,
+  faUserAlt,
   faStar,
   faSearch,
   faFilter,
@@ -30,7 +31,7 @@ class SearchResult extends Component {
         ),
         new Provider(
           "2",
-          null,
+          "https://i.pravatar.cc/150?img=32",
           "Diarista",
           "Maria",
           "Entre as mais confiaveis que você precisa"
@@ -139,7 +140,14 @@ class CardResult extends Component {
     return (
       <View style={style.cardResultContainer}>
         <View style={style.cardResultImage}>
-          <FontAwesomeIcon icon={faUser} size={40} style={{ flex: 1 }} />
+          {this.props.provider.imageUrl ? (
+            <Image
+              style={style.imageLogo}
+              source={{ uri: this.props.provider.imageUrl }}
+            />
+          ) : (
+            <FontAwesomeIcon size={40} icon={faUserAlt} />
+          )}
         </View>
 
         <View style={{ flex: 3, justifyContent: "center" }}>
@@ -192,6 +200,12 @@ const style = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+  },
+  imageLogo: {
+   
+    width: 55,
+    height: 55,
+    borderRadius: 100,
   },
 });
 
