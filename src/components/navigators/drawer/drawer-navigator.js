@@ -22,7 +22,7 @@ class DrawerNavigator extends Component {
   }
 
   _clean({ navigation }) {
-    console.log("CLEAR")
+    console.log("CLEAR");
     this.props.loginEmitter.logout();
     this.props.cleanMemory();
     navigation.closeDrawer();
@@ -97,66 +97,72 @@ class DrawerNavigator extends Component {
           )}
         </this.drawer.Screen>
 
-        <this.drawer.Screen
-          name="provider-gallery-stack"
-          options={({ navigation }) => ({
-            headerShown: false,
-            title: "Galeria",
-          })}
-        >
-          {(props) => (
-            <ProviderGalleryStack
-              {...props}
-              //loginEmitter={this.props.loginEmitter}
-              //providerRegisterEmitter={this.props.providerRegisterEmitter}
-              //addressesProviderFilterEmitter={
+        {this.props.loginEmitter.userLoggedIn === 2 ? (
+          <this.drawer.Screen
+            name="provider-gallery-stack"
+            options={({ navigation }) => ({
+              headerShown: false,
+              title: "Galeria",
+            })}
+          >
+            {(props) => (
+              <ProviderGalleryStack
+                {...props}
+                //loginEmitter={this.props.loginEmitter}
+                //providerRegisterEmitter={this.props.providerRegisterEmitter}
+                //addressesProviderFilterEmitter={
                 //this.props.addressesProviderFilterEmitter
-             // }
-            />
-          )}
-        </this.drawer.Screen>
+                // }
+              />
+            )}
+          </this.drawer.Screen>
+        ) : null}
 
-        <this.drawer.Screen
-          name="schedule"
-          component={Schedule}
-          options={({ navigation }) => ({
-            headerShown: true,
-            title: "Agenda",
-            headerLeft: () => (
-              <TouchableOpacity
-                style={{ marginLeft: 20 }}
-                onPress={() => navigation.goBack()}
-              >
-                <FontAwesomeIcon
-                  icon={faArrowLeft}
-                  size={20}
-                  style={{ flex: 1 }}
-                />
-              </TouchableOpacity>
-            ),
-          })}
-        />
+        {this.props.loginEmitter.userLoggedIn === 2 ? (
+          <this.drawer.Screen
+            name="schedule"
+            component={Schedule}
+            options={({ navigation }) => ({
+              headerShown: true,
+              title: "Agenda",
+              headerLeft: () => (
+                <TouchableOpacity
+                  style={{ marginLeft: 20 }}
+                  onPress={() => navigation.goBack()}
+                >
+                  <FontAwesomeIcon
+                    icon={faArrowLeft}
+                    size={20}
+                    style={{ flex: 1 }}
+                  />
+                </TouchableOpacity>
+              ),
+            })}
+          />
+        ) : null}
 
-        <this.drawer.Screen
-          name="service-packs"
-          component={ServicePacks}
-          options={({ navigation }) => ({
-            headerShown: true,
-            title: "Pacotes de Serviço",
-            headerLeft: () => (
-              <TouchableOpacity
-                style={{ marginLeft: 20 }}
-                onPress={() => navigation.goBack()}
-              >
-                <FontAwesomeIcon
-                  icon={faArrowLeft}
-                  size={20}
-                  style={{ flex: 1 }}
-                />
-              </TouchableOpacity>
-            ),
-          })}
-        />
+        {this.props.loginEmitter.userLoggedIn === 2 ? (
+          <this.drawer.Screen
+            name="service-packs"
+            component={ServicePacks}
+            options={({ navigation }) => ({
+              headerShown: true,
+              title: "Pacotes de Serviço",
+              headerLeft: () => (
+                <TouchableOpacity
+                  style={{ marginLeft: 20 }}
+                  onPress={() => navigation.goBack()}
+                >
+                  <FontAwesomeIcon
+                    icon={faArrowLeft}
+                    size={20}
+                    style={{ flex: 1 }}
+                  />
+                </TouchableOpacity>
+              ),
+            })}
+          />
+        ) : null}
       </this.drawer.Navigator>
     );
   }

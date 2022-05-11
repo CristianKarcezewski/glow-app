@@ -1,4 +1,4 @@
-import * as SecureStore from "expo-secure-store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default class LoginEmitter {
   tokenKey = "LoginEmmiterKey";
@@ -7,25 +7,29 @@ export default class LoginEmitter {
     this.subscribes = [];
     this.readUserData();
     this.authorization = null;
-    this.userLoggedIn = false;
+    this.userLoggedIn = null;
   }
 
   async readUserData() {
-    await SecureStore.getItemAsync(this.tokenKey).then((data) => {
+    await AsyncStorage.getItem(this.tokenKey).then((data) => {
       if (data != null) {
-        this.userData = JSON.parse(data);
-        this.userLoggedIn = true;
+        const info = JSON.parse(data);
+        this.userLoggedIn = info.userType;
+        this.authorization = info.token;
         this.emit();
       }
     });
   }
 
-  async saveUserData(token) {
-    await SecureStore.setItemAsync(this.tokenKey, JSON.stringify(token));
+  async saveUserData() {
+    await AsyncStorage.setItem(
+      this.tokenKey,
+      JSON.stringify({ token: this.authorization, userType: this.userLoggedIn })
+    );
   }
 
   async removeUserData() {
-    await SecureStore.deleteItemAsync(this.tokenKey);
+    await AsyncStorage.removeItem(this.tokenKey);
   }
 
   subscribe(key, handler) {
@@ -53,20 +57,21 @@ export default class LoginEmitter {
 
   emit() {
     this.subscribes.forEach((sub) => {
-      sub.handler(this.userLoggedIn);
+      sub.handler();
     });
   }
 
-  login(token) {
+  login(token, userLoggedIn) {
     this.authorization = token;
-    this.userLoggedIn = true;
+    this.userLoggedIn = userLoggedIn;
     this.emit();
-    this.saveUserData(token);
+    this.saveUserData();
   }
 
   logout() {
     this.removeUserData();
-    this.userLoggedIn = false;
+    this.userLoggedIn = null;
+    this.authorization = null;
     this.emit();
   }
 

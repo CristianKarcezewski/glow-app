@@ -39,37 +39,17 @@ class Login extends Component {
     ) {
       this.setState({ ...this.state, loading: true });
 
-      // signInWithEmailAndPassword(
-      //   firebaseAuth,
-      //   this.state.email,
-      //   this.state.password
-      // )
-      //   .then((userCredential) => {
-      //     // Signed in
-      //     userCredential.user
-      //       .getIdToken()
-      //       .then((idToken) => this.props.loginEmitter.login(idToken));
-      //     this.setState({ ...this.state, loading: false });
-      //     this.props.navigation.popToTop();
-      //   })
-      //   .catch((error) => {
-      //     console.log("error", error);
-      //     this.setState({ ...this.state, loading: false });
-      //   });
-
       login(Platform.OS, this.state.email, this.state.password)
         .then(({ status, data }) => {
           if (status === 200) {
-            // this.props.loginEmitter.login(data.authorization);
-            // this.setState({ ...this.state, loading: false });
-            // this.props.navigation.popToTop();
-
             signInWithCustomToken(firebaseAuth, data.authorization)
               .then((userCredential) => {
                 // Signed in
                 userCredential.user
                   .getIdToken()
-                  .then((idToken) => this.props.loginEmitter.login(idToken));
+                  .then((idToken) =>
+                    this.props.loginEmitter.login(idToken, data.userType)
+                  );
                 this.setState({ ...this.state, loading: false });
                 this.props.navigation.popToTop();
               })

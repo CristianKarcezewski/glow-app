@@ -27,8 +27,12 @@ class StackNavigator extends Component {
     };
   }
 
-  _handleLogin(value) {
-    this.setState({ ...this.state, userLoggedIn: value });
+  _handleLogin() {
+    if (this.props.loginEmitter.authorization) {
+      this.setState({ ...this.state, userLoggedIn: true });
+    } else {
+      this.setState({ ...this.state, userLoggedIn: false });
+    }
   }
 
   setHeader(value) {
