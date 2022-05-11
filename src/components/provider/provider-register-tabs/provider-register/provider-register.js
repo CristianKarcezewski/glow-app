@@ -212,6 +212,7 @@ class ProviderRegister extends Component {
       </TouchableOpacity>
     );
   }
+
   cityButton() {
     return (
       <TouchableOpacity
@@ -224,6 +225,7 @@ class ProviderRegister extends Component {
       </TouchableOpacity>
     );
   }
+
   componentDidMount() {
     this.props.registerEmitter.subscribe(
       this.componentKey,

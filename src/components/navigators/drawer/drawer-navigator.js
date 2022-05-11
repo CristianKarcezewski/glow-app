@@ -82,7 +82,10 @@ class DrawerNavigator extends Component {
           name="provider-register-tabs"
           options={({ navigation }) => ({
             headerShown: false,
-            title: "Torne-se um prestador",
+            title:
+              this.props.loginEmitter.userLoggedIn == 2
+                ? "Meus serviços"
+                : "Ser um prestador",
           })}
         >
           {(props) => (
@@ -97,7 +100,7 @@ class DrawerNavigator extends Component {
           )}
         </this.drawer.Screen>
 
-        {this.props.loginEmitter.userLoggedIn === 2 ? (
+        {this.props.loginEmitter.userLoggedIn == 2 ? (
           <this.drawer.Screen
             name="provider-gallery-stack"
             options={({ navigation }) => ({
@@ -118,7 +121,7 @@ class DrawerNavigator extends Component {
           </this.drawer.Screen>
         ) : null}
 
-        {this.props.loginEmitter.userLoggedIn === 2 ? (
+        {this.props.loginEmitter.userLoggedIn == 2 ? (
           <this.drawer.Screen
             name="schedule"
             component={Schedule}
@@ -141,7 +144,7 @@ class DrawerNavigator extends Component {
           />
         ) : null}
 
-        {this.props.loginEmitter.userLoggedIn === 2 ? (
+        {this.props.loginEmitter.userLoggedIn == 2 ? (
           <this.drawer.Screen
             name="service-packs"
             component={ServicePacks}

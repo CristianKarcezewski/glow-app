@@ -48,7 +48,7 @@ class Login extends Component {
                 userCredential.user
                   .getIdToken()
                   .then((idToken) =>
-                    this.props.loginEmitter.login(idToken, data.userType)
+                    this.props.loginEmitter.login(idToken, data.userGroupId)
                   );
                 this.setState({ ...this.state, loading: false });
                 this.props.navigation.popToTop();
