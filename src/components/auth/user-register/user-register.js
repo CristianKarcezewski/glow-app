@@ -48,7 +48,7 @@ class UserRegister extends Component {
       };
       register(Platform.OS, newUser)
         .then(({ status, data }) => {
-          if (status === 200) {console.log;
+          if (status === 200) {
             this.props.loginEmitter.login(data);
             this.setState({ ...this.state, loading: false });
             this.props.navigation.popToTop();

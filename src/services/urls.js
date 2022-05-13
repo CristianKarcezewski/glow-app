@@ -7,7 +7,7 @@ const API = `http://${manifest.debuggerHost.split(":").shift()}:8080`;
 // must use 'http' and local IP address
 
 // const API = "http://192.168.15.6:8080";
- //const API = "http://192.168.0.129:8080";
+//const API = "http://192.168.0.129:8080";
 
 //users
 export const LOGIN_API = `${API}/users/login`;
@@ -34,6 +34,7 @@ export const REMOVE_COMPANY_ADDRESS = `${API}/addresses/company`;
 export const PROVIDER_REGISTER = `${API}/companies`;
 export const GET_COMPANY_BY_USER = `${API}/companies/user`;
 export const UPDATE_PROVIDER = `${API}/companies`;
+export const SEARCH_PROVIDER = `${API}/companies/search`;
 
 //provider-types
 export const GET_PROVIDER_TYPES = `${API}/provider-types`;

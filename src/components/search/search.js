@@ -5,7 +5,9 @@ import {
   View,
   Image,
   FlatList,
+  Platform,
   TouchableOpacity,
+  ActivityIndicator,
   TextInput,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -15,12 +17,17 @@ import {
   faSearch,
   faFilter,
 } from "@fortawesome/free-solid-svg-icons";
-import Provider from "../../models/provider";
+import * as Location from "expo-location";
+import { searchProvider } from "../../services/provider-service";
+import { Provider } from "../../models/provider";
 
 class SearchResult extends Component {
+  componentKey = "searchListKey";
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
+      // providers: [],
       providers: [
         new Provider(
           "1",
@@ -82,6 +89,64 @@ class SearchResult extends Component {
     };
   }
 
+  searchProviders(filter) {
+    searchProvider(Platform.OS, this.props.loginEmitter.authorization, filter)
+      .then(({ status, data }) => {
+        if (status === 200) {
+          signInWithCustomToken(firebaseAuth, data.authorization)
+            .then((userCredential) => {
+              // Signed in
+              userCredential.user
+                .getIdToken()
+                .then((idToken) =>
+                  this.props.loginEmitter.login(idToken, data.userGroupId)
+                );
+              this.setState({ ...this.state, loading: false });
+              this.props.navigation.popToTop();
+            })
+            .catch((error) => {
+              console.log("error", error);
+              this.setState({ ...this.state, loading: false });
+            });
+        } else {
+          this.setState({ ...this.state, loading: false });
+          Toast.show("Usuário ou senha inválidos...", {
+            duration: Toast.durations.LONG,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        this.setState({ ...this.state, loading: false });
+      });
+  }
+
+  requestLocation() {
+    Location.requestForegroundPermissionsAsync().then((status) => {
+      if (status.status === "granted") {
+        Location.getCurrentPositionAsync().then((result) => {
+          this.props.searchFilterEmitter.setFilter({
+            ...this.props.searchFilterEmitter.filter,
+            latitude: result.latitude,
+            longitude: result.longitude,
+          });
+        });
+      }
+    });
+  }
+
+  componentDidMount() {
+    this.props.searchFilterEmitter.subscribe(
+      this.componentKey,
+      this.searchProviders.bind(this)
+    );
+    this.requestLocation();
+  }
+
+  componentWillUnmount() {
+    this.props.searchFilterEmitter.unsubscribe(this.componentKey);
+  }
+
   render() {
     return (
       <View style={{ flex: 1, marginTop: 10 }}>
@@ -116,19 +181,36 @@ class SearchResult extends Component {
           </TouchableOpacity>
         </View>
         <View style={{ flex: 14 }}>
-          <FlatList
-            keyExtractor={(item) => item.id}
-            data={this.state.providers}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.navigate("provider-detail-tabs")
-                }
-              >
-                <CardResult provider={item} />
-              </TouchableOpacity>
-            )}
-          />
+          {this.state.loading ? (
+            <ActivityIndicator
+              size={"large"}
+              color={"#db382f"}
+              animating={this.state.loading}
+              style={{ flex: 1 }}
+            />
+          ) : (
+            <View style={{ flex: 1 }}>
+              {this.state.providers.length > 0 ? (
+                <FlatList
+                  keyExtractor={(item) => item.id}
+                  data={this.state.providers}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.props.navigation.navigate("provider-detail-tabs")
+                      }
+                    >
+                      <CardResult provider={item} />
+                    </TouchableOpacity>
+                  )}
+                />
+              ) : (
+                <Text style={{ fontSize: 20, flex: 1, padding: 20 }}>
+                  Nenhum resultado encontrado. Tente modificar os filtros.
+                </Text>
+              )}
+            </View>
+          )}
         </View>
       </View>
     );
@@ -202,7 +284,6 @@ const style = StyleSheet.create({
     justifyContent: "center",
   },
   imageLogo: {
-   
     width: 55,
     height: 55,
     borderRadius: 100,

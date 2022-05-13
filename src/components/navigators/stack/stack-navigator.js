@@ -107,7 +107,13 @@ class StackNavigator extends Component {
               },
             })}
           >
-            {(props) => <Search {...props} />}
+            {(props) => (
+              <Search
+                {...props}
+                loginEmitter={this.props.loginEmitter}
+                searchFilterEmitter={this.props.searchFilterEmitter}
+              />
+            )}
           </this.stack.Screen>
 
           <this.stack.Screen

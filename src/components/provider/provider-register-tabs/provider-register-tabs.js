@@ -71,6 +71,23 @@ class ProviderRegisterTabs extends Component {
             />
           )}
         </this.tabs.Screen>
+
+        {/* <this.tabs.Screen
+          name="provider-galery"
+          options={{ title: "Galeria" }}
+        >
+          {(props) => (
+            <ProviderAddressStack
+              {...props}
+              loginEmitter={this.props.loginEmitter}
+              addressesProviderFilterEmitter={
+                this.props.addressesProviderFilterEmitter
+              }
+              // locationsEmitter={this.props.locationsEmitter}
+              showHeader={this.showHeader.bind(this)}
+            />
+          )}
+        </this.tabs.Screen> */}
       </this.tabs.Navigator>
     );
   }

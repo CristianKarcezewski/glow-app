@@ -160,7 +160,10 @@ class ProviderRegister extends Component {
       .then(({ status, data }) => {
         if (status === 200) {
           this.setState({ ...this.state, loading: false });
-          this.props.loginEmitter.userData.userGroupId = 2;
+          this.props.loginEmitter.login(
+            this.props.loginEmitter.authorization,
+            2
+          );
           if (data) {
             this.setForm(data);
           }

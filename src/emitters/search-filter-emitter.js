@@ -8,6 +8,8 @@ export default class SearchFilterEmitter {
       providerType: null,
       state: null,
       city: null,
+      latitude: null,
+      longitude: null,
     };
     this.defaultFilter = this.filter;
   }

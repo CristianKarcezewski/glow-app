@@ -2,6 +2,7 @@ import {
   PROVIDER_REGISTER,
   GET_COMPANY_BY_USER,
   UPDATE_PROVIDER,
+  SEARCH_PROVIDER,
 } from "./urls";
 
 export const getCompanyByUser = async (platform, authorization) => {
@@ -54,6 +55,26 @@ export const updateProvider = async (platform, authorization, provider) => {
         authorization,
       },
       body: JSON.stringify(provider),
+    });
+
+    let json = await response.json();
+    return { status: response.status, data: json };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const searchProvider = async (platform, authorization, filter) => {
+  try {
+    let response = await fetch(SEARCH_PROVIDER, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        platform,
+        authorization,
+      },
+      body: JSON.stringify(filter),
     });
 
     let json = await response.json();

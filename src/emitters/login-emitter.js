@@ -64,7 +64,6 @@ export default class LoginEmitter {
   login(token, userLoggedIn) {
     this.authorization = token;
     this.userLoggedIn = userLoggedIn;
-    console.log(this.userLoggedIn);
     this.emit();
     this.saveUserData();
   }

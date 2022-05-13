@@ -15,8 +15,6 @@ import { getUserById, updateUser } from "../../../services/user-service";
 import Toast from "react-native-root-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUserAlt } from "@fortawesome/free-solid-svg-icons";
-import ImageIcon from "../../../assets/fotoPerfil.jpg";
-import AddPhotoCamera from "../../add-photo-camera";
 
 class UserData extends Component {
   constructor(props) {
@@ -24,7 +22,6 @@ class UserData extends Component {
     this.state = {
       loading: false,
       imageUrl: null,
-     // imageUrl: "https://i.pravatar.cc/150?img=32" ,
       name: "",
       email: "",
       validName: true,
@@ -36,6 +33,7 @@ class UserData extends Component {
     this.setState({ ...this.state, loading: true });
     getUserById(Platform.OS, this.props.loginEmitter.authorization)
       .then(({ status, data }) => {
+        console.log(data);
         if (status === 200) {
           this.setState({
             ...this.state,
@@ -177,7 +175,7 @@ class UserData extends Component {
             {this.state.imageUrl ? (
               <Image
                 style={style.imageLogo}
-                source={{ uri: this.state.imageUrl }}                
+                source={{ uri: this.state.imageUrl }}
               />
             ) : (
               <FontAwesomeIcon size={80} icon={faUserAlt} />
