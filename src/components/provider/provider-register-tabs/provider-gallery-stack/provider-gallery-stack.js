@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Gallery from "../../gallery";
+import Gallery from "../../../gallery";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
@@ -8,9 +8,9 @@ import {
   faPlus,
   faPhotoVideo,
 } from "@fortawesome/free-solid-svg-icons";
-import AddPhotoCamera from "../../add-photo-camera";
-import AddPhotoGallery from "../../add-photo-gallery";
-import ProviderUploadImage from "../../provider/provider-upload-image";
+import AddPhotoCamera from "../../../add-photo-camera";
+import AddPhotoGallery from "../../../add-photo-gallery";
+import ProviderUploadImage from "../../provider-upload-image";
 
 class ProviderGalleryStack extends Component {
   constructor(props) {

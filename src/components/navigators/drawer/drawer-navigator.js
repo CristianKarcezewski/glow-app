@@ -11,9 +11,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import StackNavigator from "../stack";
 import UserTabs from "../../user/user-tabs";
 import ProviderRegisterTabs from "../../provider/provider-register-tabs";
-import Schedule from "../../schedule";
-import ServicePacks from "../../service-packs";
-import ProviderGalleryStack from "../provider-gallery-stack";
+
 
 class DrawerNavigator extends Component {
   constructor(props) {
@@ -100,28 +98,7 @@ class DrawerNavigator extends Component {
           )}
         </this.drawer.Screen>
 
-        {this.props.loginEmitter.userLoggedIn == 2 ? (
-          <this.drawer.Screen
-            name="provider-gallery-stack"
-            options={({ navigation }) => ({
-              headerShown: false,
-              title: "Galeria",
-            })}
-          >
-            {(props) => (
-              <ProviderGalleryStack
-                {...props}
-                //loginEmitter={this.props.loginEmitter}
-                //providerRegisterEmitter={this.props.providerRegisterEmitter}
-                //addressesProviderFilterEmitter={
-                //this.props.addressesProviderFilterEmitter
-                // }
-              />
-            )}
-          </this.drawer.Screen>
-        ) : null}
-
-        {this.props.loginEmitter.userLoggedIn == 2 ? (
+        {/* {this.props.loginEmitter.userLoggedIn == 2 ? (
           <this.drawer.Screen
             name="schedule"
             component={Schedule}
@@ -142,9 +119,9 @@ class DrawerNavigator extends Component {
               ),
             })}
           />
-        ) : null}
+        ) : null} */}
 
-        {this.props.loginEmitter.userLoggedIn == 2 ? (
+        {/* {this.props.loginEmitter.userLoggedIn == 2 ? (
           <this.drawer.Screen
             name="service-packs"
             component={ServicePacks}
@@ -165,7 +142,7 @@ class DrawerNavigator extends Component {
               ),
             })}
           />
-        ) : null}
+        ) : null} */}
       </this.drawer.Navigator>
     );
   }

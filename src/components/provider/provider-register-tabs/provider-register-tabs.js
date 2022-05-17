@@ -1,9 +1,19 @@
 import React, { Component } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faAddressCard, faMapMarker } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAddressCard,
+  faMapMarker,
+  faPhotoVideo,
+  faHourglass,
+  faBell,
+} from "@fortawesome/free-solid-svg-icons";
 import ProviderRegisterStack from "./provider-register-stack";
 import ProviderAddressStack from "./provider-address-stack";
+import ProviderGalleryStack from "./provider-gallery-stack";
+import Schedule from "../../schedule";
+import ServicePacks from "../../service-packs";
+
 
 class ProviderRegisterTabs extends Component {
   constructor(props) {
@@ -25,6 +35,34 @@ class ProviderRegisterTabs extends Component {
               return (
                 <FontAwesomeIcon
                   icon={faAddressCard}
+                  color={focused ? "#db382f" : "black"}
+                  size={24}
+                />
+              );
+            }
+            if (route.name === "provider-gallery-stack") {
+              return (
+                <FontAwesomeIcon
+                  icon={faPhotoVideo}
+                  color={focused ? "#db382f" : "black"}
+                  size={24}
+                />
+              );
+            }
+
+            if (route.name === "schedule") {
+              return (
+                <FontAwesomeIcon
+                  icon={faBell}
+                  color={focused ? "#db382f" : "black"}
+                  size={24}
+                />
+              );
+            }
+            if (route.name === "service-packs") {
+              return (
+                <FontAwesomeIcon
+                  icon={faHourglass}
                   color={focused ? "#db382f" : "black"}
                   size={24}
                 />
@@ -56,6 +94,21 @@ class ProviderRegisterTabs extends Component {
         </this.tabs.Screen>
 
         <this.tabs.Screen
+          name="provider-gallery-stack"
+          options={{ title: "Galeria" }}
+        >
+          {(props) => <ProviderGalleryStack {...props} />}
+        </this.tabs.Screen>
+
+        <this.tabs.Screen name="schedule" options={{ title: "Agenda" }}>
+          {(props) => <Schedule {...props} />}
+        </this.tabs.Screen>
+
+        <this.tabs.Screen name="service-packs" options={{ title: "Pacote" }}>
+          {(props) => <ServicePacks {...props} />}
+        </this.tabs.Screen>
+
+        <this.tabs.Screen
           name="provider-address-stack"
           options={{ title: "Seus endereços" }}
         >
@@ -72,22 +125,28 @@ class ProviderRegisterTabs extends Component {
           )}
         </this.tabs.Screen>
 
-        {/* <this.tabs.Screen
-          name="provider-galery"
-          options={{ title: "Galeria" }}
-        >
-          {(props) => (
-            <ProviderAddressStack
-              {...props}
-              loginEmitter={this.props.loginEmitter}
-              addressesProviderFilterEmitter={
-                this.props.addressesProviderFilterEmitter
-              }
-              // locationsEmitter={this.props.locationsEmitter}
-              showHeader={this.showHeader.bind(this)}
-            />
-          )}
-        </this.tabs.Screen> */}
+        {/* {this.props.loginEmitter.userLoggedIn == 2 ? (
+          <this.drawer.Screen
+            name="schedule"
+            component={Schedule}
+            options={({ navigation }) => ({
+              headerShown: true,
+              title: "Agenda",
+              headerLeft: () => (
+                <TouchableOpacity
+                  style={{ marginLeft: 20 }}
+                  onPress={() => navigation.goBack()}
+                >
+                  <FontAwesomeIcon
+                    icon={faArrowLeft}
+                    size={20}
+                    style={{ flex: 1 }}
+                  />
+                </TouchableOpacity>
+              ),
+            })}
+          />
+        ) : null} */}
       </this.tabs.Navigator>
     );
   }

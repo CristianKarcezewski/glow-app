@@ -27,65 +27,65 @@ class SearchResult extends Component {
     super(props);
     this.state = {
       loading: false,
-      // providers: [],
-      providers: [
-        new Provider(
-          "1",
-          null,
-          "Encanador",
-          "João",
-          "Um dos mais bem avaliados da região"
-        ),
-        new Provider(
-          "2",
-          "https://i.pravatar.cc/150?img=32",
-          "Diarista",
-          "Maria",
-          "Entre as mais confiaveis que você precisa"
-        ),
-        new Provider(
-          "3",
-          null,
-          "Encanador",
-          "João",
-          "Um dos mais bem avaliados da região"
-        ),
-        new Provider(
-          "4",
-          null,
-          "Diarista",
-          "Maria",
-          "Entre as mais confiaveis que você precisa"
-        ),
-        new Provider(
-          "5",
-          null,
-          "Encanador",
-          "João",
-          "Um dos mais bem avaliados da região"
-        ),
-        new Provider(
-          "6",
-          null,
-          "Diarista",
-          "Maria",
-          "Entre as mais confiaveis que você precisa"
-        ),
-        new Provider(
-          "7",
-          null,
-          "Encanador",
-          "João",
-          "Um dos mais bem avaliados da região"
-        ),
-        new Provider(
-          "8",
-          null,
-          "Diarista",
-          "Maria",
-          "Entre as mais confiaveis que você precisa"
-        ),
-      ],
+      providers: [],
+      // providers: [
+      //   new Provider(
+      //     "1",
+      //     null,
+      //     "Encanador",
+      //     "João",
+      //     "Um dos mais bem avaliados da região"
+      //   ),
+      //   new Provider(
+      //     "2",
+      //     "https://i.pravatar.cc/150?img=32",
+      //     "Diarista",
+      //     "Maria",
+      //     "Entre as mais confiaveis que você precisa"
+      //   ),
+      //   new Provider(
+      //     "3",
+      //     null,
+      //     "Encanador",
+      //     "João",
+      //     "Um dos mais bem avaliados da região"
+      //   ),
+      //   new Provider(
+      //     "4",
+      //     null,
+      //     "Diarista",
+      //     "Maria",
+      //     "Entre as mais confiaveis que você precisa"
+      //   ),
+      //   new Provider(
+      //     "5",
+      //     null,
+      //     "Encanador",
+      //     "João",
+      //     "Um dos mais bem avaliados da região"
+      //   ),
+      //   new Provider(
+      //     "6",
+      //     null,
+      //     "Diarista",
+      //     "Maria",
+      //     "Entre as mais confiaveis que você precisa"
+      //   ),
+      //   new Provider(
+      //     "7",
+      //     null,
+      //     "Encanador",
+      //     "João",
+      //     "Um dos mais bem avaliados da região"
+      //   ),
+      //   new Provider(
+      //     "8",
+      //     null,
+      //     "Diarista",
+      //     "Maria",
+      //     "Entre as mais confiaveis que você precisa"
+      //   ),
+      // ],
     };
   }
 
