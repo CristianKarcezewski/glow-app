@@ -19,6 +19,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import * as Location from "expo-location";
 import { searchProvider } from "../../services/provider-service";
+import { findAddressByGeolocation } from "../../services/address-service";
+import Toast from "react-native-root-toast";
 import { Provider } from "../../models/provider";
 
 class SearchResult extends Component {
@@ -27,90 +29,72 @@ class SearchResult extends Component {
     super(props);
     this.state = {
       loading: false,
+      search: "",
       providers: [],
-      // providers: [
-      //   new Provider(
-      //     "1",
-      //     null,
-      //     "Encanador",
-      //     "João",
-      //     "Um dos mais bem avaliados da região"
-      //   ),
-      //   new Provider(
-      //     "2",
-      //     "https://i.pravatar.cc/150?img=32",
-      //     "Diarista",
-      //     "Maria",
-      //     "Entre as mais confiaveis que você precisa"
-      //   ),
-      //   new Provider(
-      //     "3",
-      //     null,
-      //     "Encanador",
-      //     "João",
-      //     "Um dos mais bem avaliados da região"
-      //   ),
-      //   new Provider(
-      //     "4",
-      //     null,
-      //     "Diarista",
-      //     "Maria",
-      //     "Entre as mais confiaveis que você precisa"
-      //   ),
-      //   new Provider(
-      //     "5",
-      //     null,
-      //     "Encanador",
-      //     "João",
-      //     "Um dos mais bem avaliados da região"
-      //   ),
-      //   new Provider(
-      //     "6",
-      //     null,
-      //     "Diarista",
-      //     "Maria",
-      //     "Entre as mais confiaveis que você precisa"
-      //   ),
-      //   new Provider(
-      //     "7",
-      //     null,
-      //     "Encanador",
-      //     "João",
-      //     "Um dos mais bem avaliados da região"
-      //   ),
-      //   new Provider(
-      //     "8",
-      //     null,
-      //     "Diarista",
-      //     "Maria",
-      //     "Entre as mais confiaveis que você precisa"
-      //   ),
-      // ],
     };
   }
 
   searchProviders(filter) {
+    this.setState({ ...this.state, loading: true });
     searchProvider(Platform.OS, this.props.loginEmitter.authorization, filter)
       .then(({ status, data }) => {
         if (status === 200) {
-          signInWithCustomToken(firebaseAuth, data.authorization)
-            .then((userCredential) => {
-              // Signed in
-              userCredential.user
-                .getIdToken()
-                .then((idToken) =>
-                  this.props.loginEmitter.login(idToken, data.userGroupId)
-                );
-              this.setState({ ...this.state, loading: false });
-              this.props.navigation.popToTop();
-            })
-            .catch((error) => {
-              console.log("error", error);
-              this.setState({ ...this.state, loading: false });
-            });
+          this.setState({
+            ...this.state,
+            loading: false,
+            providers: this.mapResponse(data),
+          });
         } else {
           this.setState({ ...this.state, loading: false });
-          Toast.show("Usuário ou senha inválidos...", {
+          Toast.show("Erro ao buscar prestatores", {
+            duration: Toast.durations.LONG,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        this.setState({ ...this.state, loading: false });
+      });
+  }
+
+  mapResponse(data) {
+    var resp = [];
+    if (data.length > 0) {
+      data.map((p) => {
+        resp.push({
+          id: p.companyId,
+          imageUrl: null,
+          profession: p.providerType?.name,
+          name: p.companyName,
+          description: p.description,
+        });
+      });
+    }
+
+    return resp;
+  }
+
+  setFilter() {
+    this.props.searchFilterEmitter.setFilter({
+      ...this.props.searchFilterEmitter.filter,
+      search: this.state.search,
+    });
+  }
+
+  findAddressByGeolocation(geolocation) {
+    this.setState({ ...this.state, loading: true });
+    findAddressByGeolocation(
+      Platform.OS,
+      this.props.loginEmitter.authorization,
+      geolocation
+    )
+      .then(({ status, data }) => {
+        if (status === 200) {
+          this.setState({ ...this.state, loading: false });
+          //set address data to filter emmiter
+        } else {
+          this.setState({ ...this.state, loading: false });
+          Toast.show("Erro ao buscar localização", {
             duration: Toast.durations.LONG,
           });
         }
@@ -125,11 +109,17 @@ class SearchResult extends Component {
     Location.requestForegroundPermissionsAsync().then((status) => {
       if (status.status === "granted") {
         Location.getCurrentPositionAsync().then((result) => {
-          this.props.searchFilterEmitter.setFilter({
-            ...this.props.searchFilterEmitter.filter,
-            latitude: result.latitude,
-            longitude: result.longitude,
-          });
+          // this.props.searchFilterEmitter.setFilter({
+          //   ...this.props.searchFilterEmitter.filter,
+          //   latitude: result.latitude,
+          //   longitude: result.longitude,
+          // });
+          if (result.latitude && result.longitude) {
+            this.findAddressByGeolocation({
+              latitude: result.latitude,
+              longitude: result.longitude,
+            });
+          }
         });
       }
     });
@@ -167,8 +157,15 @@ class SearchResult extends Component {
               borderBottomColor: "black",
               borderBottomWidth: 1,
             }}
+            onChangeText={(value) =>
+              this.setState({ ...this.state, search: value })
+            }
+            value={this.state.search}
           ></TextInput>
-          <TouchableOpacity style={{ flex: 1, alignItems: "center" }}>
+          <TouchableOpacity
+            style={{ flex: 1, alignItems: "center" }}
+            onPress={() => this.setFilter()}
+          >
             <FontAwesomeIcon icon={faSearch} size={25} color={"#db382f"} />
           </TouchableOpacity>
           <TouchableOpacity

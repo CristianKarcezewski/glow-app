@@ -6,6 +6,7 @@ import {
   UPDATE_ADDRESS,
   REMOVE_USER_ADDRESS,
   REMOVE_COMPANY_ADDRESS,
+  FIND_BY_GEOLOCATION,
 } from "./urls";
 
 export const loadUserAddresses = async (platform, authorization) => {
@@ -129,7 +130,11 @@ export const removeUserAddress = async (platform, authorization, addressId) => {
   }
 };
 
-export const removeCompanyAddress = async (  platform,  authorization, addressId) => {
+export const removeCompanyAddress = async (
+  platform,
+  authorization,
+  addressId
+) => {
   try {
     let response = await fetch(`${REMOVE_COMPANY_ADDRESS}/${addressId}`, {
       method: "DELETE",
@@ -139,6 +144,30 @@ export const removeCompanyAddress = async (  platform,  authorization, addressId
         platform,
         authorization,
       },
+    });
+
+    let json = await response.json();
+    return { status: response.status, data: json };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const findAddressByGeolocation = async (
+  platform,
+  authorization,
+  address
+) => {
+  try {
+    let response = await fetch(FIND_BY_GEOLOCATION, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        platform,
+        authorization,
+      },
+      body: JSON.stringify(address),
     });
 
     let json = await response.json();

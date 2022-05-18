@@ -11,15 +11,12 @@ class ProviderFilterStack extends Component {
   }
 
   setProvider(providerType) {
-     console.log("SetProvaiderRecebe", providerType);
     if (providerType) {
       this.props.searchFilterEmitter.setFilter({
         ...this.props.searchFilterEmitter.filter,
         providerType: providerType,
       });
-       console.log("setProvider", providerType);
     }
-    
   }
 
   setLocationState(item) {
