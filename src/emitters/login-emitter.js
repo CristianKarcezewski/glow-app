@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 
 export default class LoginEmitter {
   tokenKey = "LoginEmmiterKey";
@@ -11,7 +11,7 @@ export default class LoginEmitter {
   }
 
   async readUserData() {
-    await AsyncStorage.getItem(this.tokenKey).then((data) => {
+    await SecureStore.getItemAsync(this.tokenKey).then((data) => {
       if (data != null) {
         const info = JSON.parse(data);
         this.userLoggedIn = info.userType;
@@ -22,14 +22,14 @@ export default class LoginEmitter {
   }
 
   async saveUserData() {
-    await AsyncStorage.setItem(
+    await SecureStore.setItemAsync(
       this.tokenKey,
       JSON.stringify({ token: this.authorization, userType: this.userLoggedIn })
     );
   }
 
   async removeUserData() {
-    await AsyncStorage.removeItem(this.tokenKey);
+    await SecureStore.deleteItemAsync(this.tokenKey);
   }
 
   subscribe(key, handler) {

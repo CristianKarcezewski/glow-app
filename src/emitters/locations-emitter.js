@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 
 export default class LocationsEmitter {
   statesKey = "statesCache";
@@ -13,7 +13,7 @@ export default class LocationsEmitter {
 
   _loadCache() {
     if (this.statesKey && this.states.length == 0) {
-      AsyncStorage.getItem(this.statesKey).then((states) => {
+      SecureStore.setItemAsync(this.statesKey).then((states) => {
         if (states != null) {
           this.states = JSON.parse(states);
 
@@ -42,7 +42,7 @@ export default class LocationsEmitter {
   }
 
   _loadCity(st, index) {
-    return AsyncStorage.getItem(`${this.citiesKey}-${st.stateUf}-${index}`);
+    return SecureStore.getItemAsync(`${this.citiesKey}-${st.stateUf}-${index}`);
   }
 
   getCitiesByStateUf(stateUf) {
@@ -53,7 +53,7 @@ export default class LocationsEmitter {
   }
 
   _saveStates() {
-    AsyncStorage.setItem(this.statesKey, JSON.stringify(this.states));
+    SecureStore.setItemAsync(this.statesKey, JSON.stringify(this.states));
   }
 
   subscribe(key, handler) {
@@ -94,10 +94,6 @@ export default class LocationsEmitter {
   setCities(ct) {
     ct.forEach((ct, index) => {
       this.cities.push(ct);
-      // AsyncStorage.setItem(
-      //   `${this.citiesKey}-${ct.stateUf}-${index}`,
-      //   JSON.stringify(ct)
-      // );
     });
     this._emit();
   }

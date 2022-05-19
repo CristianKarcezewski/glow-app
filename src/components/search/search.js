@@ -89,6 +89,7 @@ class SearchResult extends Component {
       geolocation
     )
       .then(({ status, data }) => {
+        console.log(data);
         if (status === 200) {
           this.setState({ ...this.state, loading: false });
           //set address data to filter emmiter
@@ -109,15 +110,10 @@ class SearchResult extends Component {
     Location.requestForegroundPermissionsAsync().then((status) => {
       if (status.status === "granted") {
         Location.getCurrentPositionAsync().then((result) => {
-          // this.props.searchFilterEmitter.setFilter({
-          //   ...this.props.searchFilterEmitter.filter,
-          //   latitude: result.latitude,
-          //   longitude: result.longitude,
-          // });
-          if (result.latitude && result.longitude) {
+          if (result?.coords?.latitude && result?.coords?.longitude) {
             this.findAddressByGeolocation({
-              latitude: result.latitude,
-              longitude: result.longitude,
+              latitude: result.coords.latitude.toString(),
+              longitude: result.coords.longitude.toString(),
             });
           }
         });
