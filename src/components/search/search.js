@@ -89,10 +89,13 @@ class SearchResult extends Component {
       geolocation
     )
       .then(({ status, data }) => {
-        console.log(data);
         if (status === 200) {
           this.setState({ ...this.state, loading: false });
-          //set address data to filter emmiter
+          this.props.searchFilterEmitter.setFilter({
+            ...this.props.searchFilterEmitter.filter,
+            stateUf: data.state.uf,
+            cityId: data.city.cityId,
+          });
         } else {
           this.setState({ ...this.state, loading: false });
           Toast.show("Erro ao buscar localização", {

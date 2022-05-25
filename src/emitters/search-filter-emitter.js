@@ -26,7 +26,6 @@ export default class SearchFilterEmitter {
     } else {
       this.subscribes.push({ key: key, handler });
     }
-    handler(this.filter);
   }
 
   unsubscribe(key) {
