@@ -22,9 +22,22 @@ class StackNavigator extends Component {
     super(props);
     this.stack = createNativeStackNavigator();
     this.state = {
+      userDetails: null,
       userLoggedIn: false,
       headerShown: true,
     };
+  }
+
+  setUserInfo(item) {
+    this.setState({ ...this.state, userDetails: item });
+  }
+
+  getUserInfo() {
+    return this.state.userDetails;
+  }
+
+  getUserLogged() {
+    return this.state.userLoggedIn;
   }
 
   _handleLogin() {
@@ -42,12 +55,12 @@ class StackNavigator extends Component {
   componentDidMount() {
     this.props.loginEmitter.subscribe(
       this.componentKey,
-      this._handleLogin.bind(this)
+      this._handleLogin.bind(this),
     );
   }
 
   componentWillUnmount() {
-    this.props.loginEmitter.unsubscribe(this.componentKey);
+    this.props.loginEmitter.unsubscribe(this.componentKey);    
   }
 
   render() {
@@ -95,6 +108,7 @@ class StackNavigator extends Component {
                       <Text
                         style={{
                           fontSize: 20,
+                          height: 30,
                           fontWeight: "bold",
                           color: "#fff",
                         }}
@@ -112,6 +126,7 @@ class StackNavigator extends Component {
                 {...props}
                 loginEmitter={this.props.loginEmitter}
                 searchFilterEmitter={this.props.searchFilterEmitter}
+                setUserInfo={this.setUserInfo.bind(this)}
               />
             )}
           </this.stack.Screen>
@@ -147,7 +162,14 @@ class StackNavigator extends Component {
               headerShown: this.state.headerShown,
             }}
           >
-            {(props) => <ProviderDetailTabs {...props} />}
+            {(props) => (
+              <ProviderDetailTabs
+                {...props}
+                getUserInfo={this.getUserInfo.bind(this)}
+                loginEmitter={this.props.loginEmitter}
+                getUserLogged={this.getUserLogged.bind(this)}
+              />
+            )}
           </this.stack.Screen>
 
           <this.stack.Screen

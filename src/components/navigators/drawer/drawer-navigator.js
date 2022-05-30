@@ -11,7 +11,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import StackNavigator from "../stack";
 import UserTabs from "../../user/user-tabs";
 import ProviderRegisterTabs from "../../provider/provider-register-tabs";
-
+import ServicePacks from "../../service-packs/service-packs";
 
 class DrawerNavigator extends Component {
   constructor(props) {
@@ -97,31 +97,8 @@ class DrawerNavigator extends Component {
             />
           )}
         </this.drawer.Screen>
-
-        {/* {this.props.loginEmitter.userLoggedIn == 2 ? (
-          <this.drawer.Screen
-            name="schedule"
-            component={Schedule}
-            options={({ navigation }) => ({
-              headerShown: true,
-              title: "Agenda",
-              headerLeft: () => (
-                <TouchableOpacity
-                  style={{ marginLeft: 20 }}
-                  onPress={() => navigation.goBack()}
-                >
-                  <FontAwesomeIcon
-                    icon={faArrowLeft}
-                    size={20}
-                    style={{ flex: 1 }}
-                  />
-                </TouchableOpacity>
-              ),
-            })}
-          />
-        ) : null} */}
-
-        {/* {this.props.loginEmitter.userLoggedIn == 2 ? (
+    
+        {this.props.loginEmitter.userLoggedIn ==2 ? (
           <this.drawer.Screen
             name="service-packs"
             component={ServicePacks}
@@ -142,7 +119,7 @@ class DrawerNavigator extends Component {
               ),
             })}
           />
-        ) : null} */}
+        ) : null}
       </this.drawer.Navigator>
     );
   }
