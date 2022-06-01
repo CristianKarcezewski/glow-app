@@ -33,7 +33,6 @@ class UserData extends Component {
     this.setState({ ...this.state, loading: true });
     getUserById(Platform.OS, this.props.loginEmitter.authorization)
       .then(({ status, data }) => {
-        console.log(data);
         if (status === 200) {
           this.setState({
             ...this.state,

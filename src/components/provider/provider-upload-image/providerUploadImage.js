@@ -1,26 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import ImageIcon from "../../../assets/fotoPerfil.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faPhotoVideo,
-  faCamera,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPhotoVideo, faCamera } from "@fortawesome/free-solid-svg-icons";
 
 export default function ProviderUploadImage(props) {
-  useEffect(() => {
-    console.log(props.capturedPhoto);
-  });
+  useEffect(() => {});
 
-  async function savePicture() {
-    console.log(props.capturedPhoto);
-  }
+  async function savePicture() {}
 
   return (
     <View style={styles.container}>
