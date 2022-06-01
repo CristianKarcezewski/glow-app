@@ -12,9 +12,11 @@ import {
   Alert,
 } from "react-native";
 import { getUserById, updateUser } from "../../../services/user-service";
+import { setProfileImage } from "../../../services/file-service";
 import Toast from "react-native-root-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUserAlt } from "@fortawesome/free-solid-svg-icons";
+import * as ImagePicker from "expo-image-picker";
 
 class UserData extends Component {
   constructor(props) {
@@ -148,6 +150,86 @@ class UserData extends Component {
     );
   }
 
+  pickImage() {
+    Alert.alert(
+      "Imagem de perfil",
+      "Selecione a origem",
+      [
+        {
+          text: "Camera",
+          style: "default",
+          onPress: () => this.pickFromCam(),
+        },
+        {
+          text: "Galeria",
+          style: "default",
+          onPress: () => this.pickFromGalery(),
+        },
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+      ],
+      { cancelable: true }
+    );
+  }
+
+  pickFromGalery() {
+    ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+      base64: true,
+    }).then((result) => console.log(result.base64));
+  }
+
+  pickFromCam() {
+    ImagePicker.requestCameraPermissionsAsync().then((permission) => {
+      if (permission.granted === true) {
+        ImagePicker.launchCameraAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [1, 1],
+          quality: 1,
+          base64: true,
+        }).then((result) => console.log(result.base64));
+      }
+    });
+  }
+
+  uploadImage(base64) {
+    if (base64) {
+      this.setState({ ...this.state, loading: true });
+      setProfileImage(
+        Platform.OS,
+        this.props.loginEmitter.authorization,
+        base64
+      )
+        .then(({ status, data }) => {
+          if (status === 200) {
+            this.setState({
+              ...this.state,
+              loading: false,
+              imageUrl: data,
+            });
+          } else {
+            this.setState({ ...this.state, loading: false });
+            Toast.show("Erro ao salvar imagem", {
+              duration: Toast.durations.LONG,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log("error", err);
+          this.setState({ ...this.state, loading: false });
+          Toast.show("Erro ao carregar usuário", {
+            duration: Toast.durations.LONG,
+          });
+        });
+    }
+  }
+
   componentWillUnmount() {
     this.props.showHeader(false);
   }
@@ -170,7 +252,10 @@ class UserData extends Component {
     } else {
       return (
         <View style={{ flex: 1, backgroundColor: "#fff" }}>
-          <TouchableOpacity style={style.imageContainer}>
+          <TouchableOpacity
+            style={style.imageContainer}
+            onPress={() => this.pickImage()}
+          >
             {this.state.imageUrl ? (
               <Image
                 style={style.imageLogo}
