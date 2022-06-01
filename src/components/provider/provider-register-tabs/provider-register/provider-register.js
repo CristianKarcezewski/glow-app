@@ -277,7 +277,8 @@ class ProviderRegister extends Component {
               textAlign: "left",
               textAlignVertical: "top",
             }}
-            maxLength={1000}
+            maxLength={500}
+            multiline={true}
             placeholder="Explique aqui o que você faz"
             onChangeText={(value) =>
               this.setState({ ...this.state, description: value })
@@ -327,6 +328,7 @@ const styles = StyleSheet.create({
   },
   description: {
     flex: 2,
+    textAlignVertical: 'top',
     width: "80%",
     borderColor: "black",
     borderWidth: 1,

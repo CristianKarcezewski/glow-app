@@ -31,6 +31,7 @@ class Chat extends Component {
         },
       ],
     };
+  
   }
 
   sendMessage() {
@@ -48,7 +49,7 @@ class Chat extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>        
         <View style={{ flex: 9 }}>
           <FlatList
             keyExtractor={(item) => item.id}
@@ -88,6 +89,7 @@ class Chat extends Component {
 
 class Message extends Component {
   render() {
+
     return (
       <View
         style={

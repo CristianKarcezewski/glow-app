@@ -260,7 +260,7 @@ const style = StyleSheet.create({
     justifyContent: "center",
   },
   imageLogo: {
-    marginTop: 20,
+    marginTop: 70,
     width: 150,
     height: 40,
   },

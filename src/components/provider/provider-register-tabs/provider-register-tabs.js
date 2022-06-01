@@ -5,14 +5,12 @@ import {
   faAddressCard,
   faMapMarker,
   faPhotoVideo,
-  faHourglass,
   faBell,
 } from "@fortawesome/free-solid-svg-icons";
 import ProviderRegisterStack from "./provider-register-stack";
 import ProviderAddressStack from "./provider-address-stack";
 import ProviderGalleryStack from "./provider-gallery-stack";
 import Schedule from "../../schedule";
-import ServicePacks from "../../service-packs";
 
 
 class ProviderRegisterTabs extends Component {
@@ -59,15 +57,7 @@ class ProviderRegisterTabs extends Component {
                 />
               );
             }
-            if (route.name === "service-packs") {
-              return (
-                <FontAwesomeIcon
-                  icon={faHourglass}
-                  color={focused ? "#db382f" : "black"}
-                  size={24}
-                />
-              );
-            }
+           
             if (route.name === "provider-address-stack") {
               return (
                 <FontAwesomeIcon
@@ -102,10 +92,6 @@ class ProviderRegisterTabs extends Component {
 
         <this.tabs.Screen name="schedule" options={{ title: "Agenda" }}>
           {(props) => <Schedule {...props} />}
-        </this.tabs.Screen>
-
-        <this.tabs.Screen name="service-packs" options={{ title: "Pacote" }}>
-          {(props) => <ServicePacks {...props} />}
         </this.tabs.Screen>
 
         <this.tabs.Screen

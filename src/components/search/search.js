@@ -21,7 +21,7 @@ import * as Location from "expo-location";
 import { searchProvider } from "../../services/provider-service";
 import { findAddressByGeolocation } from "../../services/address-service";
 import Toast from "react-native-root-toast";
-import { Provider } from "../../models/provider";
+
 
 class SearchResult extends Component {
   componentKey = "searchListKey";
@@ -32,6 +32,11 @@ class SearchResult extends Component {
       search: "",
       providers: [],
     };
+  }
+
+  _userDetails(item){
+    this.props.setUserInfo(item);
+    this.props.navigation.navigate("provider-detail-tabs");
   }
 
   searchProviders(filter) {
@@ -192,9 +197,7 @@ class SearchResult extends Component {
                   data={this.state.providers}
                   renderItem={({ item }) => (
                     <TouchableOpacity
-                      onPress={() =>
-                        this.props.navigation.navigate("provider-detail-tabs")
-                      }
+                      onPress={() =>  this._userDetails(item)}                                         
                     >
                       <CardResult provider={item} />
                     </TouchableOpacity>
@@ -231,7 +234,7 @@ class CardResult extends Component {
         <View style={{ flex: 3, justifyContent: "center" }}>
           <Text style={style.cardResultName}>{this.props.provider.name}</Text>
           <Text style={{ fontSize: 20 }}>{this.props.provider.profession}</Text>
-          <Text>{this.props.provider.description}</Text>
+          {/* <Text>{this.props.provider.description}</Text> */}
         </View>
 
         <View style={style.cardResultRating}>

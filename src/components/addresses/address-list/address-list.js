@@ -203,7 +203,13 @@ class CardResult extends Component {
           <Text style={style.cardResultName}>{this.props.address.name}</Text>
           <Text style={{ fontSize: 20 }}>{this.state.locationLabel}</Text>
           <Text>{`${this.props.address.district}`}</Text>
-          <Text>{`${this.props.address.street}-${this.props.address.number}`}</Text>
+          <Text>{`${this.props.address.street}, ${
+            this.props.address.number
+          } - ${
+            this.props.address.complement ==null
+              ? ""
+              : this.props.address.complement
+          }`}</Text>
         </View>
 
         <View

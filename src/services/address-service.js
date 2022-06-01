@@ -30,7 +30,6 @@ export const loadUserAddresses = async (platform, authorization) => {
 
 export const loadCompanyAddresses = async (platform, authorization) => {
   try {
-    console.log("LoadCompanyaddress");
     let response = await fetch(GET_ADDRESS_COMPANY, {
       method: "GET",
       headers: {
