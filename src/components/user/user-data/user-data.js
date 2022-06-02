@@ -19,6 +19,7 @@ import { faUserAlt } from "@fortawesome/free-solid-svg-icons";
 import * as ImagePicker from "expo-image-picker";
 
 class UserData extends Component {
+  userDataKey = "userDataKey"
   constructor(props) {
     super(props);
     this.state = {
@@ -232,10 +233,29 @@ class UserData extends Component {
 
   componentWillUnmount() {
     this.props.showHeader(false);
+    this.setState({
+      loading: false,
+      imageUrl: null,
+      name: "",
+      email: "",
+      validName: true,
+      validEmail: true,
+    });
+
+    this.props.loginEmitter.unsubscribe(this.userDataKey);
   }
 
   componentDidMount() {
     this.props.showHeader(true);
+     this.setState({
+       loading: false,
+       imageUrl: null,
+       name: "",
+       email: "",
+       validName: true,
+       validEmail: true,
+     });
+    this.props.loginEmitter.subscribe(this.userDataKey, this.fetchUser.bind(this));
     this.fetchUser();
   }
 

@@ -141,7 +141,7 @@ class SearchResult extends Component {
     this.props.searchFilterEmitter.unsubscribe(this.componentKey);
   }
 
-  render() {
+  render() {   
     return (
       <View style={{ flex: 1, marginTop: 10 }}>
         <View
@@ -196,9 +196,7 @@ class SearchResult extends Component {
                   keyExtractor={(item) => item.id}
                   data={this.state.providers}
                   renderItem={({ item }) => (
-                    <TouchableOpacity
-                      onPress={() =>  this._userDetails(item)}                                         
-                    >
+                    <TouchableOpacity onPress={() => this._userDetails(item)}>
                       <CardResult provider={item} />
                     </TouchableOpacity>
                   )}

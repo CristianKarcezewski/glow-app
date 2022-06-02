@@ -97,8 +97,8 @@ class DrawerNavigator extends Component {
             />
           )}
         </this.drawer.Screen>
-    
-        {this.props.loginEmitter.userLoggedIn ==2 ? (
+
+        {this.props.loginEmitter.userLoggedIn == 2 ? (
           <this.drawer.Screen
             name="service-packs"
             component={ServicePacks}
