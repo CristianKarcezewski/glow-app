@@ -5,31 +5,101 @@ import {
   View,
   FlatList,
   TouchableOpacity,
-  TextInput,
   Image,
+  Alert
 } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faUser,
-  faStar,
-  faSearch,
-  faFilter,
-} from "@fortawesome/free-solid-svg-icons";
-import Provider from "../../models/provider";
+import Pack from "../../models/pack";
 import imagem from "../../assets/Ampulheta.jpg";
+import {getProviderPacks} from "../../services/provider-packs-service"
+import Toast from "react-native-root-toast";
 
 class ServicePacks extends Component {
+ // constructor(props) {
+   // super(props);
+  //   this.state = {
+  //     packList: [
+  //       new Pack("1", "Pacote Prata", "30 dias", "R$ 100,00", false),
+  //       new Pack("2", "Pacote Ouro", "60 dias", "R$ 180,00", false),
+  //       new Pack("3", "Pacote Diamante", "90 dias", "R$ 340,00", false),
+  //     ],
+  //   };
+  // }
   constructor(props) {
     super(props);
     this.state = {
-      providers: [
-        new Provider("1", null, "30 dias", "Pacote Prata", "R$ 100,00"),
-        new Provider("2", null, "60 dias", "Pacote Ouro", "R$ 180,00"),
-        new Provider("3", null, "90 dias", "Pacote Diamante", "R$ 340,00"),        
-      ],
+      search: null,
+      loading: false,
+      packList: [],
     };
   }
 
+  _handleLoadPacks() {
+    this.setState({ ...this.state, loading: true });
+    getProviderPacks(Platform.OS, this.props.loginEmitter.authorization)
+      .then(({ status, data }) => {
+        console.log(data)
+        if (status === 200) {
+          this.setState({
+            ...this.state,
+            loading: false,
+            packList: data,
+          });
+        } else {
+          this.setState({ ...this.state, loading: false });
+          Toast.show("Não foi possível carregar os pacotes de serviço.", {
+            duration: Toast.durations.LONG,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        this.setState({ ...this.state, loading: false });
+        Toast.show("Sem conexão com internet.", {
+          duration: Toast.durations.LONG,
+        });
+      });
+  }
+
+  _filterData() {
+    if (this.state.search) {
+      return this.state.packList.filter((x) =>
+        x.name.toLowerCase().includes(this.state.search.toLowerCase())
+      );
+    } else {
+      return this.state.packList;
+    }
+  }
+
+  _selectData(item) {
+    if (item) {
+      this.props.setPacks(item);
+    }
+    this.props.navigation.goBack();
+  }
+
+  successSelectedPack(item) {
+    const p = item;
+     Alert.alert(
+       "Deseja Confirmar esse pacote ?",
+       `${p.name} - ${p.description}`,
+       [
+         {
+           text: "Cancelar",
+           style: "cancel",
+         },
+         { text: "OK", onPress: () => this._handleAddPack(item) },
+       ],
+       { cancelable: false }
+     );
+  }
+  _handleAddPack(item){
+    
+  }
+
+  componentDidMount() {
+     this._handleLoadPacks();
+    }
+   
   render() {
     return (
       <View style={{ flex: 1, marginTop: 10 }}>
@@ -41,36 +111,15 @@ class ServicePacks extends Component {
             alignItems: "center",
           }}
         >
-          {/* <TextInput
-            placeholder={"Pesquisar"}
-            style={{
-              fontSize: 24,
-              flex: 5,
-              marginLeft: 20,
-              borderBottomColor: "black",
-              borderBottomWidth: 1,
-            }}
-          ></TextInput>
-          <TouchableOpacity style={{ flex: 1, alignItems: "center" }}>
-            <FontAwesomeIcon icon={faSearch} size={25} color={"#db382f"} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ flex: 1, alignItems: "center" }}
-            onPress={() => this.props.navigation.navigate("provider-filter")}
-          >
-            <FontAwesomeIcon icon={faFilter} size={25} color={"#db382f"} />
-          </TouchableOpacity> */}
           <Text style={style.cardResultName}>Adicionar Creditos:</Text>
         </View>
         <View style={{ flex: 14 }}>
           <FlatList
             keyExtractor={(item) => item.id}
-            data={this.state.providers}
+            data={this.state.packList}
             renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate()}
-              >
-                <CardResult provider={item} />
+              <TouchableOpacity onPress={() => this.successSelectedPack(item)}>
+                <CardResult pack={item} />
               </TouchableOpacity>
             )}
           />
@@ -85,7 +134,6 @@ class CardResult extends Component {
     return (
       <View style={style.cardResultContainer}>
         <View style={style.cardResultImage}>
-          {/* <FontAwesomeIcon icon={faUser} size={40} style={{ flex: 1 }} /> */}
           <Image
             source={imagem}
             style={{ flex: 1, width: "100%", borderRadius:30 }}
@@ -93,9 +141,9 @@ class CardResult extends Component {
         </View>
 
         <View style={{ flex: 3, justifyContent: "center" }}>
-          <Text style={style.cardResultName}>{this.props.provider.name}</Text>
-          <Text style={{ fontSize: 20 }}>{this.props.provider.profession}</Text>
-          <Text>{this.props.provider.description}</Text>
+          <Text style={style.cardResultName}>{this.props.pack.name}</Text>
+          <Text style={{ fontSize: 20 }}>{this.props.pack.description}</Text>
+          <Text>{this.props.pack.value}</Text>
         </View>
         <View style={style.cardResultRating}></View>
       </View>

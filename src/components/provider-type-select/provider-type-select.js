@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import { getProviderTypes } from "../../services/provider-types-service";
 import Toast from "react-native-root-toast";
-import { setItemAsync } from "expo-secure-store";
 
 class ProviderTypeSelect extends Component {
   constructor(props) {

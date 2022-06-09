@@ -98,7 +98,33 @@ class DrawerNavigator extends Component {
           )}
         </this.drawer.Screen>
 
-        {this.props.loginEmitter.userLoggedIn == 2 ? (
+        {this.props.loginEmitter?.userLoggedIn == 2 ? (
+          <this.drawer.Screen
+            name="service-packs"
+            options={({ navigation }) => ({
+              headerShown: true,
+              title: "Pacotes de Serviço",
+              headerLeft: () => (
+                <TouchableOpacity
+                  style={{ marginLeft: 20 }}
+                  onPress={() => navigation.goBack()}
+                >
+                  <FontAwesomeIcon
+                    icon={faArrowLeft}
+                    size={20}
+                    style={{ flex: 1 }}
+                  />
+                </TouchableOpacity>
+              ),
+            })}
+          >
+            {(props) => (
+              <ServicePacks {...props} loginEmitter={this.props.loginEmitter} />
+            )}
+          </this.drawer.Screen>
+        ) : null}
+
+        {/* {this.props.loginEmitter.userLoggedIn === 2 ? (
           <this.drawer.Screen
             name="service-packs"
             component={ServicePacks}
@@ -119,7 +145,7 @@ class DrawerNavigator extends Component {
               ),
             })}
           />
-        ) : null}
+        ) : null} */}
       </this.drawer.Navigator>
     );
   }
