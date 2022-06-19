@@ -39,13 +39,16 @@ class ProviderRegisterStack extends Component {
     });
   }
 
-  render() {
+  render() {   
     return (
       <this.stack.Navigator initialRouteName="provider-register">
         <this.stack.Screen
           name="provider-register"
           options={({ navigation }) => ({
-            title: "Cadastro de Profissional",
+            title:
+              this.props.loginEmitter.userLoggedIn == 2
+                ? "Sua Conta Profissional"
+                : "Cadastro de Profissional",
             headerShown: true,
             headerLeft: () => (
               <TouchableOpacity

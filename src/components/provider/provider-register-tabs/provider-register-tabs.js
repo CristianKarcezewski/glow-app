@@ -109,30 +109,7 @@ class ProviderRegisterTabs extends Component {
               showHeader={this.showHeader.bind(this)}
             />
           )}
-        </this.tabs.Screen>
-
-        {/* {this.props.loginEmitter.userLoggedIn == 2 ? (
-          <this.drawer.Screen
-            name="schedule"
-            component={Schedule}
-            options={({ navigation }) => ({
-              headerShown: true,
-              title: "Agenda",
-              headerLeft: () => (
-                <TouchableOpacity
-                  style={{ marginLeft: 20 }}
-                  onPress={() => navigation.goBack()}
-                >
-                  <FontAwesomeIcon
-                    icon={faArrowLeft}
-                    size={20}
-                    style={{ flex: 1 }}
-                  />
-                </TouchableOpacity>
-              ),
-            })}
-          />
-        ) : null} */}
+        </this.tabs.Screen>      
       </this.tabs.Navigator>
     );
   }

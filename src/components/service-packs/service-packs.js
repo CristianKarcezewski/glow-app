@@ -8,22 +8,12 @@ import {
   Image,
   Alert
 } from "react-native";
-import Pack from "../../models/pack";
 import imagem from "../../assets/Ampulheta.jpg";
 import {getProviderPacks} from "../../services/provider-packs-service"
 import Toast from "react-native-root-toast";
 
 class ServicePacks extends Component {
- // constructor(props) {
-   // super(props);
-  //   this.state = {
-  //     packList: [
-  //       new Pack("1", "Pacote Prata", "30 dias", "R$ 100,00", false),
-  //       new Pack("2", "Pacote Ouro", "60 dias", "R$ 180,00", false),
-  //       new Pack("3", "Pacote Diamante", "90 dias", "R$ 340,00", false),
-  //     ],
-  //   };
-  // }
+ 
   constructor(props) {
     super(props);
     this.state = {
@@ -37,7 +27,6 @@ class ServicePacks extends Component {
     this.setState({ ...this.state, loading: true });
     getProviderPacks(Platform.OS, this.props.loginEmitter.authorization)
       .then(({ status, data }) => {
-        console.log(data)
         if (status === 200) {
           this.setState({
             ...this.state,
@@ -93,7 +82,7 @@ class ServicePacks extends Component {
      );
   }
   _handleAddPack(item){
-    
+    this.props.navigation.navigate("buy-package",item)
   }
 
   componentDidMount() {
