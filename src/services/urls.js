@@ -40,5 +40,5 @@ export const SEARCH_PROVIDER = `${API}/companies/search`;
 export const GET_PROVIDER_TYPES = `${API}/provider-types`;
 
 //files
-export const PROFILE_IMAGE = `${API}/profile-image`;
+export const PROFILE_IMAGE = `${API}/files/profile-image`;
 export const FILE = `${API}/file`;

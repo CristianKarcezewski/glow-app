@@ -181,7 +181,10 @@ class UserData extends Component {
       aspect: [1, 1],
       quality: 1,
       base64: true,
-    }).then((result) => console.log(result.base64));
+    }).then((result) => {
+      console.log(result);
+      this.uploadImage(result.base64);
+    });
   }
 
   pickFromCam() {
@@ -193,7 +196,7 @@ class UserData extends Component {
           aspect: [1, 1],
           quality: 1,
           base64: true,
-        }).then((result) => console.log(result.base64));
+        }).then((result) => this.uploadImage(result.base64));
       }
     });
   }
