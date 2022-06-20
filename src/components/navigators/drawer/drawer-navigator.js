@@ -22,7 +22,7 @@ class DrawerNavigator extends Component {
     this.props.cleanMemory();
     navigation.closeDrawer();
   }
-  
+
   render() {
     return (
       <this.drawer.Navigator
@@ -78,7 +78,7 @@ class DrawerNavigator extends Component {
           options={({ navigation }) => ({
             headerShown: false,
             title:
-              this.props.loginEmitter.userLoggedIn == 2
+              this.props.loginEmitter?.userData?.userGroupId === 2
                 ? "Meus serviços"
                 : "Ser um prestador",
           })}
@@ -95,10 +95,10 @@ class DrawerNavigator extends Component {
           )}
         </this.drawer.Screen>
 
-        {this.props.loginEmitter.userLoggedIn == 2 ? (
+        {this.props.loginEmitter?.userData?.userGroupId === 2 ? (
           <this.drawer.Screen
             name="provider-packages-stack"
-            options={{ headerShown: false, title: "Pacotes de Serviço" }}
+            options={{ headerShown: false, title: "Pacotes" }}
           >
             {(props) => (
               <ProviderPackagesStack

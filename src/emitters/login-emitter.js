@@ -1,21 +1,18 @@
 import * as SecureStore from "expo-secure-store";
 
 export default class LoginEmitter {
-  tokenKey = "LoginEmmiterKey";
+  LoginEmmiterKey = "LoginEmmiterKey";
 
   constructor() {
-    this.subscribes = [];   
-    this.authorization = null;
-    this.userLoggedIn = null;
+    this.subscribes = [];
+    this.userData = null;
     this.readUserData();
   }
 
   async readUserData() {
-    await SecureStore.getItemAsync(this.tokenKey).then((data) => {
+    await SecureStore.getItemAsync(this.LoginEmmiterKey).then((data) => {
       if (data != null) {
-        const info = JSON.parse(data);
-        this.userLoggedIn = info.userType;
-        this.authorization = info.token;
+        this.userData = JSON.parse(data);
         this.emit();
       }
     });
@@ -23,13 +20,13 @@ export default class LoginEmitter {
 
   async saveUserData() {
     await SecureStore.setItemAsync(
-      this.tokenKey,
-      JSON.stringify({ token: this.authorization, userType: this.userLoggedIn })
+      this.LoginEmmiterKey,
+      JSON.stringify(this.userData)
     );
   }
 
   async removeUserData() {
-    await SecureStore.deleteItemAsync(this.tokenKey);
+    await SecureStore.deleteItemAsync(this.LoginEmmiterKey);
   }
 
   subscribe(key, handler) {
@@ -61,23 +58,20 @@ export default class LoginEmitter {
     });
   }
 
-  login(token, userLoggedIn) {
-    this.authorization = token;
-    this.userLoggedIn = userLoggedIn;
-    this.emit();
+  login(userData) {
+    this.userData = userData;
     this.saveUserData();
+    this.emit();
   }
 
   logout() {
     this.removeUserData();
-    this.userLoggedIn = null;
-    this.authorization = null;
+    this.userData = null;
     this.emit();
   }
 
   reset() {
-    this.removeUserData(); 
-    this.authorization = null;
-    this.userLoggedIn = false;
+    this.userData = null;
+    this.removeUserData();
   }
 }

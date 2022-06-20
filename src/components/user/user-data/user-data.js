@@ -19,12 +19,12 @@ import { faUserAlt } from "@fortawesome/free-solid-svg-icons";
 import * as ImagePicker from "expo-image-picker";
 
 class UserData extends Component {
-  userDataKey = "userDataKey"
+  userDataKey = "userDataKey";
   constructor(props) {
     super(props);
     this.state = {
       loading: false,
-      imageUrl: null,
+      imageUrl: "",
       name: "",
       email: "",
       validName: true,
@@ -32,31 +32,35 @@ class UserData extends Component {
     };
   }
 
-  fetchUser() {
-    this.setState({ ...this.state, loading: true });
-    getUserById(Platform.OS, this.props.loginEmitter.authorization)
-      .then(({ status, data }) => {
-        if (status === 200) {
-          this.setState({
-            ...this.state,
-            loading: false,
-            name: data.name,
-            email: data.email,
-          });
-        } else {
-          this.setState({ ...this.state, loading: false });
-          Toast.show("Erro ao carregar dados da sua conta", {
-            duration: Toast.durations.LONG,
-          });
-        }
-      })
-      .catch((err) => {
-        console.log("error", err);
-        this.setState({ ...this.state, loading: false });
-        Toast.show("Erro ao carregar dados da sua conta", {
-          duration: Toast.durations.LONG,
-        });
-      });
+  // fetchUser() {
+  //   this.setState({ ...this.state, loading: true });
+  //   getUserById(Platform.OS, this.props.loginEmitter.authorization)
+  //     .then(({ status, data }) => {
+  //       if (status === 200) {
+
+  //       } else {
+  //         this.setState({ ...this.state, loading: false });
+  //         Toast.show("Erro ao carregar dados da sua conta", {
+  //           duration: Toast.durations.LONG,
+  //         });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("error", err);
+  //       this.setState({ ...this.state, loading: false });
+  //       Toast.show("Erro ao carregar dados da sua conta", {
+  //         duration: Toast.durations.LONG,
+  //       });
+  //     });
+  // }
+
+  setUserForm() {
+    this.setState({
+      ...this.state,
+      name: this.props.loginEmitter?.userData?.name || "",
+      email: this.props.loginEmitter?.userData?.email || "",
+      imageUrl: this.props.loginEmitter?.userData?.imageUrl || "",
+    });
   }
 
   _handleUpdate() {
@@ -69,7 +73,7 @@ class UserData extends Component {
 
       updateUser(
         Platform.OS,
-        this.props.loginEmitter.authorization,
+        this.props.loginEmitter.userData.authorization,
         refreshUser
       )
         .then(({ status, data }) => {
@@ -236,30 +240,15 @@ class UserData extends Component {
 
   componentWillUnmount() {
     this.props.showHeader(false);
-    this.setState({
-      loading: false,
-      imageUrl: null,
-      name: "",
-      email: "",
-      validName: true,
-      validEmail: true,
-    });
-
     this.props.loginEmitter.unsubscribe(this.userDataKey);
   }
 
   componentDidMount() {
     this.props.showHeader(true);
-     this.setState({
-       loading: false,
-       imageUrl: null,
-       name: "",
-       email: "",
-       validName: true,
-       validEmail: true,
-     });
-    this.props.loginEmitter.subscribe(this.userDataKey, this.fetchUser.bind(this));
-    this.fetchUser();
+    this.props.loginEmitter.subscribe(
+      this.userDataKey,
+      this.setUserForm.bind(this)
+    );
   }
 
   render() {

@@ -45,11 +45,10 @@ class Login extends Component {
             signInWithCustomToken(firebaseAuth, data.authorization)
               .then((userCredential) => {
                 // Signed in
-                userCredential.user
-                  .getIdToken()
-                  .then((idToken) =>
-                    this.props.loginEmitter.login(idToken, data.userGroupId)
-                  );
+                userCredential.user.getIdToken().then((idToken) => {
+                  data.authorization = idToken;
+                  this.props.loginEmitter.login(data);
+                });
                 this.setState({ ...this.state, loading: false });
                 this.props.navigation.popToTop();
               })
@@ -82,14 +81,17 @@ class Login extends Component {
   }
 
   _handleEmail(value) {
-    if (this.emailPattern.test(value.toLowerCase()) === true) {
-      this.setState({
-        ...this.state,
-        validEmail: true,
-        email: value.toLowerCase(),
-      });
-    } else {
-      this.setState({ ...this.state, validEmail: false, email: value });
+    if (value) {
+      value = value.trim();
+      if (this.emailPattern.test(value.toLowerCase()) === true) {
+        this.setState({
+          ...this.state,
+          validEmail: true,
+          email: value.toLowerCase(),
+        });
+      } else {
+        this.setState({ ...this.state, validEmail: false, email: value });
+      }
     }
   }
 
@@ -130,6 +132,7 @@ class Login extends Component {
               }
               maxLength={100}
               keyboardType={"email-address"}
+              autoCapitalize="none"
               placeholder="Email"
               onChangeText={(value) => this._handleEmail(value)}
               value={this.state.email}
@@ -138,6 +141,7 @@ class Login extends Component {
             <TextInput
               placeholder="Senha"
               secureTextEntry={true}
+              autoCapitalize="none"
               style={
                 this.state.validPassword
                   ? style.validPasswordField

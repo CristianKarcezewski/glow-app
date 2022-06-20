@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import { register } from "../../../services/auth-service";
 import Toast from "react-native-root-toast";
+import firebaseAuth from "../../../config/firebase-config";
+import { signInWithCustomToken } from "firebase/auth";
 
 class UserRegister extends Component {
   emailPattern =
@@ -39,7 +41,6 @@ class UserRegister extends Component {
       this.state.validEmail &&
       this.state.validPassword &&
       this.state.validConfirmPassword
-    
     ) {
       this.setState({ ...this.state, loading: true });
       this.props.loginEmitter.reset();
@@ -51,9 +52,20 @@ class UserRegister extends Component {
       register(Platform.OS, newUser)
         .then(({ status, data }) => {
           if (status === 200) {
-            this.props.loginEmitter.login(data.authorization, true);
-            this.setState({ ...this.state, loading: false });
-            this.props.navigation.popToTop();
+            signInWithCustomToken(firebaseAuth, data.authorization)
+              .then((userCredential) => {
+                // Signed in
+                userCredential.user.getIdToken().then((idToken) => {
+                  data.authorization = idToken;
+                  this.props.loginEmitter.login(data);
+                });
+                this.setState({ ...this.state, loading: false });
+                this.props.navigation.popToTop();
+              })
+              .catch((error) => {
+                console.log("error", error);
+                this.setState({ ...this.state, loading: false });
+              });
           } else {
             this.setState({ ...this.state, loading: false });
             Toast.show("Erro ao cadastrar usuário", {
@@ -80,21 +92,24 @@ class UserRegister extends Component {
 
   _handleName(value) {
     if (value) {
-      this.setState({ ...this.state, name: value, validName: true });
+      this.setState({ ...this.state, name: value.trim(), validName: true });
     } else {
       this.setState({ ...this.state, name: value, validName: false });
     }
   }
 
   _handleEmail(value) {
-    if (this.emailPattern.test(value.toLowerCase()) === true) {
-      this.setState({
-        ...this.state,
-        validEmail: true,
-        email: value.toLowerCase(),
-      });
-    } else {
-      this.setState({ ...this.state, validEmail: false, email: value });
+    if (value) {
+      value = value.trim();
+      if (this.emailPattern.test(value.toLowerCase()) === true) {
+        this.setState({
+          ...this.state,
+          validEmail: true,
+          email: value.toLowerCase(),
+        });
+      } else {
+        this.setState({ ...this.state, validEmail: false, email: value });
+      }
     }
   }
 
@@ -164,6 +179,7 @@ class UserRegister extends Component {
               }
               maxLength={50}
               keyboardType={"email-address"}
+              autoCapitalize="none"
               placeholder="E-mail"
               onChangeText={(value) => this._handleEmail(value)}
               value={this.state.email}
@@ -225,6 +241,7 @@ class UserRegister extends Component {
                   : style.invalidFormField
               }
               secureTextEntry={true}
+              autoCapitalize="none"
               placeholder="Senha"
               onChangeText={(value) => this._handlePassword(value)}
               value={this.state.password}
@@ -236,6 +253,7 @@ class UserRegister extends Component {
                   : style.invalidFormField
               }
               secureTextEntry={true}
+              autoCapitalize="none"
               placeholder="Confirmar Senha"
               onChangeText={(value) => this._handleCheckPassword(value)}
               value={this.state.confirmPassword}

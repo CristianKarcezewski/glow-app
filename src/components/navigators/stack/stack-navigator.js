@@ -22,26 +22,17 @@ class StackNavigator extends Component {
     super(props);
     this.stack = createNativeStackNavigator();
     this.state = {
-      userDetails: null,
       userLoggedIn: false,
       headerShown: true,
     };
   }
 
-  setUserInfo(item) {
-    this.setState({ ...this.state, userDetails: item });
-  }
-
-  getUserInfo() {
-    return this.state.userDetails;
-  }
-
   getUserLogged() {
-    return this.state.userLoggedIn;
+    return this.props.loginEmitter?.userData == null ? false : true;
   }
 
   _handleLogin() {
-    if (this.props.loginEmitter.authorization) {
+    if (this.props.loginEmitter?.userData) {
       this.setState({ ...this.state, userLoggedIn: true });
     } else {
       this.setState({ ...this.state, userLoggedIn: false });
@@ -55,12 +46,12 @@ class StackNavigator extends Component {
   componentDidMount() {
     this.props.loginEmitter.subscribe(
       this.componentKey,
-      this._handleLogin.bind(this),
+      this._handleLogin.bind(this)
     );
   }
 
   componentWillUnmount() {
-    this.props.loginEmitter.unsubscribe(this.componentKey);    
+    this.props.loginEmitter.unsubscribe(this.componentKey);
   }
 
   render() {
@@ -126,7 +117,6 @@ class StackNavigator extends Component {
                 {...props}
                 loginEmitter={this.props.loginEmitter}
                 searchFilterEmitter={this.props.searchFilterEmitter}
-                setUserInfo={this.setUserInfo.bind(this)}
               />
             )}
           </this.stack.Screen>
