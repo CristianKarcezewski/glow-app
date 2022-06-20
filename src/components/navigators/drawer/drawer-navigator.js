@@ -11,9 +11,11 @@ import ProviderRegisterTabs from "../../provider/provider-register-tabs";
 import ProviderPackagesStack from "../../provider/provider-packages-stack/provider-packages-stack";
 
 class DrawerNavigator extends Component {
+  drawerMenyKey = "drawerMenyKey";
   constructor(props) {
     super(props);
     this.drawer = createDrawerNavigator();
+    this.state = {};
   }
 
   _clean({ navigation }) {
@@ -21,6 +23,21 @@ class DrawerNavigator extends Component {
     this.props.loginEmitter.logout();
     this.props.cleanMemory();
     navigation.closeDrawer();
+  }
+
+  refreshMenu() {
+    this.setState({ ...this.state });
+  }
+
+  componentDidMount() {
+    this.props.loginEmitter.subscribe(
+      this.drawerMenyKey,
+      this.refreshMenu.bind(this)
+    );
+  }
+
+  componentWillUnmount() {
+    this.props.loginEmitter.unsubscribe(this.drawerMenyKey);
   }
 
   render() {

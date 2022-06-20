@@ -29,6 +29,7 @@ class UserData extends Component {
       email: "",
       validName: true,
       validEmail: true,
+      formChanged: false,
     };
   }
 
@@ -60,11 +61,16 @@ class UserData extends Component {
       name: this.props.loginEmitter?.userData?.name || "",
       email: this.props.loginEmitter?.userData?.email || "",
       imageUrl: this.props.loginEmitter?.userData?.imageUrl || "",
+      formChanged: false,
     });
   }
 
   _handleUpdate() {
-    if (this.state.validName && this.state.validEmail) {
+    if (
+      this.state.validName &&
+      this.state.validEmail &&
+      this.props.loginEmitter?.userData?.authorization
+    ) {
       this.setState({ ...this.state, loading: true });
       let refreshUser = {
         userName: this.state.name,
@@ -73,7 +79,7 @@ class UserData extends Component {
 
       updateUser(
         Platform.OS,
-        this.props.loginEmitter.userData.authorization,
+        this.props.loginEmitter?.userData?.authorization,
         refreshUser
       )
         .then(({ status, data }) => {
@@ -81,8 +87,10 @@ class UserData extends Component {
             this.setState({
               ...this.state,
               loading: false,
-              name: data.name,
-              email: data.email,
+            });
+            this.props.loginEmitter.login({
+              ...data,
+              authorization: this.props.loginEmitter?.userData?.authorization,
             });
           } else {
             this.setState({ ...this.state, loading: false });
@@ -102,41 +110,18 @@ class UserData extends Component {
   }
 
   _handleEmail(value) {
-    if (this.emailPattern.test(value.toLowerCase()) === true) {
-      this.setState({
-        ...this.state,
-        validEmail: true,
-        email: value.toLowerCase(),
-      });
-    } else {
-      this.setState({ ...this.state, validEmail: false, email: value });
-    }
-  }
-
-  _handlePassword(value) {
-    if (this.state.password.length >= 6) {
-      this.setState({ ...this.state, validPassword: true, password: value });
-    } else {
-      this.setState({ ...this.state, validPassword: false, password: value });
-    }
-  }
-
-  _handleCheckPassword(value) {
-    if (
-      this.state.confirmPassword.length >= 6 &&
-      this.state.password === value
-    ) {
-      this.setState({
-        ...this.state,
-        validConfirmPassword: true,
-        confirmPassword: value,
-      });
-    } else {
-      this.setState({
-        ...this.state,
-        validConfirmPassword: false,
-        confirmPassword: value,
-      });
+    if (value) {
+      value = value.trim();
+      if (this.emailPattern.test(value.toLowerCase()) === true) {
+        this.setState({
+          ...this.state,
+          validEmail: true,
+          email: value.toLowerCase(),
+          formChanged: true,
+        });
+      } else {
+        this.setState({ ...this.state, validEmail: false, email: value });
+      }
     }
   }
 
@@ -277,6 +262,7 @@ class UserData extends Component {
               <FontAwesomeIcon size={80} icon={faUserAlt} />
             )}
           </TouchableOpacity>
+
           <View style={style.container}>
             <TextInput
               style={
@@ -291,6 +277,7 @@ class UserData extends Component {
                   ...this.state,
                   name: value,
                   validName: value.length > 0 ? true : false,
+                  formChanged: true,
                 })
               }
               value={this.state.name}
@@ -307,14 +294,18 @@ class UserData extends Component {
               onChangeText={(value) => this._handleEmail(value)}
               value={this.state.email}
             />
-            <TouchableHighlight
-              style={style.registerButton}
-              onPress={() => this.confirmUserUpdate()}
-            >
-              <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
-                Atualizar
-              </Text>
-            </TouchableHighlight>
+            {this.state.formChanged ? (
+              <TouchableHighlight
+                style={style.registerButton}
+                onPress={() => this.confirmUserUpdate()}
+              >
+                <Text
+                  style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}
+                >
+                  Atualizar
+                </Text>
+              </TouchableHighlight>
+            ) : null}
           </View>
         </View>
       );
