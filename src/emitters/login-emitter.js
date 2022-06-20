@@ -4,10 +4,10 @@ export default class LoginEmitter {
   tokenKey = "LoginEmmiterKey";
 
   constructor() {
-    this.subscribes = [];
-    this.readUserData();
+    this.subscribes = [];   
     this.authorization = null;
     this.userLoggedIn = null;
+    this.readUserData();
   }
 
   async readUserData() {
@@ -76,6 +76,7 @@ export default class LoginEmitter {
   }
 
   reset() {
+    this.removeUserData(); 
     this.authorization = null;
     this.userLoggedIn = false;
   }

@@ -262,7 +262,7 @@ class ProviderRegister extends Component {
         />
 
         <TouchableOpacity
-          style={styles.selectButton}
+          style={styles.formField}
           onPress={() => this.props.navigation.navigate("select-provider-type")}
         >
           <Text style={{ fontSize: 20, paddingLeft: 20 }}>
@@ -285,6 +285,13 @@ class ProviderRegister extends Component {
             }
             value={this.state.description}
           />
+        </View>
+        <View>
+          <Text style={{ fontSize: 20, paddingLeft: 5, padding: 10 }}>
+            {this.props.registerEmitter.providerForm.companyId
+              ? "Seu pacote expira em 30 dias"
+              : null}
+          </Text>
         </View>
         {this.props.registerEmitter.providerForm.companyId
           ? null
@@ -323,12 +330,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 5,
     padding: 5,
-    borderRadius: 20,
+    borderRadius: 15,
     fontSize: 20,
   },
   description: {
     flex: 2,
-    textAlignVertical: 'top',
+    textAlignVertical: "top",
     width: "80%",
     borderColor: "black",
     borderWidth: 1,

@@ -1,17 +1,14 @@
 import React, { Component } from "react";
-import { TouchableOpacity } from "react-native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem,
 } from "@react-navigation/drawer";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import StackNavigator from "../stack";
 import UserTabs from "../../user/user-tabs";
 import ProviderRegisterTabs from "../../provider/provider-register-tabs";
-import ServicePacks from "../../service-packs/service-packs";
+import ProviderPackagesStack from "../../provider/provider-packages-stack/provider-packages-stack";
 
 class DrawerNavigator extends Component {
   constructor(props) {
@@ -25,7 +22,7 @@ class DrawerNavigator extends Component {
     this.props.cleanMemory();
     navigation.closeDrawer();
   }
-
+  
   render() {
     return (
       <this.drawer.Navigator
@@ -97,28 +94,19 @@ class DrawerNavigator extends Component {
             />
           )}
         </this.drawer.Screen>
-    
-        {this.props.loginEmitter.userLoggedIn ==2 ? (
+
+        {this.props.loginEmitter.userLoggedIn == 2 ? (
           <this.drawer.Screen
-            name="service-packs"
-            component={ServicePacks}
-            options={({ navigation }) => ({
-              headerShown: true,
-              title: "Pacotes de Serviço",
-              headerLeft: () => (
-                <TouchableOpacity
-                  style={{ marginLeft: 20 }}
-                  onPress={() => navigation.goBack()}
-                >
-                  <FontAwesomeIcon
-                    icon={faArrowLeft}
-                    size={20}
-                    style={{ flex: 1 }}
-                  />
-                </TouchableOpacity>
-              ),
-            })}
-          />
+            name="provider-packages-stack"
+            options={{ headerShown: false, title: "Pacotes de Serviço" }}
+          >
+            {(props) => (
+              <ProviderPackagesStack
+                {...props}
+                loginEmitter={this.props.loginEmitter}
+              />
+            )}
+          </this.drawer.Screen>
         ) : null}
       </this.drawer.Navigator>
     );

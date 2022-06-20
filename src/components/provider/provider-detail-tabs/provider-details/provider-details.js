@@ -17,10 +17,11 @@ class ProviderDetails extends Component {
   }
 
   componentDidMount(){
-    this.setState({ ...this.state, provider: this.props.getUserInfo() });
+    this.setState({ ...this.state, provider: this.props.getUserInfo() });    
   }
 
   render() {
+     console.log(this.state.provider);
     if (this.state.loading) {
       return (
         <ActivityIndicator

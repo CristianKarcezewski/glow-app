@@ -25,10 +25,10 @@ class UserRegister extends Component {
       email: "",
       password: "",
       confirmPassword: "",
-      validName: true,
-      validEmail: true,
-      validPassword: true,
-      validConfirmPassword: true,
+      validName: false,
+      validEmail: false,
+      validPassword: false,
+      validConfirmPassword: false,
       loading: false,
     };
   }
@@ -39,8 +39,10 @@ class UserRegister extends Component {
       this.state.validEmail &&
       this.state.validPassword &&
       this.state.validConfirmPassword
+    
     ) {
       this.setState({ ...this.state, loading: true });
+      this.props.loginEmitter.reset();
       let newUser = {
         userName: this.state.name,
         email: this.state.email,
@@ -49,7 +51,7 @@ class UserRegister extends Component {
       register(Platform.OS, newUser)
         .then(({ status, data }) => {
           if (status === 200) {
-            this.props.loginEmitter.login(data);
+            this.props.loginEmitter.login(data.authorization, true);
             this.setState({ ...this.state, loading: false });
             this.props.navigation.popToTop();
           } else {
