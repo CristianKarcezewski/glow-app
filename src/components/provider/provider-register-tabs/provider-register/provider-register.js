@@ -197,7 +197,7 @@ class ProviderRegister extends Component {
   successfullRegistered() {
     Alert.alert(
       "Novo prestador",
-      "Agora você é um prestador!",
+      "Você é um prestador!",
       [{ text: "OK", onPress: () => this.props.navigation.goBack() }],
       { cancelable: false }
     );
