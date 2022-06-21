@@ -10,7 +10,7 @@ import LocationSelect from "../../../location-select";
 class ProviderRegisterStack extends Component {
   constructor(props) {
     super(props);
-    this.stack = createNativeStackNavigator();    
+    this.stack = createNativeStackNavigator();
   }
 
   setProvider(providerType) {
@@ -39,14 +39,14 @@ class ProviderRegisterStack extends Component {
     });
   }
 
-  render() {   
+  render() {
     return (
       <this.stack.Navigator initialRouteName="provider-register">
         <this.stack.Screen
           name="provider-register"
           options={({ navigation }) => ({
             title:
-              this.props.loginEmitter.userLoggedIn == 2
+              this.props.loginEmitter?.userData?.userGroupId === 2
                 ? "Sua Conta Profissional"
                 : "Cadastro de Profissional",
             headerShown: true,

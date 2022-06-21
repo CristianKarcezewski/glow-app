@@ -6,18 +6,16 @@ import {
   FlatList,
   TouchableOpacity,
   Image,
-  Alert
+  Alert,
 } from "react-native";
 import imagem from "../../assets/Ampulheta.jpg";
-import {getProviderPacks} from "../../services/provider-packs-service"
+import { getProviderPacks } from "../../services/provider-packs-service";
 import Toast from "react-native-root-toast";
 
 class ServicePacks extends Component {
- 
   constructor(props) {
     super(props);
     this.state = {
-      search: null,
       loading: false,
       packList: [],
     };
@@ -25,7 +23,10 @@ class ServicePacks extends Component {
 
   _handleLoadPacks() {
     this.setState({ ...this.state, loading: true });
-    getProviderPacks(Platform.OS, this.props.loginEmitter.authorization)
+    getProviderPacks(
+      Platform.OS,
+      this.props.loginEmitter?.userData?.authorization
+    )
       .then(({ status, data }) => {
         if (status === 200) {
           this.setState({
@@ -49,46 +50,17 @@ class ServicePacks extends Component {
       });
   }
 
-  _filterData() {
-    if (this.state.search) {
-      return this.state.packList.filter((x) =>
-        x.name.toLowerCase().includes(this.state.search.toLowerCase())
-      );
-    } else {
-      return this.state.packList;
-    }
-  }
-
   _selectData(item) {
     if (item) {
-      this.props.setPacks(item);
+      this.props.setPackage(item);
     }
-    this.props.navigation.goBack();
-  }
-
-  successSelectedPack(item) {
-    const p = item;
-     Alert.alert(
-       "Deseja Confirmar esse pacote ?",
-       `${p.name} - ${p.description}`,
-       [
-         {
-           text: "Cancelar",
-           style: "cancel",
-         },
-         { text: "OK", onPress: () => this._handleAddPack(item) },
-       ],
-       { cancelable: false }
-     );
-  }
-  _handleAddPack(item){
-    this.props.navigation.navigate("buy-package",item)
+    this.props.navigation.navigate("buy-package");
   }
 
   componentDidMount() {
-     this._handleLoadPacks();
-    }
-   
+    this._handleLoadPacks();
+  }
+
   render() {
     return (
       <View style={{ flex: 1, marginTop: 10 }}>
@@ -107,7 +79,7 @@ class ServicePacks extends Component {
             keyExtractor={(item) => item.id}
             data={this.state.packList}
             renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => this.successSelectedPack(item)}>
+              <TouchableOpacity onPress={() => this._selectData(item)}>
                 <CardResult pack={item} />
               </TouchableOpacity>
             )}
@@ -125,7 +97,7 @@ class CardResult extends Component {
         <View style={style.cardResultImage}>
           <Image
             source={imagem}
-            style={{ flex: 1, width: "100%", borderRadius:30 }}
+            style={{ flex: 1, width: "100%", borderRadius: 30 }}
           ></Image>
         </View>
 

@@ -22,7 +22,6 @@ import { searchProvider } from "../../services/provider-service";
 import { findAddressByGeolocation } from "../../services/address-service";
 import Toast from "react-native-root-toast";
 
-
 class SearchResult extends Component {
   componentKey = "searchListKey";
   constructor(props) {
@@ -34,14 +33,18 @@ class SearchResult extends Component {
     };
   }
 
-  _userDetails(item){
+  _userDetails(item) {
     this.props.setUserInfo(item);
     this.props.navigation.navigate("provider-detail-tabs");
   }
 
   searchProviders(filter) {
     this.setState({ ...this.state, loading: true });
-    searchProvider(Platform.OS, this.props.loginEmitter.authorization, filter)
+    searchProvider(
+      Platform.OS,
+      this.props.loginEmitter?.userData?.authorization,
+      filter
+    )
       .then(({ status, data }) => {
         if (status === 200) {
           this.setState({
@@ -90,7 +93,7 @@ class SearchResult extends Component {
     this.setState({ ...this.state, loading: true });
     findAddressByGeolocation(
       Platform.OS,
-      this.props.loginEmitter.authorization,
+      this.props.loginEmitter?.userData?.authorization,
       geolocation
     )
       .then(({ status, data }) => {
@@ -141,7 +144,7 @@ class SearchResult extends Component {
     this.props.searchFilterEmitter.unsubscribe(this.componentKey);
   }
 
-  render() {   
+  render() {
     return (
       <View style={{ flex: 1, marginTop: 10 }}>
         <View

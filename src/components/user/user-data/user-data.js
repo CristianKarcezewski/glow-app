@@ -196,7 +196,7 @@ class UserData extends Component {
       this.setState({ ...this.state, loading: true });
       setProfileImage(
         Platform.OS,
-        this.props.loginEmitter.authorization,
+        this.props.loginEmitter?.userData?.authorization,
         base64
       )
         .then(({ status, data }) => {

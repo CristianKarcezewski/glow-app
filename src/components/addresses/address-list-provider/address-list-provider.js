@@ -29,7 +29,10 @@ class AddressListProvider extends Component {
 
   _handleLoadCompanyAddresses() {
     this.setState({ ...this.state, loading: true });
-    loadCompanyAddresses(Platform.OS, this.props.loginEmitter.authorization)
+    loadCompanyAddresses(
+      Platform.OS,
+      this.props.loginEmitter?.userData?.authorization
+    )
       .then(({ status, data }) => {
         if (status === 200) {
           this.props.filterEmitter.setAddresses(data);
@@ -168,7 +171,7 @@ class CardResult extends Component {
 
       removeCompanyAddress(
         Platform.OS,
-        this.props.loginEmitter.authorization,
+        this.props.loginEmitter?.userData?.authorization,
         id
       )
         .then(({ status, data }) => {
@@ -207,7 +210,11 @@ class CardResult extends Component {
           <Text style={style.cardResultName}>{this.props.address.name}</Text>
           <Text style={{ fontSize: 20 }}>{this.state.locationLabel}</Text>
           <Text>{`${this.props.address.district}`}</Text>
-          <Text>{`${this.props.address.street}, ${this.props.address.number}  ${this.props.address.complement ==null ? "":this.props.address.complement}`}</Text>
+          <Text>{`${this.props.address.street}, ${this.props.address.number}  ${
+            this.props.address.complement == null
+              ? ""
+              : this.props.address.complement
+          }`}</Text>
         </View>
 
         <View

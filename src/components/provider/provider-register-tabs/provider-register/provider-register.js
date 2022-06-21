@@ -29,7 +29,10 @@ class ProviderRegister extends Component {
 
   fetchCompany() {
     this.setState({ ...this.state, loading: true });
-    getCompanyByUser(Platform.OS, this.props.loginEmitter.authorization)
+    getCompanyByUser(
+      Platform.OS,
+      this.props.loginEmitter?.userData?.authorization
+    )
       .then(({ status, data }) => {
         if (status === 200) {
           if (data) {
@@ -117,7 +120,11 @@ class ProviderRegister extends Component {
       description: this.state.description,
     };
 
-    updateProvider(Platform.OS, this.props.loginEmitter.authorization, provider)
+    updateProvider(
+      Platform.OS,
+      this.props.loginEmitter?.userData?.authorization,
+      provider
+    )
       .then(({ status, data }) => {
         if (status === 200) {
           if (data) {
@@ -160,10 +167,10 @@ class ProviderRegister extends Component {
       .then(({ status, data }) => {
         if (status === 200) {
           this.setState({ ...this.state, loading: false });
-          this.props.loginEmitter.login(
-            this.props.loginEmitter.authorization,
-            2
-          );
+          this.props.loginEmitter.login({
+            ...this.props.loginEmitter?.userData,
+            userGroupId: 2,
+          });
           if (data) {
             this.setForm(data);
           }

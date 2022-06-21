@@ -29,7 +29,10 @@ class AddressList extends Component {
 
   _handleLoadUserAddresses() {
     this.setState({ ...this.state, loading: true });
-    loadUserAddresses(Platform.OS, this.props.loginEmitter.authorization)
+    loadUserAddresses(
+      Platform.OS,
+      this.props.loginEmitter?.userData?.authorization
+    )
       .then(({ status, data }) => {
         if (status === 200) {
           this.props.filterEmitter.setAddresses(data);
@@ -166,7 +169,11 @@ class CardResult extends Component {
     if (id) {
       this.setState({ ...this.state, loading: true });
 
-      removeUserAddress(Platform.OS, this.props.loginEmitter.authorization, id)
+      removeUserAddress(
+        Platform.OS,
+        this.props.loginEmitter?.userData?.authorization,
+        id
+      )
         .then(({ status, data }) => {
           if (status === 200) {
             let i = this.props.filterEmitter.addresses.findIndex(
@@ -206,7 +213,7 @@ class CardResult extends Component {
           <Text>{`${this.props.address.street}, ${
             this.props.address.number
           } - ${
-            this.props.address.complement ==null
+            this.props.address.complement == null
               ? ""
               : this.props.address.complement
           }`}</Text>

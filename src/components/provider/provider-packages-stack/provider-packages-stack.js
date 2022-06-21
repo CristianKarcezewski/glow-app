@@ -2,19 +2,25 @@ import React, { Component } from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import ServicePacks from "../../service-packs/service-packs";
 import BuyPackage from "../../buy-package";
 
 class ProviderPackagesStack extends Component {
   constructor(props) {
     super(props);
-    this.stack = createNativeStackNavigator();   
+    this.stack = createNativeStackNavigator();
+    this.state = {
+      selectedPackage: null,
+    };
   }
-  
+
+  setPack(item) {
+    this.setState({ ...this.state, selectedPackage: item });
+  }
+
   render() {
-    return ( 
-        
+    return (
       <this.stack.Navigator initialRouteName="service-package">
         <this.stack.Screen
           name="service-package"
@@ -36,28 +42,32 @@ class ProviderPackagesStack extends Component {
           })}
         >
           {(props) => (
-            <ServicePacks {...props} 
-            loginEmitter={this.props.loginEmitter} />
+            <ServicePacks
+              {...props}
+              loginEmitter={this.props.loginEmitter}
+              setPackage={this.setPack.bind(this)}
+            />
           )}
         </this.stack.Screen>
 
         <this.stack.Screen
           name="buy-package"
           options={{
-            title: "Adiquirir Pacote",
+            title: "Adquirir Pacote",
             headerShown: true,
           }}
         >
           {(props) => (
             <BuyPackage
               {...props}
-              loginEmitter={this.props.loginEmitter}              
+              loginEmitter={this.props.loginEmitter}
+              selectedPackage={this.state.selectedPackage}
             />
           )}
         </this.stack.Screen>
       </this.stack.Navigator>
-   );
- }
+    );
+  }
 }
 
 const style = StyleSheet.create({
@@ -74,6 +84,6 @@ const style = StyleSheet.create({
     elevation: 10,
     justifyContent: "center",
     elevation: 20,
- },
-});    
+  },
+});
 export default ProviderPackagesStack;

@@ -86,7 +86,11 @@ class ManualAddressProvider extends Component {
       complement: this.state.complement,
       referencePoint: this.state.referencePoint,
     };
-    updateAddress(Platform.OS, this.props.loginEmitter.authorization, address)
+    updateAddress(
+      Platform.OS,
+      this.props.loginEmitter?.userData?.authorization,
+      address
+    )
       .then(({ status, data }) => {
         if (status === 200) {
           this.setState({ ...this.state, loading: false });
@@ -127,7 +131,7 @@ class ManualAddressProvider extends Component {
 
     registerCompanyAddress(
       Platform.OS,
-      this.props.loginEmitter.authorization,
+      this.props.loginEmitter?.userData?.authorization,
       address
     )
       .then(({ status, data }) => {
@@ -155,7 +159,7 @@ class ManualAddressProvider extends Component {
     this.setState({ ...this.state, loading: true });
     findViacepLocation(
       Platform.OS,
-      this.props.loginEmitter.authorization,
+      this.props.loginEmitter?.userData?.authorization,
       postalCode
     )
       .then(({ status, data }) => {
@@ -193,8 +197,8 @@ class ManualAddressProvider extends Component {
       number: filter?.number ? filter.number.toString() : null,
       complement: filter?.complement || null,
       referencePoint: filter?.referencePoint || null,
-      stateName: filter.state ? filter.state.name : null,
-      cityName: filter.city ? filter.city.name : null,
+      stateName: filter?.state?.name || null,
+      cityName: filter?.city?.name || null,
       loading: false,
     });
   }
@@ -221,7 +225,6 @@ class ManualAddressProvider extends Component {
       this.componentKey,
       this._changeFilter.bind(this)
     );
-
     this.setForm(this.props.address || null);
   }
 

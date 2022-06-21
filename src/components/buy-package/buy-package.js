@@ -24,13 +24,19 @@ class BuyPackage extends Component {
       loading: false,
     };
   }
+
   _handleConclude() {
     if (this.state.validNumberCard && this.state.validName) {
       Alert.alert(
-        "Operação Concluida!",
-        "Adicionado novo pacote!",
-        [{ text: "OK", onPress: () => this.props.navigation.goBack() }],
-        { cancelable: false }
+        "Finalizar a compra",
+        `Confirmar compra de ${this.props.selectedPackage.name} com valor de ${this.props.selectedPackage.value}?`,
+        [
+          {
+            text: "Cancelar",
+            style: "cancel",
+          },
+          { text: "OK", onPress: () => this.props.navigation.popToTop() },
+        ]
       );
     } else {
       if (this.state.numberCard != "" || this.state.name != "") {
@@ -77,7 +83,7 @@ class BuyPackage extends Component {
     //   });
     // }
   }
- 
+
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -125,6 +131,7 @@ class BuyPackage extends Component {
             value={this.state.name}
           />
         </View>
+
         <View style={style.container2}>
           <TouchableOpacity
             style={style.loginButton}
@@ -244,7 +251,7 @@ const style = StyleSheet.create({
     alignItems: "center",
     elevation: 10,
     padding: 2,
-  },  
+  },
 });
 
 export default BuyPackage;
