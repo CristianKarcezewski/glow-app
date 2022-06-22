@@ -8,20 +8,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 class ProviderDetails extends Component {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
-      loading:false,
-      provider: null,
-    }
-  }
-
-  componentDidMount(){
-    this.setState({ ...this.state, provider: this.props.getUserInfo() });    
+      loading: false,
+    };
   }
 
   render() {
-     console.log(this.state.provider);
     if (this.state.loading) {
       return (
         <ActivityIndicator
@@ -36,8 +30,8 @@ class ProviderDetails extends Component {
         <View style={{ flex: 1, backgroundColor: "#fff", margin: 10 }}>
           <View style={styles.header}>
             <View style={styles.headerImage}>
-              {this.state?.provider?.imageUrl ? (
-                <Image source={{ uri: this.state?.provider?.imageUrl }} />
+              {this.props?.provider?.imageUrl ? (
+                <Image source={{ uri: this.props?.provider?.imageUrl }} />
               ) : (
                 <FontAwesomeIcon icon={faUser} size={85} />
               )}
@@ -52,10 +46,10 @@ class ProviderDetails extends Component {
                   margin: 5,
                 }}
               >
-                {this.state?.provider?.name}
+                {this.props?.provider?.name}
               </Text>
               <Text style={{ fontSize: 20, margin: 5 }}>
-                {this.state?.provider?.profession}
+                {this.props?.provider?.profession}
               </Text>
               <View style={{ flexDirection: "row" }}>
                 <Text style={{ fontSize: 16, margin: 5 }}>Avaliação:</Text>
@@ -74,7 +68,7 @@ class ProviderDetails extends Component {
               Sobre:
             </Text>
             <Text style={{ fontSize: 14, margin: 15 }}>
-              {this.state?.provider?.description}
+              {this.props?.provider?.description}
             </Text>
           </View>
         </View>

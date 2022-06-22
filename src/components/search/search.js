@@ -34,7 +34,7 @@ class SearchResult extends Component {
   }
 
   _userDetails(item) {
-    this.props.setUserInfo(item);
+    this.props.setProviderInfo(item);
     this.props.navigation.navigate("provider-detail-tabs");
   }
 

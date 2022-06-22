@@ -11,7 +11,7 @@ import ProviderRegisterTabs from "../../provider/provider-register-tabs";
 import ProviderPackagesStack from "../../provider/provider-packages-stack/provider-packages-stack";
 
 class DrawerNavigator extends Component {
-  drawerMenyKey = "drawerMenyKey";
+  drawerMenuKey = "drawerMenuKey";
   constructor(props) {
     super(props);
     this.drawer = createDrawerNavigator();
@@ -31,13 +31,13 @@ class DrawerNavigator extends Component {
 
   componentDidMount() {
     this.props.loginEmitter.subscribe(
-      this.drawerMenyKey,
+      this.drawerMenuKey,
       this.refreshMenu.bind(this)
     );
   }
 
   componentWillUnmount() {
-    this.props.loginEmitter.unsubscribe(this.drawerMenyKey);
+    this.props.loginEmitter.unsubscribe(this.drawerMenuKey);
   }
 
   render() {

@@ -62,11 +62,11 @@ class ProviderDetailTabs extends Component {
       >
         <this.tabs.Screen name="provider-details" options={{ title: "Sobre" }}>
           {(props) => (
-            <ProviderDetails {...props} getUserInfo={this.props.getUserInfo} />
+            <ProviderDetails {...props} provider={this.props.provider} />
           )}
         </this.tabs.Screen>
 
-        {this.props.loginEmitter.userLoggedIn > 0 ? (
+        {this.props.loginEmitter?.userData != null ? (
           <this.tabs.Screen name="chat" options={{ title: "Chat" }}>
             {(props) => <Chat {...props} />}
           </this.tabs.Screen>
@@ -74,7 +74,7 @@ class ProviderDetailTabs extends Component {
           this.userInform()
         )}
 
-        {this.props.loginEmitter.userLoggedIn > 0 ? (
+        {this.props.loginEmitter?.userData != null ? (
           <this.tabs.Screen name="gallery" options={{ title: "Galeria" }}>
             {(props) => <Gallery {...props} />}
           </this.tabs.Screen>

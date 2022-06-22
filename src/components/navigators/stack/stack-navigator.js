@@ -22,6 +22,7 @@ class StackNavigator extends Component {
     super(props);
     this.stack = createNativeStackNavigator();
     this.state = {
+      selectedProvider: null,
       userLoggedIn: false,
       headerShown: true,
     };
@@ -37,6 +38,10 @@ class StackNavigator extends Component {
     } else {
       this.setState({ ...this.state, userLoggedIn: false });
     }
+  }
+
+  setProvider(item) {
+    this.setState({ ...this.setState, selectedProvider: item });
   }
 
   setHeader(value) {
@@ -117,6 +122,7 @@ class StackNavigator extends Component {
                 {...props}
                 loginEmitter={this.props.loginEmitter}
                 searchFilterEmitter={this.props.searchFilterEmitter}
+                setProviderInfo={this.setProvider.bind(this)}
               />
             )}
           </this.stack.Screen>
@@ -155,9 +161,8 @@ class StackNavigator extends Component {
             {(props) => (
               <ProviderDetailTabs
                 {...props}
-                getUserInfo={this.getUserInfo.bind(this)}
                 loginEmitter={this.props.loginEmitter}
-                getUserLogged={this.getUserLogged.bind(this)}
+                provider={this.state.selectedProvider}
               />
             )}
           </this.stack.Screen>
