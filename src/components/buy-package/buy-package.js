@@ -25,7 +25,7 @@ class BuyPackage extends Component {
     };
   }
 
-  _handleConclude() {
+  _buyConclude() {
     if (this.state.validNumberCard && this.state.validName) {
       Alert.alert(
         "Finalizar a compra",
@@ -144,7 +144,7 @@ class BuyPackage extends Component {
 
           <TouchableOpacity
             style={style.registerButton}
-            onPress={() => this._handleConclude()}
+            onPress={() => this._buyConclude()}
           >
             <Text style={{ fontSize: 25, fontWeight: "bold", color: "#fff" }}>
               Concluir
