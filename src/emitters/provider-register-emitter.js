@@ -9,6 +9,7 @@ class ProviderRegisterEmitter {
       state: null,
       city: null,
       dailyWork: new Array(),
+      expirationDate:null,
     };
 
     this.initialState = this.providerForm;

@@ -24,6 +24,7 @@ class ProviderRegister extends Component {
       description: null,
       stateName: null,
       cityName: null,
+      expirationDate: null
     };
   }
 
@@ -198,6 +199,7 @@ class ProviderRegister extends Component {
       providerType: data.providerType,
       description: data.description,
       companyId: data.companyId,
+      expirationDate: data.expirationDate,
     });
   }
 
@@ -248,7 +250,7 @@ class ProviderRegister extends Component {
     this.props.registerEmitter.unsubscribe(this.componentKey);
   }
 
-  render() {
+  render() {   
     return (
       <View
         style={{
@@ -294,9 +296,9 @@ class ProviderRegister extends Component {
           />
         </View>
         <View>
-          <Text style={{ fontSize: 20, paddingLeft: 5, padding: 10 }}>
+          <Text style={{ fontSize: 20, paddingLeft: 5, padding: 10,marginLeft:10 }}>
             {this.props.registerEmitter.providerForm.companyId
-              ? "Seu pacote expira em 30 dias"
+              ? "Seu pacote de serviço expira em: " + this.props.registerEmitter.providerForm.expirationDate                
               : null}
           </Text>
         </View>
