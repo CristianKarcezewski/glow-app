@@ -18,7 +18,7 @@ class ProviderTypeSelect extends Component {
     this.state = {
       search: null,
       loading: false,
-      providerTypesList: [],
+      providerTypesList: [{ name: "Todos", providerTypeId: null }],
     };
   }
 
@@ -30,7 +30,7 @@ class ProviderTypeSelect extends Component {
           this.setState({
             ...this.state,
             loading: false,
-            providerTypesList: data,
+            providerTypesList: this.state.providerTypesList.concat(data),
           });
         } else {
           this.setState({ ...this.state, loading: false });
@@ -60,13 +60,17 @@ class ProviderTypeSelect extends Component {
 
   _selectData(item) {
     if (item) {
-      this.props.setProvider(item);      
+      if (item.providerTypeId) {
+        this.props.setProvider(item);
+      } else {
+        this.props.setProvider(null);
+      }
     }
     this.props.navigation.goBack();
   }
 
   componentDidMount() {
-    if (this.state.providerTypesList.length == 0) {
+    if (this.state.providerTypesList.length == 1) {
       this._handleLoadProviders();
     }
   }

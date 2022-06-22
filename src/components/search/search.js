@@ -67,7 +67,7 @@ class SearchResult extends Component {
 
   mapResponse(data) {
     var resp = [];
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       data.map((p) => {
         resp.push({
           id: p.companyId,
@@ -103,6 +103,7 @@ class SearchResult extends Component {
             ...this.props.searchFilterEmitter.filter,
             state: data.state,
             city: data.city,
+            cityId: data.city.cityId,
           });
         } else {
           this.setState({ ...this.state, loading: false });

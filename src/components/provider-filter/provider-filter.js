@@ -152,6 +152,7 @@ const style = StyleSheet.create({
     flexDirection: "row",
     width: "80%",
     paddingHorizontal: 20,
+    paddingVertical: 5,
     borderColor: "black",
     borderWidth: 1,
     margin: 5,
@@ -159,7 +160,8 @@ const style = StyleSheet.create({
   },
   checkboxText: {
     fontSize: 20,
-    paddingTop: 5,
+    paddingTop: 2,
+    paddingLeft: 5,
   },
   buttons: {
     borderRadius: 30,
