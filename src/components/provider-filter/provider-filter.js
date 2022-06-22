@@ -22,12 +22,14 @@ class ProviderFilter extends Component {
   }
 
   _changeFilter(filter) {
-    this.setState({
-      ...this.state,
-      stateName: filter.state ? filter.state.name : null,
-      cityName: filter.city ? filter.city.name : null,
-      providerTypeName: filter.providerType ? filter.providerType.name : null,
-    });
+    if (filter) {
+      this.setState({
+        ...this.state,
+        stateName: filter.state?.name || null,
+        cityName: filter.city?.name || null,
+        providerTypeName: filter.providerType ? filter.providerType.name : null,
+      });
+    }
   }
 
   componentDidMount() {
@@ -35,6 +37,7 @@ class ProviderFilter extends Component {
       this.componentKey,
       this._changeFilter.bind(this)
     );
+    this._changeFilter(this.props.searchFilterEmitter.filter);
   }
 
   componentWillUnmount() {

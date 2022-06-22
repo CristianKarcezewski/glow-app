@@ -101,8 +101,8 @@ class SearchResult extends Component {
           this.setState({ ...this.state, loading: false });
           this.props.searchFilterEmitter.setFilter({
             ...this.props.searchFilterEmitter.filter,
-            stateUf: data.state.uf,
-            cityId: data.city.cityId,
+            state: data.state,
+            city: data.city,
           });
         } else {
           this.setState({ ...this.state, loading: false });
