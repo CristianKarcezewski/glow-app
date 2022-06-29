@@ -8,6 +8,8 @@ import {
   Image,
   Alert,
 } from "react-native";
+import { updateProvider } from "../../services/provider-service";
+import Toast from "react-native-root-toast";
 
 class BuyPackage extends Component {
   //numberCardPattern = /[0-9]/;
@@ -35,22 +37,61 @@ class BuyPackage extends Component {
             text: "Cancelar",
             style: "cancel",
           },
-          { text: "OK", onPress: () => this.props.navigation.popToTop() },
+          { text: "OK", onPress: () => this.handleProviderUpdate() },
         ]
       );
-    } else {
-      if (this.state.numberCard != "" || this.state.name != "") {
-        Toast.show("Dados inválidos", {
-          duration: Toast.durations.SHORT,
-        });
-      } else {
-        Toast.show("Preencha os campos.", {
-          duration: Toast.durations.SHORT,
-        });
-      }
     }
+        
   }
 
+  handleProviderUpdate() {
+      let provider = {
+        companyId: this.props.registerEmitter.providerForm.companyId,
+        companyName: this.props.registerEmitter.providerForm.commercialName,
+        packageId: this.props.selectedPackage.packageId,
+        providerTypeId: this.props.registerEmitter.providerForm.providerType.providerTypeId,
+        description: this.props.registerEmitter.providerForm.description,
+      };
+
+    updateProvider(
+      Platform.OS,
+      this.props.loginEmitter?.userData?.authorization,
+      provider
+    )
+      .then(({ status, data }) => {
+        if (status === 200) {
+          if (data) {
+            Toast.show("Informações Atualizadas!", {
+              duration: Toast.durations.LONG,
+            });
+            this.setForm(data);
+          }
+        } else {
+          this.setState({ ...this.state, loading: false });
+          Toast.show("Erro ao atualizar fornecedor", {
+            duration: Toast.durations.LONG,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        this.setState({ ...this.state, loading: false });
+        Toast.show("Erro de conexão com cadastro de fornecedor", {
+          duration: Toast.durations.LONG,
+        });
+      });
+  }
+
+  setForm(data) {
+    this.props.registerEmitter.setProviderForm({
+      ...this.props.registerEmitter.providerForm,
+      commercialName: data.companyName,
+      providerType: data.providerType,
+      description: data.description,
+      companyId: data.companyId,
+      expirationDate: data.expirationDate,
+    });
+  }
   _handleNumberCard(value) {
     // if (this.numberCardPattern.test(value) === true) {
     //   this.setState({

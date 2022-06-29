@@ -62,6 +62,8 @@ class ProviderPackagesStack extends Component {
               {...props}
               loginEmitter={this.props.loginEmitter}
               selectedPackage={this.state.selectedPackage}
+              registerEmitter={this.props.providerRegisterEmitter}
+
             />
           )}
         </this.stack.Screen>

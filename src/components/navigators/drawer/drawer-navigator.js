@@ -121,6 +121,7 @@ class DrawerNavigator extends Component {
               <ProviderPackagesStack
                 {...props}
                 loginEmitter={this.props.loginEmitter}
+                providerRegisterEmitter={this.props.providerRegisterEmitter}
               />
             )}
           </this.drawer.Screen>

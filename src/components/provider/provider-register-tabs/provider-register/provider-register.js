@@ -13,6 +13,10 @@ import {
   getCompanyByUser,
   updateProvider,
 } from "../../../../services/provider-service";
+import moment from "moment";
+import "moment/locale/pt-br";
+
+
 
 class ProviderRegister extends Component {
   componentKey = "ProviderRegisterKey";
@@ -24,7 +28,7 @@ class ProviderRegister extends Component {
       description: null,
       stateName: null,
       cityName: null,
-      expirationDate: null
+      expirationDate: null,
     };
   }
 
@@ -160,6 +164,9 @@ class ProviderRegister extends Component {
       cityId: this.props.registerEmitter.providerForm.city.cityId,
     };
 
+    console.log(provider),
+
+
     registerProvider(
       Platform.OS,
       this.props.loginEmitter.authorization,
@@ -247,10 +254,13 @@ class ProviderRegister extends Component {
   }
 
   componentWillUnmount() {
-    this.props.registerEmitter.unsubscribe(this.componentKey);
+    this.props.registerEmitter.unsubscribe(this.componentKey);  
+    
   }
 
-  render() {   
+  render() {  
+ // var date = Date.parse(this.props.registerEmitter.providerForm.expirationDate.toString());
+     
     return (
       <View
         style={{
@@ -296,10 +306,34 @@ class ProviderRegister extends Component {
           />
         </View>
         <View>
-          <Text style={{ fontSize: 20, paddingLeft: 5, padding: 10,marginLeft:10 }}>
+          <Text
+            style={{
+              fontSize: 20,
+              paddingLeft: 5,
+              padding: 10,
+              marginLeft: 10,
+            }}
+          >
             {this.props.registerEmitter.providerForm.companyId
-              ? "Seu pacote de serviço expira em: " + this.props.registerEmitter.providerForm.expirationDate                
+              ? `Seu pacote de serviço expira em:
+               ${
+                  this.props.registerEmitter.providerForm.expirationDate
+                }`        
+               
               : null}
+
+            {/* {this.props.registerEmitter.providerForm.companyId
+              ? `Seu pacote de serviço expira em:
+               ${moment(date).format("DD.MM.YYYY, hh:mm:ss")}`
+              : null} */}
+
+            {/* {this.props.registerEmitter.providerForm.companyId
+              ? `Seu pacote de serviço expira em:
+               ${moment(
+                  this.props.registerEmitter.providerForm.expirationDate
+                ).format("dd/mm/yyyy, hh:mm:ss")}`        
+               
+              : null} */}
           </Text>
         </View>
         {this.props.registerEmitter.providerForm.companyId
