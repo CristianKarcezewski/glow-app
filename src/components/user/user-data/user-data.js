@@ -15,7 +15,13 @@ import { getUserById, updateUser } from "../../../services/user-service";
 import { setProfileImage } from "../../../services/file-service";
 import Toast from "react-native-root-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faUserAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUserAlt,
+  faPenToSquare,
+  faPenSquare,
+  faPen,
+  faAddressCard,
+} from "@fortawesome/free-solid-svg-icons";
 import * as ImagePicker from "expo-image-picker";
 
 class UserData extends Component {
@@ -253,14 +259,26 @@ class UserData extends Component {
             style={style.imageContainer}
             onPress={() => this.pickImage()}
           >
+            <FontAwesomeIcon
+              size={25}
+              icon={faPen}
+              color={"#db382f"}
+              style={{marginLeft:85}}
+            />
             {this.state.imageUrl ? (
               <Image
                 style={style.imageLogo}
                 source={{ uri: this.state.imageUrl }}
               />
             ) : (
-              <FontAwesomeIcon size={80} icon={faUserAlt} />
+              <FontAwesomeIcon size={100} icon={faUserAlt} />
             )}
+            {/* <FontAwesomeIcon
+              size={25}
+              icon={faPen}
+              color={"#db382f"}
+              // style={{marginLeft:55}}
+            /> */}
           </TouchableOpacity>
 
           <View style={style.container}>

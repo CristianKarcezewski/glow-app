@@ -81,7 +81,7 @@ class ProviderFilter extends Component {
           >
             <View style={style.checkboxContainer}>
               <Checkbox
-                style={style.checkbox}
+                style={{ marginTop: 5 }}
                 color={"#db382f"}
                 value={this.state.favorites}
                 onValueChange={() =>
@@ -160,7 +160,6 @@ const style = StyleSheet.create({
   },
   checkboxText: {
     fontSize: 20,
-    paddingTop: 2,
     paddingLeft: 5,
   },
   buttons: {
