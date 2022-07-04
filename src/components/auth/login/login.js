@@ -10,7 +10,7 @@ import {
   TextInput,
 } from "react-native";
 import { login } from "../../../services/auth-service";
-import firebaseAuth from "../../../config/firebase-config";
+import { auth } from "../../../config/firebase-config";
 import { signInWithCustomToken } from "firebase/auth";
 import Toast from "react-native-root-toast";
 
@@ -42,7 +42,7 @@ class Login extends Component {
       login(Platform.OS, this.state.email, this.state.password)
         .then(({ status, data }) => {
           if (status === 200) {
-            signInWithCustomToken(firebaseAuth, data.authorization)
+            signInWithCustomToken(auth, data.authorization)
               .then((userCredential) => {
                 // Signed in
                 userCredential.user.getIdToken().then((idToken) => {

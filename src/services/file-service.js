@@ -1,6 +1,6 @@
 import { PROFILE_IMAGE, FILE } from "./urls";
 
-export const setProfileImage = async (platform, authorization, base64) => {
+export const setProfileImage = async (platform, authorization, url) => {
   try {
     let response = await fetch(PROFILE_IMAGE, {
       method: "POST",
@@ -10,7 +10,7 @@ export const setProfileImage = async (platform, authorization, base64) => {
         platform,
         authorization,
       },
-      body: JSON.stringify({ image: base64 }),
+      body: JSON.stringify({ imageUrl: url }),
     });
 
     let json = await response.json();

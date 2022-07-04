@@ -11,18 +11,14 @@ import {
   Platform,
   Alert,
 } from "react-native";
-import { getUserById, updateUser } from "../../../services/user-service";
+import { updateUser } from "../../../services/user-service";
 import { setProfileImage } from "../../../services/file-service";
 import Toast from "react-native-root-toast";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faUserAlt,
-  faPenToSquare,
-  faPenSquare,
-  faPen,
-  faAddressCard,
-} from "@fortawesome/free-solid-svg-icons";
+import { faUserAlt, faPen } from "@fortawesome/free-solid-svg-icons";
 import * as ImagePicker from "expo-image-picker";
+import { storage } from "../../../config/firebase-config";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 
 class UserData extends Component {
   userDataKey = "userDataKey";
@@ -38,28 +34,6 @@ class UserData extends Component {
       formChanged: false,
     };
   }
-
-  // fetchUser() {
-  //   this.setState({ ...this.state, loading: true });
-  //   getUserById(Platform.OS, this.props.loginEmitter.authorization)
-  //     .then(({ status, data }) => {
-  //       if (status === 200) {
-
-  //       } else {
-  //         this.setState({ ...this.state, loading: false });
-  //         Toast.show("Erro ao carregar dados da sua conta", {
-  //           duration: Toast.durations.LONG,
-  //         });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log("error", err);
-  //       this.setState({ ...this.state, loading: false });
-  //       Toast.show("Erro ao carregar dados da sua conta", {
-  //         duration: Toast.durations.LONG,
-  //       });
-  //     });
-  // }
 
   setUserForm() {
     this.setState({
@@ -176,10 +150,9 @@ class UserData extends Component {
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
-      base64: true,
+      // base64: true,
     }).then((result) => {
-      console.log(result);
-      this.uploadImage(result.base64);
+      this.uploadImage(result);
     });
   }
 
@@ -191,30 +164,51 @@ class UserData extends Component {
           allowsEditing: true,
           aspect: [1, 1],
           quality: 1,
-          base64: true,
-        }).then((result) => this.uploadImage(result.base64));
+          // base64: true,
+        }).then((result) => this.uploadImage(result));
       }
     });
   }
 
-  uploadImage(base64) {
-    if (base64) {
-      this.setState({ ...this.state, loading: true });
+  uploadImage(file) {
+    if (file) {
+      try {
+        this.setState({ ...this.state, loading: true });
+
+        if (!file.cancelled) {
+          this.uploadImageAsync(file.uri).then((uploadUrl) => {
+            this.saveImageUrl(uploadUrl);
+          });
+        } else {
+          this.setState({ loading: false });
+        }
+      } catch (e) {
+        console.log(e);
+        this.setState({ loading: false });
+      }
+    }
+  }
+
+  saveImageUrl(url) {
+    if (url) {
       setProfileImage(
         Platform.OS,
         this.props.loginEmitter?.userData?.authorization,
-        base64
+        url
       )
         .then(({ status, data }) => {
           if (status === 200) {
             this.setState({
               ...this.state,
               loading: false,
-              imageUrl: data,
+            });
+            this.props.loginEmitter.login({
+              ...this.props.loginEmitter.userData,
+              imageUrl: data.imageUrl,
             });
           } else {
             this.setState({ ...this.state, loading: false });
-            Toast.show("Erro ao salvar imagem", {
+            Toast.show("Erro ao atualizar usário", {
               duration: Toast.durations.LONG,
             });
           }
@@ -227,6 +221,35 @@ class UserData extends Component {
           });
         });
     }
+  }
+
+  async uploadImageAsync(uri) {
+    // Why are we using XMLHttpRequest? See:
+    // https://github.com/expo/expo/issues/2402#issuecomment-443726662
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+
+    const fileRef = ref(
+      storage,
+      `glow-files/${this.props.loginEmitter?.userData?.uid}/profile-image`
+    );
+    const result = await uploadBytes(fileRef, blob);
+
+    // We're done with the blob, close and release it
+    blob.close();
+
+    return await getDownloadURL(fileRef);
   }
 
   componentWillUnmount() {
@@ -263,7 +286,7 @@ class UserData extends Component {
               size={25}
               icon={faPen}
               color={"#db382f"}
-              style={{marginLeft:85}}
+              style={{ marginLeft: 85 }}
             />
             {this.state.imageUrl ? (
               <Image

@@ -71,7 +71,7 @@ class SearchResult extends Component {
       data.map((p) => {
         resp.push({
           id: p.companyId,
-          imageUrl: null,
+          imageUrl: p.imageUrl,
           profession: p.providerType?.name,
           name: p.companyName,
           description: p.description,
