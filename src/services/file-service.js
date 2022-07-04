@@ -10,7 +10,7 @@ export const setProfileImage = async (platform, authorization, url) => {
         platform,
         authorization,
       },
-      body: JSON.stringify({ imageUrl: url }),
+      body: JSON.stringify({ fileUrl: url }),
     });
 
     let json = await response.json();
