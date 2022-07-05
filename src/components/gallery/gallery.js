@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import {
   View,
   Text,
-  StyleSheet,
-  AppRegistry,  
+  StyleSheet, 
   TouchableOpacity,
   Dimensions,
   Modal,
@@ -11,6 +10,8 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ImageElement from "./imageElement";
+import {loadCompanyImages} from "./../../services/file-service"
+
 
 const numColumns = 2;
 
@@ -68,11 +69,55 @@ export default class Gallery extends Component {
   state = {
     ...initialState,
   };
-   
+
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     imagesList: [],
+  //     loading: false,
+  //   };
+  // }
+
   setModalVisible(visible, imageKey) {
-    this.setState({ modalImage: this.state.imagesList[(imageKey-1)] });
+    this.setState({ modalImage: this.state.imagesList[imageKey - 1] });
     this.setState({ modalVisible: visible });
-  } 
+  }
+
+  _handleLoadCompanyImages() {
+    this.setState({ ...this.state, loading: true });
+    loadCompanyImages(
+      Platform.OS,
+      this.props.loginEmitter?.userData?.authorization
+    )
+      .then(({ status, data }) => {
+        if (status === 200) {
+          this.props.filterEmitter.setImages(data);
+          this.setState({ ...this.state, loading: false });
+        } else {
+          this.setState({ ...this.state, loading: false });
+          Toast.show("Erro ao carregar imagens", {
+            duration: Toast.durations.LONG,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+        this.setState({ ...this.state, loading: false });
+        Toast.show("Erro ao carregar endereços", {
+          duration: Toast.durations.LONG,
+        });
+      });
+  }
+  setImages() {
+    this.setState({
+      ...this.state,
+      imagesList: this.props.filterEmitter,
+    });
+  }
+
+  componentDidMount() {
+   this.setImages.bind(this)
+  }
   
   render() {
     return (
@@ -96,7 +141,7 @@ export default class Gallery extends Component {
               </Text>
               <ImageElement imagsource={this.state.modalImage}></ImageElement>
             </View>
-          </Modal>         
+          </Modal>
         </View>
 
         <FlatList
@@ -107,7 +152,7 @@ export default class Gallery extends Component {
             <TouchableOpacity
               key={item}
               onPress={() => {
-                this.setModalVisible(true, item.id);               
+                this.setModalVisible(true, item.id);
               }}
             >
               <View style={styles.imagewrap}>
@@ -118,8 +163,7 @@ export default class Gallery extends Component {
         />
       </SafeAreaView>
     );
-
-  }; 
+  }
 }
 
 const styles = StyleSheet.create({
@@ -143,7 +187,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0, 0.9)",
   },
   text: {
-    color: "#fff",
+    color: "#fff",   
   },
 });
 

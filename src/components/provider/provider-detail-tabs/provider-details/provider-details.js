@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import { StyleSheet, Text, View, ActivityIndicator, Image } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faUser,
@@ -30,8 +30,11 @@ class ProviderDetails extends Component {
         <View style={{ flex: 1, backgroundColor: "#fff", margin: 10 }}>
           <View style={styles.header}>
             <View style={styles.headerImage}>
-              {this.props?.provider?.imageUrl ? (
-                <Image source={{ uri: this.props?.provider?.imageUrl }} />
+              {this.props.provider.imageUrl ? (
+                <Image
+                  style={styles.imageLogo}
+                  source={{ uri: this.props.provider.imageUrl }}
+                />
               ) : (
                 <FontAwesomeIcon icon={faUser} size={85} />
               )}
@@ -106,6 +109,11 @@ const styles = StyleSheet.create({
   },
   cardResultTextDetailsDescription: {
     margin: 15,
+  },
+  imageLogo: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 35,
   },
 });
 

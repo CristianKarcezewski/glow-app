@@ -204,7 +204,7 @@ class UserData extends Component {
             });
             this.props.loginEmitter.login({
               ...this.props.loginEmitter.userData,
-              imageUrl: data.imageUrl,
+              imageUrl: data.fileUrl,
             });
           } else {
             this.setState({ ...this.state, loading: false });

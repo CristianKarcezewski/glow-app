@@ -1,16 +1,14 @@
 import React, { Component } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Gallery from "../../../gallery";
-import { TouchableOpacity, StyleSheet } from "react-native";
+import { TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faArrowLeft,
   faPlus,
-  faPhotoVideo,
 } from "@fortawesome/free-solid-svg-icons";
-import AddPhotoCamera from "../../../add-photo-camera";
-import AddPhotoGallery from "../../../add-photo-gallery";
-import ProviderUploadImage from "../../provider-upload-image";
+import * as ImagePicker from "expo-image-picker";
+import {setCompanyImage} from "./../../../../services/file-service"
 
 class ProviderGalleryStack extends Component {
   constructor(props) {
@@ -23,6 +21,138 @@ class ProviderGalleryStack extends Component {
 
   updateImage(image) {
     this.setState({ ...this.state, image });
+  }
+
+  pickImage() {
+    Alert.alert(
+      "Adicionar Imagem",
+      "Selecione a origem",
+      [
+        {
+          text: "Camera",
+          style: "default",
+          onPress: () => this.pickFromCam(),
+        },
+        {
+          text: "Galeria",
+          style: "default",
+          onPress: () => this.pickFromGalery(),
+        },
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+      ],
+      { cancelable: true }
+    );
+  }
+
+  pickFromGalery() {
+    ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+      // base64: true,
+    }).then((result) => {
+      this.uploadImage(result);
+    });
+  }
+
+  pickFromCam() {
+    ImagePicker.requestCameraPermissionsAsync().then((permission) => {
+      if (permission.granted === true) {
+        ImagePicker.launchCameraAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [1, 1],
+          quality: 1,
+          // base64: true,
+        }).then((result) => this.uploadImage(result));
+      }
+    });
+  }
+
+  uploadImage(file) {
+    if (file) {
+      try {
+        this.setState({ ...this.state, loading: true });
+
+        if (!file.cancelled) {
+          this.uploadImageAsync(file.uri).then((uploadUrl) => {
+            this.saveImageUrl(uploadUrl);
+          });
+        } else {
+          this.setState({ loading: false });
+        }
+      } catch (e) {
+        console.log(e);
+        this.setState({ loading: false });
+      }
+    }
+  }
+
+  saveImageUrl(url) {
+    if (url) {
+      setCompanyImage(
+        Platform.OS,
+        this.props.loginEmitter?.userData?.authorization,
+        url
+      )
+        .then(({ status, data }) => {
+          if (status === 200) {
+            this.setState({
+              ...this.state,
+              loading: false,
+            });
+            this.props.loginEmitter.login({
+              ...this.props.loginEmitter.userData,
+              imageUrl: data.fileUrl,
+            });
+          } else {
+            this.setState({ ...this.state, loading: false });
+            Toast.show("Erro ao atualizar usário", {
+              duration: Toast.durations.LONG,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log("error", err);
+          this.setState({ ...this.state, loading: false });
+          Toast.show("Erro ao carregar usuário", {
+            duration: Toast.durations.LONG,
+          });
+        });
+    }
+  }
+
+  async uploadImageAsync(uri) {
+    // Why are we using XMLHttpRequest? See:
+    // https://github.com/expo/expo/issues/2402#issuecomment-443726662
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+
+    const fileRef = ref(
+      storage,
+      `glow-files/${this.props.loginEmitter?.userData?.uid}/profile-image`
+    );
+    const result = await uploadBytes(fileRef, blob);
+
+    // We're done with the blob, close and release it
+    blob.close();
+
+    return await getDownloadURL(fileRef);
   }
 
   render() {
@@ -48,7 +178,7 @@ class ProviderGalleryStack extends Component {
             headerRight: () => (
               <TouchableOpacity
                 style={styles.headerLoginButton}
-                onPress={() => navigation.navigate("provider-upload-image")}
+                onPress={() => this.pickImage()}
               >
                 <FontAwesomeIcon icon={faPlus} color={"#fff"} size={20} />
               </TouchableOpacity>
@@ -56,41 +186,6 @@ class ProviderGalleryStack extends Component {
           })}
         >
           {(props) => <Gallery {...props} />}
-        </this.stack.Screen>
-
-        <this.stack.Screen
-          name="provider-upload-image"
-          options={({ navigation }) => ({
-            title: "Adicionar Fotos",
-            headerShown: true,
-          })}
-        >
-          {(props) => (
-            <ProviderUploadImage
-              {...props}
-              //update_Image={this.updateImage.bind(this)}
-            />
-          )}
-        </this.stack.Screen>
-
-        <this.stack.Screen
-          name="add-photo-camera"
-          options={{
-            title: "Camera",
-            headerShown: true,
-          }}
-        >
-          {(props) => <AddPhotoCamera {...props} />}
-        </this.stack.Screen>
-
-        <this.stack.Screen
-          name="add-photo-gallery"
-          options={{
-            title: "Fotos Galeria",
-            headerShown: true,
-          }}
-        >
-          {(props) => <AddPhotoGallery {...props} />}
         </this.stack.Screen>
       </this.stack.Navigator>
     );

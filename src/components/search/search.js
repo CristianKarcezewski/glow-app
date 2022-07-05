@@ -285,8 +285,8 @@ const style = StyleSheet.create({
     justifyContent: "center",
   },
   imageLogo: {
-    width: 55,
-    height: 55,
+    width: 70,
+    height: 60,
     borderRadius: 100,
   },
 });
