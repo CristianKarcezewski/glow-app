@@ -71,6 +71,7 @@ class ProviderRegister extends Component {
       providerType: providerForm.providerType || null,
       stateName: providerForm.state?.name || null,
       cityName: providerForm.city?.name || null,
+      expirationDate: providerForm.expirationDate || null,
     });
   }
 
@@ -319,7 +320,7 @@ class ProviderRegister extends Component {
             {this.props.registerEmitter.providerForm.companyId
               ? `Seu pacote de serviço expira em:
                ${moment(
-                 this.props.registerEmitter.providerForm.expirationDate,
+                 this.state.expirationDate,
                  "DD/mm/yyyy HH:MM:SS"
                ).format("DD/mm/yyyy HH:MM")}`
               : null}
