@@ -35,6 +35,7 @@ class AddressListProvider extends Component {
     )
       .then(({ status, data }) => {
         if (status === 200) {
+          this.props.filterEmitter.addresses = [];
           this.props.filterEmitter.setAddresses(data);
           this.setState({ ...this.state, loading: false });
         } else {

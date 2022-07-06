@@ -308,7 +308,7 @@ class ProviderRegister extends Component {
             onChangeText={(value) => {
               this.props.registerEmitter.providerForm = {
                 ...this.props.registerEmitter.providerForm,
-                commercialName: value,
+                description: value,
               };
               this.setState({ ...this.state, description: value });
             }}

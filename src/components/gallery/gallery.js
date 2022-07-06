@@ -72,14 +72,6 @@ class Gallery extends Component {
     images: [],
   };
 
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     imagesList: [],
-  //     loading: false,
-  //   };
-  // }
-
   openImage(img) {
     this.setState({ ...this.state, modalVisible: true, modalImage: img });
   }
@@ -113,8 +105,12 @@ class Gallery extends Component {
   componentDidMount() {
     this.props.providerRegisterEmitter.subscribe(
       componentKey,
-      this._handleLoadCompanyImages
+      this._handleLoadCompanyImages.bind(this)
     );
+  }
+
+  componentWillUnmount() {
+    this.props.providerRegisterEmitter.unsubscribe(componentKey);
   }
 
   render() {
