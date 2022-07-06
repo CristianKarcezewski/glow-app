@@ -27,7 +27,6 @@ class ProviderRegister extends Component {
       stateName: null,
       cityName: null,
       expirationDate: null,
-      formattedDate: moment().locale("pt-br").format("ddd, D [de] MMMM, hh:mm"),
     };
   }
 
@@ -58,14 +57,8 @@ class ProviderRegister extends Component {
           });
         });
     } else {
-      this.props.registerEmitter.setProviderForm({
-        ...this.props.registerEmitter.providerForm,
-        commercialName: null,
-        providerType: null,
-        description: null,
-        companyId: null,
-        expirationDate: null,
-      });
+      this.props.registerEmitter.reset();
+      this._changeFilter(this.props.registerEmitter.providerForm);
     }
   }
 
