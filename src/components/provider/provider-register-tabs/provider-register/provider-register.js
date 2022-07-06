@@ -170,7 +170,7 @@ class ProviderRegister extends Component {
 
     registerProvider(
       Platform.OS,
-      this.props.loginEmitter.authorization,
+      this.props.loginEmitter?.userData?.authorization,
       provider
     )
       .then(({ status, data }) => {
