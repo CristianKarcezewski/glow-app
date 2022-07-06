@@ -276,9 +276,13 @@ class ProviderRegister extends Component {
           style={styles.formField}
           maxLength={50}
           placeholder="Nome comercial"
-          onChangeText={(value) =>
-            this.setState({ ...this.state, commercialName: value })
-          }
+          onChangeText={(value) => {
+            this.props.registerEmitter.providerForm = {
+              ...this.props.registerEmitter.providerForm,
+              commercialName: value,
+            };
+            this.setState({ ...this.state, commercialName: value });
+          }}
           value={this.state.commercialName}
         />
 
@@ -301,9 +305,13 @@ class ProviderRegister extends Component {
             maxLength={500}
             multiline={true}
             placeholder="Explique aqui o que você faz"
-            onChangeText={(value) =>
-              this.setState({ ...this.state, description: value })
-            }
+            onChangeText={(value) => {
+              this.props.registerEmitter.providerForm = {
+                ...this.props.registerEmitter.providerForm,
+                commercialName: value,
+              };
+              this.setState({ ...this.state, description: value });
+            }}
             value={this.state.description}
           />
         </View>

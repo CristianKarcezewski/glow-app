@@ -65,6 +65,7 @@ const numColumns = 2;
 // };
 
 class Gallery extends Component {
+  componentKey = "providerGalleryKey";
   state = {
     modalVisible: false,
     modalImage: null,
@@ -87,12 +88,12 @@ class Gallery extends Component {
     this.setState({ ...this.state, loading: true });
     loadCompanyImages(
       Platform.OS,
-      this.props.loginEmitter?.userData?.authorization
+      this.props.providerRegisterEmitter,
+      this.props.provider.companyId
     )
       .then(({ status, data }) => {
         if (status === 200) {
-          this.props.filterEmitter.setImages(data);
-          this.setState({ ...this.state, loading: false });
+          this.setState({ ...this.state, loading: false, images: data });
         } else {
           this.setState({ ...this.state, loading: false });
           Toast.show("Erro ao carregar imagens", {
@@ -103,13 +104,18 @@ class Gallery extends Component {
       .catch((err) => {
         console.log("error", err);
         this.setState({ ...this.state, loading: false });
-        Toast.show("Erro ao carregar endereços", {
+        Toast.show("Erro ao carregar imagens", {
           duration: Toast.durations.LONG,
         });
       });
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.props.providerRegisterEmitter.subscribe(
+      componentKey,
+      this._handleLoadCompanyImages
+    );
+  }
 
   render() {
     return (
