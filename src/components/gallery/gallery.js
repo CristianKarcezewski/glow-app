@@ -78,11 +78,7 @@ class Gallery extends Component {
 
   _handleLoadCompanyImages() {
     this.setState({ ...this.state, loading: true });
-    loadCompanyImages(
-      Platform.OS,
-      this.props.providerRegisterEmitter,
-      this.props.provider.companyId
-    )
+    loadCompanyImages(Platform.OS, this.props.companyId)
       .then(({ status, data }) => {
         if (status === 200) {
           this.setState({ ...this.state, loading: false, images: data });
@@ -103,14 +99,11 @@ class Gallery extends Component {
   }
 
   componentDidMount() {
-    this.props.providerRegisterEmitter.subscribe(
-      componentKey,
-      this._handleLoadCompanyImages.bind(this)
-    );
+    _handleLoadCompanyImages();
   }
 
-  componentWillUnmount() {
-    this.props.providerRegisterEmitter.unsubscribe(componentKey);
+  shouldComponentUpdate() {
+    _handleLoadCompanyImages();
   }
 
   render() {

@@ -22,9 +22,14 @@ export const setProfileImage = async (platform, authorization, url) => {
   }
 };
 
-export const setCompanyImage = async (platform, authorization, url) => {
+export const setCompanyImage = async (
+  platform,
+  authorization,
+  companyId,
+  url
+) => {
   try {
-    let response = await fetch(PROFILE_IMAGE, {
+    let response = await fetch(`${UPLOAD_COMPANY_FILE}/${companyId}`, {
       method: "POST",
       headers: {
         Accept: "application/json",

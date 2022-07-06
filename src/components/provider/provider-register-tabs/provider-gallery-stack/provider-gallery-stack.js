@@ -95,6 +95,7 @@ class ProviderGalleryStack extends Component {
       setCompanyImage(
         Platform.OS,
         this.props.loginEmitter?.userData?.authorization,
+        this.props.providerRegisterEmitter.providerForm.companyId,
         url
       )
         .then(({ status, data }) => {
@@ -102,10 +103,6 @@ class ProviderGalleryStack extends Component {
             this.setState({
               ...this.state,
               loading: false,
-            });
-            this.props.loginEmitter.login({
-              ...this.props.loginEmitter.userData,
-              imageUrl: data.fileUrl,
             });
           } else {
             this.setState({ ...this.state, loading: false });
@@ -186,7 +183,9 @@ class ProviderGalleryStack extends Component {
           {(props) => (
             <Gallery
               {...props}
-              providerRegisterEmitter={this.props.providerRegisterEmitter}
+              companyId={
+                this.props.providerRegisterEmitter.providerForm.companyId
+              }
             />
           )}
         </this.stack.Screen>
