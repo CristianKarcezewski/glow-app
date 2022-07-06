@@ -63,11 +63,11 @@ class ProviderRegister extends Component {
   }
 
   _changeFilter(providerForm) {
+    console.log(providerForm);
     this.setState({
       ...this.state,
-      commercialName:
-        providerForm.commercialName || this.state.commercialName || null,
-      description: providerForm.description || this.state.description || null,
+      commercialName: providerForm.commercialName || null,
+      description: providerForm.description || null,
       providerType: providerForm.providerType || null,
       stateName: providerForm.state?.name || null,
       cityName: providerForm.city?.name || null,
@@ -317,7 +317,7 @@ class ProviderRegister extends Component {
               marginLeft: 10,
             }}
           >
-            {this.props.registerEmitter.providerForm.companyId
+            {this.state.expirationDate
               ? `Seu pacote de serviço expira em:
                ${moment(
                  this.state.expirationDate,
