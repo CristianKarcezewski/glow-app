@@ -44,6 +44,6 @@ export const GET_PROVIDER_PACKS = `${API}/packages`;
 
 //files
 export const PROFILE_IMAGE = `${API}/files/profile-image`;
-export const FILE = `${API}/file`;
-export const REMOVE_COMPANY_IMAGE = `${API}/files/:companyId/:fileId`;
-export const GET_COMPANY_IMAGE_ALL = `${API}/files/:companyId`;
+export const UPLOAD_COMPANY_FILE = `${API}/files`;
+export const GET_ALL_COMPANY_IMAGES = `${API}/files`;
+export const REMOVE_COMPANY_IMAGE = `${API}/files`;

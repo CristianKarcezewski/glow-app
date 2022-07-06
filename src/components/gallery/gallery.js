@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { loadCompanyImages } from "./../../services/file-service";
 import ImageElement from "./imageElement";
+import Toast from "react-native-root-toast";
 
 const numColumns = 2;
 
@@ -76,14 +77,18 @@ class Gallery extends Component {
     this.setState({ ...this.state, modalVisible: true, modalImage: img });
   }
 
+  setModalVisible(visible, imageKey) {
+    this.setState({
+      modalImage: this.state.images[imageKey - 1],
+      modalVisible: visible,
+    });
+  }
+
   _handleLoadCompanyImages() {
     this.setState({ ...this.state, loading: true });
-    loadCompanyImages(
-      Platform.OS,
-      this.props.providerRegisterEmitter,
-      this.props.provider.companyId
-    )
+    loadCompanyImages(Platform.OS, this.props.companyId)
       .then(({ status, data }) => {
+        console.log(data);
         if (status === 200) {
           this.setState({ ...this.state, loading: false, images: data });
         } else {
@@ -103,14 +108,7 @@ class Gallery extends Component {
   }
 
   componentDidMount() {
-    this.props.providerRegisterEmitter.subscribe(
-      componentKey,
-      this._handleLoadCompanyImages.bind(this)
-    );
-  }
-
-  componentWillUnmount() {
-    this.props.providerRegisterEmitter.unsubscribe(componentKey);
+    this._handleLoadCompanyImages();
   }
 
   render() {
@@ -139,14 +137,14 @@ class Gallery extends Component {
         </View>
 
         <FlatList
-          data={this.state.imagesList}
-          keyExtractor={(item) => item.id}
-          numColumns={3}
+          data={this.state.images}
+          keyExtractor={(item) => item.fileId}
+          numColumns={2}
           renderItem={({ item }) => (
             <TouchableOpacity
               key={item}
               onPress={() => {
-                this.openImage(item);
+                this.setModalVisible(true, item.fileId);
               }}
             >
               <View style={styles.imagewrap}>
