@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { register } from "../../../services/auth-service";
 import Toast from "react-native-root-toast";
-import firebaseAuth from "../../../config/firebase-config";
+import { auth } from "../../../config/firebase-config";
 import { signInWithCustomToken } from "firebase/auth";
 
 class UserRegister extends Component {
@@ -52,7 +52,7 @@ class UserRegister extends Component {
       register(Platform.OS, newUser)
         .then(({ status, data }) => {
           if (status === 200) {
-            signInWithCustomToken(firebaseAuth, data.authorization)
+            signInWithCustomToken(auth, data.authorization)
               .then((userCredential) => {
                 // Signed in
                 userCredential.user.getIdToken().then((idToken) => {
