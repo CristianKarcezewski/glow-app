@@ -32,30 +32,41 @@ class ProviderRegister extends Component {
   }
 
   fetchCompany() {
-    this.setState({ ...this.state, loading: true });
-    getCompanyByUser(
-      Platform.OS,
-      this.props.loginEmitter?.userData?.authorization
-    )
-      .then(({ status, data }) => {
-        if (status === 200) {
-          if (data) {
-            this.setForm(data);
+    if (this.props.loginEmitter?.userData?.userGroupId === 2) {
+      this.setState({ ...this.state, loading: true });
+      getCompanyByUser(
+        Platform.OS,
+        this.props.loginEmitter?.userData?.authorization
+      )
+        .then(({ status, data }) => {
+          if (status === 200) {
+            if (data) {
+              this.setForm(data);
+            }
+          } else {
+            this.setState({ ...this.state, loading: false });
+            Toast.show("Erro ao carregar dados da sua conta", {
+              duration: Toast.durations.LONG,
+            });
           }
-        } else {
+        })
+        .catch((err) => {
+          console.log("error", err);
           this.setState({ ...this.state, loading: false });
-          Toast.show("Erro ao carregar dados da sua conta", {
+          Toast.show("Não foi possível conectar ao servidor", {
             duration: Toast.durations.LONG,
           });
-        }
-      })
-      .catch((err) => {
-        console.log("error", err);
-        this.setState({ ...this.state, loading: false });
-        Toast.show("Não foi possível conectar ao servidor", {
-          duration: Toast.durations.LONG,
         });
+    } else {
+      this.props.registerEmitter.setProviderForm({
+        ...this.props.registerEmitter.providerForm,
+        commercialName: null,
+        providerType: null,
+        description: null,
+        companyId: null,
+        expirationDate: null,
       });
+    }
   }
 
   _changeFilter(providerForm) {
