@@ -202,6 +202,7 @@ class ProviderGalleryStack extends Component {
                 companyId={
                   this.props.providerRegisterEmitter.providerForm.companyId
                 }
+                loginEmitter={this.props.loginEmitter}
               />
             )}
           </this.stack.Screen>
