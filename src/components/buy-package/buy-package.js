@@ -46,11 +46,8 @@ class BuyPackage extends Component {
 
   handleProviderUpdate() {
       let provider = {
-        companyId: this.props.registerEmitter.providerForm.companyId,
-        companyName: this.props.registerEmitter.providerForm.commercialName,
-        packageId: this.props.selectedPackage.packageId,
-        providerTypeId: this.props.registerEmitter.providerForm.providerType.providerTypeId,
-        description: this.props.registerEmitter.providerForm.description,
+        companyId: this.props.registerEmitter.providerForm.companyId,       
+        packageId: this.props.selectedPackage.packageId,       
       };
 
     updateProvider(
@@ -65,6 +62,7 @@ class BuyPackage extends Component {
               duration: Toast.durations.LONG,
             });
             this.setForm(data);
+            this.props.navigation.popToTop();
           }
         } else {
           this.setState({ ...this.state, loading: false });

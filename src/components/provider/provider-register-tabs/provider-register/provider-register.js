@@ -309,11 +309,11 @@ class ProviderRegister extends Component {
           >
             {this.props.registerEmitter.providerForm.companyId
               ? `Seu pacote de serviço expira em:
-               ${moment(this.props.registerEmitter.providerForm.expirationDate)
-                 .locale("pt-br")
-                 .format("ddd, D [de] MMMM, hh:mm")}`
-              : null}
-              
+               ${moment(
+                 this.props.registerEmitter.providerForm.expirationDate,
+                 "DD/mm/yyyy HH:MM:SS"
+               ).format("DD/mm/yyyy HH:MM")}`
+              :null}
           </Text>
         </View>
         {this.props.registerEmitter.providerForm.companyId
