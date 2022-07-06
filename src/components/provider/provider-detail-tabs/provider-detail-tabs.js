@@ -77,7 +77,11 @@ class ProviderDetailTabs extends Component {
         {this.props.loginEmitter?.userData != null ? (
           <this.tabs.Screen name="gallery" options={{ title: "Galeria" }}>
             {(props) => (
-              <Gallery {...props} companyId={this.props.provider.companyId} />
+              <Gallery
+                {...props}
+                companyId={this.props.provider.companyId}
+                loginEmitter={this.props.loginEmitter}
+              />
             )}
           </this.tabs.Screen>
         ) : null}
