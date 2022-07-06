@@ -107,7 +107,18 @@ class Gallery extends Component {
       });
   }
 
+  fetchImages() {
+    this.setState({ ...this.state, images: [] });
+    if (this.props.loginEmitter?.userData?.userGroupId === 2) {
+      this._handleLoadCompanyImages();
+    }
+  }
+
   componentDidMount() {
+    this.props.loginEmitter.subscribe(
+      this.componentKey,
+      this.fetchImages.bind(this)
+    );
     this._handleLoadCompanyImages();
   }
 
@@ -170,7 +181,7 @@ const styles = StyleSheet.create({
     padding: 2,
     flexBasis: 0,
     height: Dimensions.get("window").height / 3 - 3,
-    width: Dimensions.get("window").width / 3 - 8,
+    width: Dimensions.get("window").width / 2 - 8,
     backgroundColor: "#fff",
   },
   modal: {
