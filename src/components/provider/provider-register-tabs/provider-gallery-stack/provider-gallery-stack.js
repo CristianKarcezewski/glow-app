@@ -1,12 +1,20 @@
 import React, { Component } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Gallery from "../../../gallery";
-import { TouchableOpacity, StyleSheet, Alert } from "react-native";
+import {
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft, faPlus } from "@fortawesome/free-solid-svg-icons";
 import * as ImagePicker from "expo-image-picker";
 import { setCompanyImage } from "./../../../../services/file-service";
 import uuid from "react-native-uuid";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { storage } from "../../../../config/firebase-config";
+import Toast from "react-native-root-toast";
 
 class ProviderGalleryStack extends Component {
   constructor(props) {
@@ -49,7 +57,6 @@ class ProviderGalleryStack extends Component {
     ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [1, 1],
       quality: 1,
       // base64: true,
     }).then((result) => {
@@ -63,7 +70,6 @@ class ProviderGalleryStack extends Component {
         ImagePicker.launchCameraAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.All,
           allowsEditing: true,
-          aspect: [1, 1],
           quality: 1,
           // base64: true,
         }).then((result) => this.uploadImage(result));
@@ -106,7 +112,7 @@ class ProviderGalleryStack extends Component {
             });
           } else {
             this.setState({ ...this.state, loading: false });
-            Toast.show("Erro ao atualizar usário", {
+            Toast.show("Erro ao fazer upload do arquivo", {
               duration: Toast.durations.LONG,
             });
           }
@@ -151,46 +157,57 @@ class ProviderGalleryStack extends Component {
   }
 
   render() {
-    return (
-      <this.stack.Navigator initialRouteName="gallery">
-        <this.stack.Screen
-          name="gallery"
-          options={({ navigation }) => ({
-            title: "Menu",
-            headerShown: true,
-            headerLeft: () => (
-              <TouchableOpacity
-                style={{ marginHorizontal: 10 }}
-                onPress={() => navigation.goBack()}
-              >
-                <FontAwesomeIcon
-                  icon={faArrowLeft}
-                  size={20}
-                  style={{ flex: 1 }}
-                />
-              </TouchableOpacity>
-            ),
-            headerRight: () => (
-              <TouchableOpacity
-                style={styles.headerLoginButton}
-                onPress={() => this.pickImage()}
-              >
-                <FontAwesomeIcon icon={faPlus} color={"#fff"} size={20} />
-              </TouchableOpacity>
-            ),
-          })}
-        >
-          {(props) => (
-            <Gallery
-              {...props}
-              companyId={
-                this.props.providerRegisterEmitter.providerForm.companyId
-              }
-            />
-          )}
-        </this.stack.Screen>
-      </this.stack.Navigator>
-    );
+    if (this.state.loading) {
+      return (
+        <ActivityIndicator
+          size={"large"}
+          color={"#db382f"}
+          animating={this.state.loading}
+          style={{ flex: 1 }}
+        />
+      );
+    } else {
+      return (
+        <this.stack.Navigator initialRouteName="gallery">
+          <this.stack.Screen
+            name="gallery"
+            options={({ navigation }) => ({
+              title: "Menu",
+              headerShown: true,
+              headerLeft: () => (
+                <TouchableOpacity
+                  style={{ marginHorizontal: 10 }}
+                  onPress={() => navigation.goBack()}
+                >
+                  <FontAwesomeIcon
+                    icon={faArrowLeft}
+                    size={20}
+                    style={{ flex: 1 }}
+                  />
+                </TouchableOpacity>
+              ),
+              headerRight: () => (
+                <TouchableOpacity
+                  style={styles.headerLoginButton}
+                  onPress={() => this.pickImage()}
+                >
+                  <FontAwesomeIcon icon={faPlus} color={"#fff"} size={20} />
+                </TouchableOpacity>
+              ),
+            })}
+          >
+            {(props) => (
+              <Gallery
+                {...props}
+                companyId={
+                  this.props.providerRegisterEmitter.providerForm.companyId
+                }
+              />
+            )}
+          </this.stack.Screen>
+        </this.stack.Navigator>
+      );
+    }
   }
 }
 

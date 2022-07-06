@@ -90,6 +90,7 @@ class ProviderRegisterTabs extends Component {
             <ProviderGalleryStack
               {...props}
               providerRegisterEmitter={this.props.providerRegisterEmitter}
+              loginEmitter={this.props.loginEmitter}
             />
           )}
         </this.tabs.Screen>

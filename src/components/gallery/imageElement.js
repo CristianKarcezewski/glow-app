@@ -1,10 +1,16 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Dimensions, Image } from "react-native";
+import { StyleSheet, Image } from "react-native";
 
 class ImageElement extends Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
-      <Image source={this.props.imagsource.fileUrl} style={styles.image} />
+      <Image
+        source={{ uri: this.props.imagsource.fileUrl }}
+        style={styles.image}
+      />
     );
   }
 }
