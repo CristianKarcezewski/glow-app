@@ -246,11 +246,16 @@ class ProviderRegister extends Component {
       this.componentKey,
       this._changeFilter.bind(this)
     );
+    this.props.loginEmitter.subscribe(
+      this.componentKey,
+      this.fetchCompany.bind(this)
+    );
     this.fetchCompany();
   }
 
   componentWillUnmount() {
     this.props.registerEmitter.unsubscribe(this.componentKey);
+    this.props.loginEmitter.unsubscribe(this.componentKey);
   }
 
   render() {
@@ -313,7 +318,7 @@ class ProviderRegister extends Component {
                  this.props.registerEmitter.providerForm.expirationDate,
                  "DD/mm/yyyy HH:MM:SS"
                ).format("DD/mm/yyyy HH:MM")}`
-              :null}
+              : null}
           </Text>
         </View>
         {this.props.registerEmitter.providerForm.companyId
