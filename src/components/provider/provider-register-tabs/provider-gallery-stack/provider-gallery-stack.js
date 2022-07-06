@@ -3,12 +3,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Gallery from "../../../gallery";
 import { TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faArrowLeft,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faPlus } from "@fortawesome/free-solid-svg-icons";
 import * as ImagePicker from "expo-image-picker";
-import {setCompanyImage} from "./../../../../services/file-service"
+import { setCompanyImage } from "./../../../../services/file-service";
+import uuid from "react-native-uuid";
 
 class ProviderGalleryStack extends Component {
   constructor(props) {
@@ -145,7 +143,7 @@ class ProviderGalleryStack extends Component {
 
     const fileRef = ref(
       storage,
-      `glow-files/${this.props.loginEmitter?.userData?.uid}/profile-image`
+      `glow-files/${this.props.loginEmitter?.userData?.uid}/${uuid.v4()}`
     );
     const result = await uploadBytes(fileRef, blob);
 
@@ -185,7 +183,12 @@ class ProviderGalleryStack extends Component {
             ),
           })}
         >
-          {(props) => <Gallery {...props} />}
+          {(props) => (
+            <Gallery
+              {...props}
+              providerRegisterEmitter={this.props.providerRegisterEmitter}
+            />
+          )}
         </this.stack.Screen>
       </this.stack.Navigator>
     );

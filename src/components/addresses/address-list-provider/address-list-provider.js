@@ -70,6 +70,10 @@ class AddressListProvider extends Component {
       this.addressesListKey,
       this.setAddresses.bind(this)
     );
+    this.props.loginEmitter.subscribe(
+      this.addressesListKey,
+      this._handleLoadCompanyAddresses.bind(this)
+    );
     if (this.props.filterEmitter.addresses.length == 0) {
       this._handleLoadCompanyAddresses();
     }

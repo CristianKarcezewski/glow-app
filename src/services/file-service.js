@@ -1,7 +1,6 @@
 import { PROFILE_IMAGE, FILE } from "./urls";
-import { REMOVE_COMPANY_IMAGE } from "./urls"
+import { REMOVE_COMPANY_IMAGE } from "./urls";
 import { GET_COMPANY_IMAGE_ALL } from "./urls";
-
 
 export const setProfileImage = async (platform, authorization, url) => {
   try {
@@ -43,9 +42,9 @@ export const setCompanyImage = async (platform, authorization, url) => {
   }
 };
 
-export const loadCompanyImages = async (platform, authorization) => {
+export const loadCompanyImages = async (platform, authorization, companyId) => {
   try {
-    let response = await fetch(GET_COMPANY_IMAGE_ALL, {
+    let response = await fetch(`${GET_COMPANY_IMAGE_ALL}/${companyId}`, {
       method: "GET",
       headers: {
         Accept: "application/json",

@@ -12,7 +12,6 @@ import ProviderAddressStack from "./provider-address-stack";
 import ProviderGalleryStack from "./provider-gallery-stack";
 import Schedule from "../../schedule";
 
-
 class ProviderRegisterTabs extends Component {
   constructor(props) {
     super(props);
@@ -57,7 +56,7 @@ class ProviderRegisterTabs extends Component {
                 />
               );
             }
-           
+
             if (route.name === "provider-address-stack") {
               return (
                 <FontAwesomeIcon
@@ -87,7 +86,12 @@ class ProviderRegisterTabs extends Component {
           name="provider-gallery-stack"
           options={{ title: "Galeria" }}
         >
-          {(props) => <ProviderGalleryStack {...props} />}
+          {(props) => (
+            <ProviderGalleryStack
+              {...props}
+              providerRegisterEmitter={this.props.providerRegisterEmitter}
+            />
+          )}
         </this.tabs.Screen>
 
         <this.tabs.Screen name="schedule" options={{ title: "Agenda" }}>
@@ -109,7 +113,7 @@ class ProviderRegisterTabs extends Component {
               showHeader={this.showHeader.bind(this)}
             />
           )}
-        </this.tabs.Screen>      
+        </this.tabs.Screen>
       </this.tabs.Navigator>
     );
   }
