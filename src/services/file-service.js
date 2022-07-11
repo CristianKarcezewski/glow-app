@@ -19,6 +19,7 @@ export const setProfileImage = async (platform, authorization, url) => {
     });
 
     let json = await response.json();
+    console.log(json)
     return { status: response.status, data: json };
   } catch (error) {
     throw error;

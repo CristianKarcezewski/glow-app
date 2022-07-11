@@ -28,6 +28,7 @@
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
-    }
+    },
+    "owner":"cristian-karcezewski"
   }
 }
