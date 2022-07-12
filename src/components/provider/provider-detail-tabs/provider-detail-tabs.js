@@ -79,7 +79,7 @@ class ProviderDetailTabs extends Component {
             {(props) => (
               <Gallery
                 {...props}
-                companyId={this.props.provider.companyId}
+                providerEmitter={this.props.providerEmiter}
                 loginEmitter={this.props.loginEmitter}
               />
             )}

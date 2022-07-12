@@ -68,6 +68,7 @@ class DrawerNavigator extends Component {
               loginEmitter={this.props.loginEmitter}
               searchFilterEmitter={this.props.searchFilterEmitter}
               addressesFilterEmitter={this.props.addressesFilterEmitter}
+              providerEmitter={this.props.providerEmiter}
               // locationsEmitter={this.props.locationsEmitter}
             />
           )}
@@ -105,6 +106,7 @@ class DrawerNavigator extends Component {
               {...props}
               loginEmitter={this.props.loginEmitter}
               providerRegisterEmitter={this.props.providerRegisterEmitter}
+              providerEmitter={this.props.providerEmiter}
               addressesProviderFilterEmitter={
                 this.props.addressesProviderFilterEmitter
               }

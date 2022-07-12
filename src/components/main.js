@@ -8,6 +8,7 @@ import DrawerNavigator from "./navigators/drawer";
 import AddressEmitter from "../emitters/addresses-emitter";
 import AddressProviderEmitter from "../emitters/addresses-provider-emitter";
 import ProviderRegisterEmitter from "../emitters/provider-register-emitter";
+import ProviderEmitter from "../emitters/provider-emitter";
 
 class Main extends Component {
   constructor() {
@@ -18,6 +19,7 @@ class Main extends Component {
       addressesFilterEmitter: new AddressEmitter(),
       addressesProviderFilterEmitter: new AddressProviderEmitter(),
       providerRegisterEmitter: new ProviderRegisterEmitter(),
+      providerEmiter: new ProviderEmitter(),
       // locationsEmitter: new LocationsEmitter(),
     };
   }
@@ -28,6 +30,7 @@ class Main extends Component {
     this.state.addressesFilterEmitter.reset();
     this.state.providerRegisterEmitter.reset();
     this.state.addressesProviderFilterEmitter.reset();
+    this.state.providerEmiter.reset();
     // this.state.locationsEmitter.reset();
   }
 
@@ -38,8 +41,11 @@ class Main extends Component {
           loginEmitter={this.state.loginEmitter}
           searchFilterEmitter={this.state.searchFilterEmitter}
           addressesFilterEmitter={this.state.addressesFilterEmitter}
-          addressesProviderFilterEmitter={this.state.addressesProviderFilterEmitter}
+          addressesProviderFilterEmitter={
+            this.state.addressesProviderFilterEmitter
+          }
           providerRegisterEmitter={this.state.providerRegisterEmitter}
+          providerEmitter={this.state.providerEmiter}
           // locationsEmitter={this.state.locationsEmitter}
           cleanMemory={this._cleanMemory.bind(this)}
         />
