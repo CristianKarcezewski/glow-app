@@ -113,7 +113,7 @@ class Gallery extends Component {
       this._handleLoadCompanyImages();
     }
   }
-
+ 
   componentDidMount() {
     this.props.loginEmitter.subscribe(
       this.componentKey,
@@ -123,49 +123,62 @@ class Gallery extends Component {
   }
 
   render() {
-    return (
-      <SafeAreaView>
-        <View style={styles.container}>
-          <Modal
-            style={styles.modal}
-            animationType={"fade"}
-            transparent={true}
-            visible={this.state.modalVisible}
-            onRequestClose={() => {}}
-          >
-            <View style={styles.modal}>
-              <Text
-                style={styles.text}
+    if (this.state.images){
+      return (
+        <SafeAreaView>
+          <View style={styles.container}>
+            <Modal
+              style={styles.modal}
+              animationType={"fade"}
+              transparent={true}
+              visible={this.state.modalVisible}
+              onRequestClose={() => {}}
+            >
+              <View style={styles.modal}>
+                <Text
+                  style={styles.text}
+                  onPress={() => {
+                    this.setModalVisible(false);
+                  }}
+                >
+                  Fechar
+                </Text>
+                <ImageElement imagsource={this.state.modalImage}></ImageElement>
+              </View>
+            </Modal>
+          </View>
+
+          <FlatList
+            data={this.state.images}
+            keyExtractor={(item) => item.fileId}
+            numColumns={2}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                key={item}
                 onPress={() => {
-                  this.setModalVisible(false);
+                  this.setModalVisible(true, item.fileId);
                 }}
               >
-                Fechar
-              </Text>
-              <ImageElement imagsource={this.state.modalImage}></ImageElement>
-            </View>
-          </Modal>
-        </View>
+                <View style={styles.imagewrap}>
+                  <ImageElement imagsource={item}></ImageElement>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+        </SafeAreaView>
+      );
+    }else{
+ return (
+   <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+     <Text style={{ fontSize: 25 }}>
+      Não tem Imagem disponível
 
-        <FlatList
-          data={this.state.images}
-          keyExtractor={(item) => item.fileId}
-          numColumns={2}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              key={item}
-              onPress={() => {
-                this.setModalVisible(true, item.fileId);
-              }}
-            >
-              <View style={styles.imagewrap}>
-                <ImageElement imagsource={item}></ImageElement>
-              </View>
-            </TouchableOpacity>
-          )}
-        />
-      </SafeAreaView>
-    );
+     </Text>
+     
+   </View>
+ );
+    }
+    
   }
 }
 
