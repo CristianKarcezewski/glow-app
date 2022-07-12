@@ -69,7 +69,7 @@ class ProviderRegisterStack extends Component {
               {...props}
               loginEmitter={this.props.loginEmitter}
               registerEmitter={this.props.registerEmitter}
-              providerEmitter={this.props.providerEmiter}
+              providerEmitter={this.props.providerEmitter}
             />
           )}
         </this.stack.Screen>

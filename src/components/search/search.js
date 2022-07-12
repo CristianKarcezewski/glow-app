@@ -34,7 +34,7 @@ class SearchResult extends Component {
   }
 
   _userDetails(item) {
-    this.props.providerEmiter.setProvider(item.id);
+    this.props.providerEmitter.setProvider(item.id);
     this.props.navigation.navigate("provider-detail-tabs");
   }
 

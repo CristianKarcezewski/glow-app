@@ -117,7 +117,7 @@ class StackNavigator extends Component {
                 {...props}
                 loginEmitter={this.props.loginEmitter}
                 searchFilterEmitter={this.props.searchFilterEmitter}
-                providerEmitter={this.props.providerEmiter}
+                providerEmitter={this.props.providerEmitter}
               />
             )}
           </this.stack.Screen>
@@ -157,7 +157,7 @@ class StackNavigator extends Component {
               <ProviderDetailTabs
                 {...props}
                 loginEmitter={this.props.loginEmitter}
-                providerEmitter={this.props.providerEmiter}
+                providerEmitter={this.props.providerEmitter}
               />
             )}
           </this.stack.Screen>

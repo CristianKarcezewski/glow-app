@@ -78,7 +78,7 @@ class ProviderRegisterTabs extends Component {
               {...props}
               loginEmitter={this.props.loginEmitter}
               registerEmitter={this.props.providerRegisterEmitter}
-              providerEmitter={this.props.providerEmiter}
+              providerEmitter={this.props.providerEmitter}
             />
           )}
         </this.tabs.Screen>
@@ -90,7 +90,7 @@ class ProviderRegisterTabs extends Component {
           {(props) => (
             <ProviderGalleryStack
               {...props}
-              providerEmitter={this.props.providerEmiter}
+              providerEmitter={this.props.providerEmitter}
               loginEmitter={this.props.loginEmitter}
             />
           )}

@@ -37,7 +37,10 @@ class Gallery extends Component {
   fetchImages(id) {
     if (id && this.props.loginEmitter?.userData?.userGroupId === 2) {
       this.setState({ ...this.state, loading: true });
-      loadCompanyImages(Platform.OS, this.props.providerEmiter.selectedProvider)
+      loadCompanyImages(
+        Platform.OS,
+        this.props.providerEmitter.selectedProvider
+      )
         .then(({ status, data }) => {
           console.log(data);
           if (status === 200) {
@@ -62,7 +65,7 @@ class Gallery extends Component {
   }
 
   componentDidMount() {
-    this.props.providerEmiter.subscribe(
+    this.props.providerEmitter.subscribe(
       this.componentKey,
       this.fetchImages.bind(this)
     );

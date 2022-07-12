@@ -209,7 +209,7 @@ class ProviderRegister extends Component {
       expirationDate: data.expirationDate,
     });
 
-    this.props.providerEmiter.setProvider(data.companyId);
+    this.props.providerEmitter.setProvider(data.companyId);
   }
 
   successfullRegistered() {

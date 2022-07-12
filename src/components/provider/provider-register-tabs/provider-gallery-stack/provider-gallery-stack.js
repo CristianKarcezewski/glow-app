@@ -199,7 +199,7 @@ class ProviderGalleryStack extends Component {
             {(props) => (
               <Gallery
                 {...props}
-                providerEmitter={this.props.providerEmiter}
+                providerEmitter={this.props.providerEmitter}
                 loginEmitter={this.props.loginEmitter}
               />
             )}
