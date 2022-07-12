@@ -30,10 +30,10 @@ class ProviderDetails extends Component {
         <View style={{ flex: 1, backgroundColor: "#fff", margin: 10 }}>
           <View style={styles.header}>
             <View style={styles.headerImage}>
-              {this.props.provider.imageUrl ? (
+              {this.props.provider?.fileUrl ? (
                 <Image
                   style={styles.imageLogo}
-                  source={{ uri: this.props.provider.imageUrl }}
+                  source={{ uri: this.props.provider.fileUrl }}
                 />
               ) : (
                 <FontAwesomeIcon icon={faUser} size={85} />

@@ -1,7 +1,7 @@
 export default class Address {
-  constructor(id, imageUrl, name, city, publicPlace, number, complement,active) {
+  constructor(id, fileUrl, name, city, publicPlace, number, complement,active) {
     this.id = id;
-    this.imageUrl = imageUrl;
+    this.fileUrl = fileUrl;
     this.name = name;
     this.city = city;
     this.publicPlace = publicPlace;
