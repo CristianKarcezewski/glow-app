@@ -33,8 +33,8 @@ class SearchResult extends Component {
     };
   }
 
-  _userDetails(item) {
-    this.props.providerEmitter.setProvider(item);
+  _userDetails(provider) {
+    this.props.providerEmitter.setProvider(provider);
     this.props.navigation.navigate("provider-detail-tabs");
   }
 
