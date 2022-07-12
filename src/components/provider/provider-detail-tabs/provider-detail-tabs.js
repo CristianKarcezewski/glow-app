@@ -62,7 +62,10 @@ class ProviderDetailTabs extends Component {
       >
         <this.tabs.Screen name="provider-details" options={{ title: "Sobre" }}>
           {(props) => (
-            <ProviderDetails {...props} provider={this.props.provider} />
+            <ProviderDetails
+              {...props}
+              provider={this.props.providerEmitter.selectedProvider}
+            />
           )}
         </this.tabs.Screen>
 

@@ -39,7 +39,7 @@ class Gallery extends Component {
       this.setState({ ...this.state, loading: true });
       loadCompanyImages(
         Platform.OS,
-        this.props.providerEmitter.selectedProvider
+        this.props.providerEmitter.selectedProvider.companyId
       )
         .then(({ status, data }) => {
           console.log(data);

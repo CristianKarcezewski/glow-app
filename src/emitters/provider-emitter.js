@@ -33,8 +33,8 @@ export default class ProviderEmitter {
     });
   }
 
-  setProvider(id) {
-    this.selectedProvider = id;
+  setProvider(provider) {
+    this.selectedProvider = provider;
     this._emit();
   }
 
