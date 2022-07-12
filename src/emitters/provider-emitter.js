@@ -39,8 +39,8 @@ export default class ProviderEmitter {
   }
 
   reset() {
-    this._emit();
-    this.subscribes = new Array();
     this.selectedProvider = null;
+    this.subscribes = new Array();
+    this._emit();
   }
 }
