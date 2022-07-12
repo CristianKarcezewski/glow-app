@@ -66,7 +66,6 @@ class Gallery extends Component {
       this.componentKey,
       this.fetchImages.bind(this)
     );
-    console.log(this.props.providerEmitter.selectedProvider);
 
     this.fetchImages(this.props.providerEmitter.selectedProvider);
   }
