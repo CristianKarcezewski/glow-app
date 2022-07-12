@@ -34,13 +34,10 @@ class Gallery extends Component {
     });
   }
 
-  fetchImages(id) {
-    if (id && this.props.loginEmitter?.userData?.userGroupId === 2) {
+  fetchImages(provider) {
+    if (provider) {
       this.setState({ ...this.state, loading: true });
-      loadCompanyImages(
-        Platform.OS,
-        this.props.providerEmitter.selectedProvider.companyId
-      )
+      loadCompanyImages(Platform.OS, provider.companyId)
         .then(({ status, data }) => {
           console.log(data);
           if (status === 200) {
