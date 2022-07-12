@@ -66,6 +66,7 @@ class Gallery extends Component {
       this.componentKey,
       this.fetchImages.bind(this)
     );
+    this.fetchImages();
   }
 
   componentWillUnmount() {
