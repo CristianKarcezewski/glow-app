@@ -13,7 +13,7 @@ class ProviderDetails extends Component {
     this.state = {
       loading: false,
     };
-  }
+  }  
 
   render() {
     if (this.state.loading) {
@@ -30,10 +30,12 @@ class ProviderDetails extends Component {
         <View style={{ flex: 1, backgroundColor: "#fff", margin: 10 }}>
           <View style={styles.header}>
             <View style={styles.headerImage}>
-              {this.props.provider?.fileUrl ? (
+              {this.props.providerEmitter.selectedProvider?.fileUrl ? (
                 <Image
                   style={styles.imageLogo}
-                  source={{ uri: this.props.provider.fileUrl }}
+                  source={{
+                    uri: this.props.providerEmitter.selectedProvider.fileUrl,
+                  }}
                 />
               ) : (
                 <FontAwesomeIcon icon={faUser} size={85} />
@@ -49,10 +51,13 @@ class ProviderDetails extends Component {
                   margin: 5,
                 }}
               >
-                {this.props?.provider?.name}
+                {this.props?.providerEmitter.selectedProvider?.companyName}
               </Text>
               <Text style={{ fontSize: 20, margin: 5 }}>
-                {this.props?.provider?.profession}
+                {
+                  this.props?.providerEmitter.selectedProvider?.providerType
+                    ?.name
+                }
               </Text>
               <View style={{ flexDirection: "row" }}>
                 <Text style={{ fontSize: 16, margin: 5 }}>Avaliação:</Text>
@@ -71,7 +76,7 @@ class ProviderDetails extends Component {
               Sobre:
             </Text>
             <Text style={{ fontSize: 14, margin: 15 }}>
-              {this.props?.provider?.description}
+              {this.props?.providerEmitter.selectedProvider?.description}
             </Text>
           </View>
         </View>
@@ -113,7 +118,7 @@ const styles = StyleSheet.create({
   imageLogo: {
     width: "100%",
     height: "100%",
-    borderRadius: 35,
+    borderRadius: 40,
   },
 });
 

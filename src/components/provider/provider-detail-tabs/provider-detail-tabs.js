@@ -64,7 +64,7 @@ class ProviderDetailTabs extends Component {
           {(props) => (
             <ProviderDetails
               {...props}
-              provider={this.props.providerEmitter.selectedProvider}
+              providerEmitter={this.props.providerEmitter}
             />
           )}
         </this.tabs.Screen>
