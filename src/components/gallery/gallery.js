@@ -60,12 +60,13 @@ class Gallery extends Component {
       this.setState({ ...this.state, images: [] });
     }
   }
- 
+
   componentDidMount() {
     this.props.providerEmitter.subscribe(
       this.componentKey,
       this.fetchImages.bind(this)
     );
+    console.log(this.props.providerEmitter.selectedProvider);
 
     this.fetchImages(this.props.providerEmitter.selectedProvider);
   }
@@ -75,7 +76,7 @@ class Gallery extends Component {
   }
 
   render() {
-    if (this.state.images){
+    if (this.state.images) {
       return (
         <SafeAreaView>
           <View style={styles.container}>
@@ -119,18 +120,15 @@ class Gallery extends Component {
           />
         </SafeAreaView>
       );
-    }else{
- return (
-   <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-     <Text style={{ fontSize: 25 }}>
-      Não tem Imagem disponível
-
-     </Text>
-     
-   </View>
- );
+    } else {
+      return (
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <Text style={{ fontSize: 25 }}>Não tem Imagem disponível</Text>
+        </View>
+      );
     }
-    
   }
 }
 
