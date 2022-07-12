@@ -50,7 +50,7 @@ class SearchResult extends Component {
           this.setState({
             ...this.state,
             loading: false,
-            providers: this.mapResponse(data),
+            providers: data,
           });
         } else {
           this.setState({ ...this.state, loading: false });
@@ -65,22 +65,22 @@ class SearchResult extends Component {
       });
   }
 
-  mapResponse(data) {
-    var resp = [];
-    if (data && data.length > 0) {
-      data.map((p) => {
-        resp.push({
-          id: p.companyId,
-          fileUrl: p.fileUrl,
-          profession: p.providerType?.name,
-          name: p.companyName,
-          description: p.description,
-        });
-      });
-    }
+  // mapResponse(data) {
+  //   var resp = [];
+  //   if (data && data.length > 0) {
+  //     data.map((p) => {
+  //       resp.push({
+  //         id: p.companyId,
+  //         fileUrl: p.fileUrl,
+  //         profession: p.providerType?.name,
+  //         name: p.companyName,
+  //         description: p.description,
+  //       });
+  //     });
+  //   }
 
-    return resp;
-  }
+  //   return resp;
+  // }
 
   setFilter() {
     this.props.searchFilterEmitter.setFilter({
@@ -197,7 +197,7 @@ class SearchResult extends Component {
             <View style={{ flex: 1 }}>
               {this.state.providers.length > 0 ? (
                 <FlatList
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item) => item.companyId}
                   data={this.state.providers}
                   renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => this._userDetails(item)}>
@@ -234,8 +234,12 @@ class CardResult extends Component {
         </View>
 
         <View style={{ flex: 3, justifyContent: "center" }}>
-          <Text style={style.cardResultName}>{this.props.provider.name}</Text>
-          <Text style={{ fontSize: 20 }}>{this.props.provider.profession}</Text>
+          <Text style={style.cardResultName}>
+            {this.props.provider.companyName}
+          </Text>
+          <Text style={{ fontSize: 20 }}>
+            {this.props.provider.providerType?.name}
+          </Text>
           {/* <Text>{this.props.provider.description}</Text> */}
         </View>
 
