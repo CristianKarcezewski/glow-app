@@ -71,6 +71,10 @@ class Gallery extends Component {
     );
   }
 
+  componentWillUnmount() {
+    this.props.providerEmitter.unsubscribe(this.componentKey);
+  }
+
   render() {
     return (
       <SafeAreaView>
