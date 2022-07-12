@@ -26,7 +26,7 @@ class UserData extends Component {
     super(props);
     this.state = {
       loading: false,
-      imageUrl: "",
+      fileUrl: null,
       name: "",
       email: "",
       validName: true,
@@ -40,7 +40,7 @@ class UserData extends Component {
       ...this.state,
       name: this.props.loginEmitter?.userData?.name || "",
       email: this.props.loginEmitter?.userData?.email || "",
-      imageUrl: this.props.loginEmitter?.userData?.imageUrl || "",
+      fileUrl: this.props.loginEmitter?.userData?.fileUrl || null,
       formChanged: false,
     });
   }
@@ -204,7 +204,7 @@ class UserData extends Component {
             });
             this.props.loginEmitter.login({
               ...this.props.loginEmitter.userData,
-              imageUrl: data,
+              fileUrl: data.fileUrl,
             });
           } else {
             this.setState({ ...this.state, loading: false });
@@ -224,32 +224,38 @@ class UserData extends Component {
   }
 
   async uploadImageAsync(uri) {
-    // Why are we using XMLHttpRequest? See:
-    // https://github.com/expo/expo/issues/2402#issuecomment-443726662
-    const blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function (e) {
-        console.log(e);
-        reject(new TypeError("Network request failed"));
-      };
-      xhr.responseType = "blob";
-      xhr.open("GET", uri, true);
-      xhr.send(null);
-    });
+    if (this.props.loginEmitter?.userData?.uid) {
+      // Why are we using XMLHttpRequest? See:
+      // https://github.com/expo/expo/issues/2402#issuecomment-443726662
+      const blob = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          resolve(xhr.response);
+        };
+        xhr.onerror = function (e) {
+          console.log(e);
+          reject(new TypeError("Network request failed"));
+        };
+        xhr.responseType = "blob";
+        xhr.open("GET", uri, true);
+        xhr.send(null);
+      });
 
-    const fileRef = ref(
-      storage,
-      `glow-files/${this.props.loginEmitter?.userData?.uid}/profile-image`
-    );
-    const result = await uploadBytes(fileRef, blob);
+      const fileRef = ref(
+        storage,
+        `glow-files/${this.props.loginEmitter?.userData?.uid}/profile-image`
+      );
+      const result = await uploadBytes(fileRef, blob);
 
-    // We're done with the blob, close and release it
-    blob.close();
+      // We're done with the blob, close and release it
+      blob.close();
 
-    return await getDownloadURL(fileRef);
+      return await getDownloadURL(fileRef);
+    } else {
+      Toast.show("não é possível salvar sua foto no momento", {
+        duration: Toast.durations.LONG,
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -288,10 +294,10 @@ class UserData extends Component {
               color={"#db382f"}
               style={{ marginLeft: 85 }}
             />
-            {this.state.imageUrl ? (
+            {this.state.fileUrl ? (
               <Image
                 style={style.imageLogo}
-                source={{ uri: this.state.imageUrl }}
+                source={{ uri: this.state.fileUrl }}
               />
             ) : (
               <FontAwesomeIcon size={100} icon={faUserAlt} />
@@ -353,6 +359,7 @@ class UserData extends Component {
     }
   }
 }
+
 const style = StyleSheet.create({
   imageContainer: {
     flex: 2,

@@ -58,6 +58,7 @@ class UserRegister extends Component {
                 userCredential.user.getIdToken().then((idToken) => {
                   console.log(data);
                   data.authorization = idToken;
+                  console.log(data)
                   this.props.loginEmitter.login(data);
                 });
                 this.setState({ ...this.state, loading: false });

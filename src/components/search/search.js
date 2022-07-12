@@ -71,7 +71,7 @@ class SearchResult extends Component {
       data.map((p) => {
         resp.push({
           id: p.companyId,
-          imageUrl: p.imageUrl,
+          fileUrl: p.fileUrl,
           profession: p.providerType?.name,
           name: p.companyName,
           description: p.description,
@@ -223,10 +223,10 @@ class CardResult extends Component {
     return (
       <View style={style.cardResultContainer}>
         <View style={style.cardResultImage}>
-          {this.props.provider.imageUrl ? (
+          {this.props.provider?.fileUrl ? (
             <Image
               style={style.imageLogo}
-              source={{ uri: this.props.provider.imageUrl }}
+              source={{ uri: this.props.provider.fileUrl }}
             />
           ) : (
             <FontAwesomeIcon size={40} icon={faUserAlt} />
