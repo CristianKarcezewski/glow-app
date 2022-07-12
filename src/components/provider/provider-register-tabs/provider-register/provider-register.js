@@ -328,7 +328,10 @@ class ProviderRegister extends Component {
           >
             {this.state.expirationDate
               ? `Seu pacote de serviço expira em:
-               ${this.state.expirationDate}`
+               ${moment(
+                 this.state.expirationDate,
+                 "DD/MM/YYYY HH:mm:ss"
+               ).format("DD/MM/YYYY HH:mm")}`
               : null}
 
             {/* {this.state.expirationDate
