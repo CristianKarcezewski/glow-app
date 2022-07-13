@@ -41,9 +41,13 @@ class ProviderRegister extends Component {
           if (status === 200) {
             if (data) {
               this.setForm(data);
+              this.props.providerEmitter.setProvider(data);
+            } else {
+              this.props.providerEmitter.reset();
             }
           } else {
             this.setState({ ...this.state, loading: false });
+            this.props.providerEmitter.reset();
             Toast.show("Erro ao carregar dados da sua conta", {
               duration: Toast.durations.LONG,
             });
@@ -51,6 +55,7 @@ class ProviderRegister extends Component {
         })
         .catch((err) => {
           console.log("error", err);
+          this.props.providerEmitter.reset();
           this.setState({ ...this.state, loading: false });
           Toast.show("Não foi possível conectar ao servidor", {
             duration: Toast.durations.LONG,
@@ -208,8 +213,6 @@ class ProviderRegister extends Component {
       companyId: data.companyId,
       expirationDate: data.expirationDate,
     });
-
-    this.props.providerEmitter.setProvider(data);
   }
 
   successfullRegistered() {
