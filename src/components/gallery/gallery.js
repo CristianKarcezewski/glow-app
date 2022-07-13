@@ -23,13 +23,13 @@ class Gallery extends Component {
     images: [],
   };
 
-  openImage(img) {
-    this.setState({ ...this.state, modalVisible: true, modalImage: img });
-  }
+  // openImage(img) {
+  //   this.setState({ ...this.state, modalVisible: true, modalImage: img });
+  // }
 
-  setModalVisible(visible, imageKey) {
+  setModalVisible(visible, image) {
     this.setState({
-      modalImage: this.state.images[imageKey - 1],
+      modalImage: image,
       modalVisible: visible,
     });
   }
@@ -90,7 +90,7 @@ class Gallery extends Component {
                 <Text
                   style={styles.text}
                   onPress={() => {
-                    this.setModalVisible(false);
+                    this.setModalVisible(false, null);
                   }}
                 >
                   Fechar
@@ -108,7 +108,7 @@ class Gallery extends Component {
               <TouchableOpacity
                 key={item}
                 onPress={() => {
-                  this.setModalVisible(true, item.fileId);
+                  this.setModalVisible(true, item);
                 }}
               >
                 <View style={styles.imagewrap}>
@@ -124,7 +124,7 @@ class Gallery extends Component {
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
-          <Text style={{ fontSize: 25 }}>Não tem Imagem disponível</Text>
+          <Text style={{ fontSize: 25 }}>Nenhuma Imagem disponível</Text>
         </View>
       );
     }
