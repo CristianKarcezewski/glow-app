@@ -67,7 +67,9 @@ class Gallery extends Component {
       this.fetchImages.bind(this)
     );
 
-    this.fetchImages(this.props.providerEmitter.selectedProvider);
+    this.props.providerEmitter.setProvider(
+      this.props.providerEmitter.selectedProvider
+    );
   }
 
   componentWillUnmount() {
