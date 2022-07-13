@@ -304,6 +304,7 @@ class ProviderRegister extends Component {
           <TextInput
             style={{
               flex: 1,
+              fontSize: 17,
               textAlign: "left",
               textAlignVertical: "top",
             }}

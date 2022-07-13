@@ -72,10 +72,10 @@ class ProviderDetails extends Component {
             </View>
           </View>
           <View style={styles.container}>
-            <Text style={{ fontSize: 16, marginLeft: 5, fontWeight: "bold" }}>
+            <Text style={{ fontSize: 18, marginLeft: 5, fontWeight: "bold" }}>
               Sobre:
             </Text>
-            <Text style={{ fontSize: 14, margin: 15 }}>
+            <Text style={{ fontSize: 17, margin: 15 }}>
               {this.props?.providerEmitter.selectedProvider?.description}
             </Text>
           </View>
