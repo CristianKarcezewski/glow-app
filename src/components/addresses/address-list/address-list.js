@@ -82,6 +82,7 @@ class AddressList extends Component {
 
   componentWillUnmount() {
     this.props.filterEmitter.unsubscribe(this.addressesListKey);
+    this.props.loginEmitter.unsubscribe(this.addressesListKey);
   }
 
   render() {
